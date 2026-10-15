@@ -116,9 +116,9 @@ function Wizard() {
         {steps.map((s, i) => (
           <li key={s}>
             <button onClick={() => i < step && setStep(i)} className="w-full text-left">
-              <div className={cx("h-1.5", i < step ? "bg-ink" : i === step ? "bg-lime" : "bg-line")} />
+              <div className={cx("h-1.5", i < step ? "bg-ink" : i === step ? "bg-brick" : "bg-line")} />
               <div className={cx("mt-2 text-[11px] uppercase tracking-[0.16em]", i === step ? "text-ink" : "text-mute")}>
-                <span className="font-pixel mr-1.5 text-[13px]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-display mr-1.5 text-[13px]">{String(i + 1).padStart(2, "0")}</span>
                 <span className="hidden sm:inline">{s}</span>
               </div>
             </button>
@@ -144,7 +144,7 @@ function Wizard() {
                         if (p === "tote" || p === "cap") setSizes(["One size"]);
                         else if (sizes[0] === "One size") setSizes(["S", "M", "L", "XL"]);
                       }}
-                      className={cx("border p-2 text-[11px] uppercase tracking-[0.14em]", product === p ? "border-ink bg-lime-soft" : "border-line hover:border-ink")}
+                      className={cx("border p-2 text-[11px] uppercase tracking-[0.14em]", product === p ? "border-ink bg-brick-soft" : "border-line hover:border-ink")}
                     >
                       <div className="mx-auto size-14">
                         <MerchMock product={p} colorway={colorway} motif={motif} accent={artist.accent} />
@@ -170,7 +170,7 @@ function Wizard() {
                         key={c}
                         aria-label={c}
                         onClick={() => setColorway(c)}
-                        className={cx("size-10 border-2", colorway === c ? "border-ink ring-2 ring-lime ring-offset-2" : "border-line")}
+                        className={cx("size-10 border-2", colorway === c ? "border-ink ring-2 ring-brick ring-offset-2" : "border-line")}
                         style={{ background: hex }}
                       />
                     ))}
@@ -243,7 +243,7 @@ function Wizard() {
                 <div className="flex items-end justify-between gap-4">
                   <div>
                     <div className="label">the number you need</div>
-                    <div className="font-display text-[64px] leading-none font-extrabold tabular">{target}</div>
+                    <div className="font-display text-[64px] leading-none tabular">{target}</div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button size="sm" variant="secondary" onClick={() => setTargetBump((b) => Math.max(0, b - 1))} disabled={targetBump === 0}>−</Button>
@@ -281,7 +281,7 @@ function Wizard() {
                   <Input className="!w-24" inputMode="numeric" value={deliveryFee} onChange={(e) => setDeliveryFee(Number(e.target.value.replace(/\D/g, "")) || 0)} />
                 )}
               </label>
-              <div className={cx("border-2 p-5", tooSoon ? "border-stop bg-stop-soft" : "border-ink bg-lime-soft")}>
+              <div className={cx("border-2 p-5", tooSoon ? "border-stop bg-stop-soft" : "border-ink bg-brick-soft")}>
                 <div className="label">close date</div>
                 <div className="mt-1 font-display text-[28px] font-bold">{date(close, true)}</div>
                 <p className="mt-1 text-[12px]">
@@ -328,7 +328,7 @@ function Wizard() {
                 Next →
               </Button>
             ) : (
-              <Button variant="lime" onClick={submit} disabled={!canNext}>
+              <Button variant="brick" onClick={submit} disabled={!canNext}>
                 Submit for review
               </Button>
             )}
@@ -362,7 +362,7 @@ function Wizard() {
                 { label: "Merch Round 10%", value: `−${aud(fee, { cents: true })}` },
                 { label: "Printer", value: `−${aud(quote, { cents: true })}` },
               ]}
-              total={{ label: "You get", value: <span className="text-lime">{aud(Math.max(0, take), { cents: true })}</span> }}
+              total={{ label: "You get", value: <span className="text-brick">{aud(Math.max(0, take), { cents: true })}</span> }}
             />
             <div className="mt-3 text-[12px] text-paper/60">+{aud(price * 0.9, { cents: true })} for every fan past {target}.</div>
           </div>

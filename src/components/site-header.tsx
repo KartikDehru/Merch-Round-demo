@@ -11,9 +11,9 @@ import { Segmented, cx } from "./ui";
 
 const NAV: Record<Role | "guest", { href: string; label: string }[]> = {
   guest: [
-    { href: "/rounds", label: "Rounds" },
     { href: "/#how", label: "How it works" },
-    { href: "/#artists", label: "For artists" },
+    { href: "/#care", label: "What we care about" },
+    { href: "/rounds", label: "Rounds" },
     { href: "/demo", label: "Demo accounts" },
   ],
   fan: [
@@ -52,12 +52,12 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[1240px] items-center gap-6 px-5 sm:px-8">
+    <header className="sticky top-0 z-40 border-b-2 border-ink bg-paper">
+      <div className="mx-auto flex h-[72px] max-w-[1280px] items-center gap-8 px-5 sm:px-8">
         <Link href="/" className="shrink-0" aria-label="Merch Round home">
-          <Logo />
+          <Logo size={42} />
         </Link>
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex">
           {links.map((l) => {
             const active = l.href === path || (l.href !== "/" && !l.href.includes("#") && path.startsWith(l.href) && l.href.length > 3);
             return (
@@ -65,8 +65,8 @@ export function SiteHeader() {
                 key={l.href}
                 href={l.href}
                 className={cx(
-                  "font-mono text-[12px] uppercase tracking-[0.18em] transition hover:text-ink",
-                  active ? "text-ink underline decoration-lime decoration-[3px] underline-offset-[6px]" : "text-ash",
+                  "text-[16px] font-medium transition hover:underline",
+                  active ? "text-ink underline decoration-brick decoration-[3px] underline-offset-[8px]" : "text-ink/80",
                 )}
               >
                 {l.label}
@@ -75,7 +75,7 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="ml-auto hidden items-center gap-3 md:flex">
-          <span className="label hidden xl:inline">view as</span>
+          <span className="label hidden xl:inline">View as</span>
           <Segmented<Role>
             value={(role ?? "fan") as Role}
             onChange={switchRole}
@@ -88,7 +88,7 @@ export function SiteHeader() {
           />
         </div>
         <button
-          className="ml-auto inline-flex h-9 items-center border border-ink/70 px-3 font-mono text-[11px] uppercase tracking-[0.16em] lg:hidden md:ml-0"
+          className="ml-auto inline-flex h-10 items-center border-2 border-ink px-4 text-[14px] font-bold lg:hidden md:ml-0"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
         >
@@ -99,12 +99,12 @@ export function SiteHeader() {
         <div className="animate-rise border-t border-line bg-paper px-5 pb-5 lg:hidden">
           <nav className="flex flex-col py-3">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="border-b border-line py-3 font-mono text-[13px] uppercase tracking-[0.16em]">
+              <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="border-b border-line py-3 text-[18px] font-medium">
                 {l.label}
               </Link>
             ))}
           </nav>
-          <div className="label mb-2">view as</div>
+          <div className="label mb-2">View as</div>
           <Segmented<Role>
             value={(role ?? "fan") as Role}
             onChange={switchRole}

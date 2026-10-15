@@ -3,17 +3,15 @@ import { Logo } from "./visuals";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <div>
-          <Logo />
-          <p className="mt-2 text-[12px] text-mute">know before you print · Australia · demo build, no real payments</p>
-        </div>
-        <nav className="flex flex-wrap gap-x-6 gap-y-2 text-[12px] uppercase tracking-[0.16em] text-ash">
-          <Link href="/rounds" className="hover:text-ink">Rounds</Link>
-          <Link href="/demo" className="hover:text-ink">Demo</Link>
-          <Link href="/#artists" className="hover:text-ink">For artists</Link>
-          <span className="text-mute">Terms · Privacy</span>
+    <footer className="bg-ink text-paper">
+      <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-x-8 gap-y-5 px-5 py-10 sm:px-8">
+        <Logo dark size={40} />
+        <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[16px] text-fog">
+          <span>Know before you print.</span>
+          <Link href="/rounds" className="hover:text-paper hover:underline">Rounds</Link>
+          <Link href="/demo" className="hover:text-paper hover:underline">Demo accounts</Link>
+          <span>Terms</span>
+          <span>Privacy</span>
         </nav>
       </div>
     </footer>

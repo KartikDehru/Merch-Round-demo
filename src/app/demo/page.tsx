@@ -59,7 +59,7 @@ export default function DemoPage() {
           <Label>suggested walkthrough</Label>
           <ol className="mt-4 space-y-3 text-[13px]">
             {[
-              ["Fan", "Open Velvet Mile's Heartline Tee and pledge. It's 2 away from target."],
+              ["Fan", "Open Velvet Mile's Heartline Tee and buy one. It's 2 away from the number."],
               ["Fan", "In My orders, confirm the Gravel Rash payment your bank flagged."],
               ["Artist", "Static Hours → Tour Tee → use demo controls to fill and close it."],
               ["Admin", "Approve the Sunburn Cap, then send the Tour Tee to the printer."],
@@ -67,7 +67,7 @@ export default function DemoPage() {
               ["Artist", "Sign in as Saltwater Choir and make the shortfall decision."],
             ].map(([who, text], i) => (
               <li key={i} className="flex gap-3 border border-line bg-card p-3">
-                <span className="font-pixel text-[16px] text-mute">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-display text-[16px] text-mute">{String(i + 1).padStart(2, "0")}</span>
                 <span>
                   <span className="label mr-2">{who}</span>
                   {text}

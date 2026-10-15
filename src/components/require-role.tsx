@@ -22,7 +22,7 @@ export function RequireRole({ role, children }: { role: Role; children: React.Re
         {role === "artist" ? "Artists sign in with a magic link." : role === "admin" ? "Admins sign in with a magic link and a role check." : ""} In the
         demo, one click.
       </p>
-      <Button variant="lime" size="lg" className="mt-6" onClick={() => act(login(role))}>
+      <Button variant="brick" size="lg" className="mt-6" onClick={() => act(login(role))}>
         Sign in as {role === "artist" ? world.artists.find((a) => a.id === world.session.artistId)?.name : COPY[role].who}
       </Button>
     </div>

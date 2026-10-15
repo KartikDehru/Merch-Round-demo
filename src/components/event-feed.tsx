@@ -20,13 +20,13 @@ const TONE: Record<NonNullable<LogEvent["tone"]>, string> = {
   good: "bg-go",
   warn: "bg-hold",
   bad: "bg-stop",
-  money: "bg-lime ring-1 ring-ink",
+  money: "bg-brick ring-1 ring-ink",
 };
 
 export function EventFeed({ events, limit = 30, showRound = false }: { events: LogEvent[]; limit?: number; showRound?: boolean }) {
   const { world } = useWorld();
   const list = events.slice(0, limit);
-  if (!list.length) return <div className="font-pixel text-mute">nothing yet</div>;
+  if (!list.length) return <div className="font-display text-mute">nothing yet</div>;
   return (
     <ol className="relative">
       {list.map((e, i) => {

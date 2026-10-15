@@ -7,7 +7,7 @@ import { RequireRole } from "@/components/require-role";
 import { MerchMock } from "@/components/visuals";
 import { Button, Field, H1, Input, Label, Panel, Pill, Textarea, cx } from "@/components/ui";
 
-const ACCENTS = ["#9ad84a", "#ff6b3d", "#3ba7c9", "#e4b637", "#b48cf2", "#e8577b", "#f2f2f2"];
+const ACCENTS = ["#C8452B", "#1D4B4F", "#2F6A84", "#B07D24", "#5B4C7E", "#8E2F45", "#15181C"];
 
 export default function Settings() {
   return (

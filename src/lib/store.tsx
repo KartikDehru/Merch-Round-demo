@@ -89,8 +89,8 @@ export function WorldProvider({ children }: { children: React.ReactNode }) {
   if (!isClient) {
     return (
       <div className="flex min-h-dvh items-center justify-center">
-        <span className="font-pixel text-lg text-mute">
-          loading<span className="animate-blink">_</span>
+        <span className="font-display text-lg text-mute">
+          Loading<span className="animate-blink">…</span>
         </span>
       </div>
     );
@@ -103,9 +103,9 @@ export function WorldProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`animate-rise pointer-events-auto border px-4 py-2 text-[13px] shadow-[4px_4px_0_var(--color-ink)] ${
+            className={`animate-rise pointer-events-auto border px-4 py-2 text-[13px] ${
               t.tone === "good"
-                ? "border-ink bg-lime text-ink"
+                ? "border-ink bg-brick text-paper"
                 : t.tone === "bad"
                   ? "border-ink bg-stop text-white"
                   : t.tone === "warn"

@@ -22,7 +22,7 @@ export default function PayPage() {
   if (p.status !== "action_required")
     return (
       <div className="mx-auto max-w-[520px] px-5 py-24 text-center">
-        {["paid", "fulfilled"].includes(p.status) ? <Stamp tone="go">Paid</Stamp> : <div className="font-pixel text-xl text-mute">nothing to pay_</div>}
+        {["paid", "fulfilled"].includes(p.status) ? <Stamp tone="go">Paid</Stamp> : <div className="font-display text-[32px] text-ash">Nothing to pay</div>}
         <p className="mt-6 text-ash">This payment doesn&apos;t need anything from you.</p>
         <Link href={`/o/${p.id}`} className="mt-4 inline-block underline">View order</Link>
       </div>
@@ -34,7 +34,7 @@ export default function PayPage() {
         Your bank needs you to confirm the <b>{aud(p.amount)}</b> payment for {a.name}&apos;s {r.title}.
         {r.chargeDeadline && <> You have until <b>{dateTime(r.chargeDeadline)}</b>.</>}
       </div>
-      <div className="mt-6 border-2 border-ink bg-card p-6 shadow-[6px_6px_0_var(--color-ink)]">
+      <div className="mt-6 border-t-[6px] border-brick bg-card p-6">
         <div className="flex gap-4">
           <div className="size-20 shrink-0 border border-line dotgrid">
             <MerchMock product={r.product} colorway={r.colorway} motif={r.motif} accent={a.accent} />
@@ -45,7 +45,7 @@ export default function PayPage() {
             <div className="text-[13px] text-ash">Size {p.size} · {p.card.brand} •••• {p.card.last4}</div>
           </div>
         </div>
-        <Button variant="lime" size="lg" className="mt-6 w-full" onClick={() => setBank(true)}>
+        <Button variant="brick" size="lg" className="mt-6 w-full" onClick={() => setBank(true)}>
           Confirm {aud(p.amount, { cents: true })}
         </Button>
         <p className="mt-3 text-center text-[11px] text-mute">Secured by Stripe · 3-D Secure</p>
@@ -60,7 +60,7 @@ export default function PayPage() {
             <div className="mt-5 grid grid-cols-2 gap-2">
               <Button variant="secondary" onClick={() => setBank(false)}>Not now</Button>
               <Button
-                variant="lime"
+                variant="brick"
                 onClick={() => {
                   act(confirmAuth(p.id));
                   toast("Paid. You're all set.", "good");

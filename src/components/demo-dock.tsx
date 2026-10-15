@@ -40,12 +40,12 @@ export function DemoDock() {
   return (
     <>
       <div className="fixed inset-x-0 bottom-0 z-50 px-3 pb-3 sm:px-5 sm:pb-4">
-        <div className="mx-auto flex max-w-[1240px] items-center gap-2 border border-ink bg-ink px-2 py-2 text-paper shadow-[0_10px_40px_-10px_rgb(0_0_0/0.5)] sm:gap-3 sm:px-3">
-          <span className="hidden bg-lime px-2 py-1 font-pixel text-[13px] leading-none text-ink sm:inline">DEMO</span>
+        <div className="mx-auto flex max-w-[1240px] items-center gap-2 border border-ink bg-ink px-2 py-2 text-paper sm:gap-3 sm:px-3">
+          <span className="hidden bg-brick px-2 py-1 font-display text-[13px] leading-none text-paper sm:inline">DEMO</span>
           <span className="hidden text-[11px] uppercase tracking-[0.16em] text-paper/60 md:inline">no real payments</span>
           <span className="mx-1 hidden h-5 w-px bg-paper/20 md:inline" />
-          <Link href="/demo" className="flex min-w-0 items-center gap-2 px-1 text-[12px] hover:text-lime">
-            <span className={cx("size-2 shrink-0 rounded-full", role ? "bg-lime" : "bg-paper/40")} />
+          <Link href="/demo" className="flex min-w-0 items-center gap-2 px-1 text-[12px] hover:text-brick">
+            <span className={cx("size-2 shrink-0 rounded-full", role ? "bg-brick" : "bg-paper/40")} />
             <span className="truncate">
               <span className="text-paper/60 uppercase tracking-[0.14em] text-[10px] mr-1.5">{role ?? "guest"}</span>
               {who}
@@ -58,7 +58,7 @@ export function DemoDock() {
             >
               Inbox
               {inbox.unread > 0 && (
-                <span className="ml-1.5 inline-flex min-w-5 justify-center bg-lime px-1 text-[10px] text-ink tabular">{inbox.unread}</span>
+                <span className="ml-1.5 inline-flex min-w-5 justify-center bg-brick px-1 text-[10px] text-paper tabular">{inbox.unread}</span>
               )}
             </button>
             <button
@@ -123,7 +123,7 @@ function Inbox({ emails }: { emails: Email[] }) {
   }, [emails, act]);
 
   if (!emails.length)
-    return <div className="p-8 text-center font-pixel text-mute">no emails yet</div>;
+    return <div className="p-8 text-center font-display text-mute">no emails yet</div>;
 
   return (
     <ul>
@@ -134,7 +134,7 @@ function Inbox({ emails }: { emails: Email[] }) {
           <li key={e.id} className="border-b border-line">
             <button onClick={() => setOpenId(open ? null : e.id)} className="block w-full px-5 py-3.5 text-left hover:bg-card">
               <div className="flex items-center gap-2">
-                {!e.read && <span className="size-1.5 shrink-0 rounded-full bg-lime ring-1 ring-ink" />}
+                {!e.read && <span className="size-1.5 shrink-0 rounded-full bg-brick ring-1 ring-ink" />}
                 <span className={cx("truncate font-display text-[15px] font-bold", !e.read && "text-ink")}>{e.subject}</span>
                 <span className="ml-auto shrink-0 text-[11px] text-mute">{ago(e.at)}</span>
               </div>
@@ -147,14 +147,14 @@ function Inbox({ emails }: { emails: Email[] }) {
                 </div>
                 <p>{e.body}</p>
                 {e.pledgeId && (
-                  <Link href={`/o/${e.pledgeId}`} className="mt-3 inline-block text-[12px] uppercase tracking-[0.14em] underline decoration-lime decoration-2 underline-offset-4">
+                  <Link href={`/o/${e.pledgeId}`} className="mt-3 inline-block text-[14px] font-bold underline decoration-brick decoration-2 underline-offset-4">
                     Open order →
                   </Link>
                 )}
                 {!e.pledgeId && r && e.audience !== "fan" && (
                   <Link
                     href={e.audience === "admin" ? `/admin/rounds/${r.id}` : `/artist/rounds/${r.id}`}
-                    className="mt-3 inline-block text-[12px] uppercase tracking-[0.14em] underline decoration-lime decoration-2 underline-offset-4"
+                    className="mt-3 inline-block text-[14px] font-bold underline decoration-brick decoration-2 underline-offset-4"
                   >
                     Open round →
                   </Link>

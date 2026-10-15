@@ -31,7 +31,7 @@ function Order() {
   if (!p)
     return (
       <div className="mx-auto max-w-[560px] px-5 py-24 text-center">
-        <div className="font-pixel text-2xl text-mute">order not found_</div>
+        <div className="font-display text-[48px] leading-none">Order not found</div>
         <Link className="mt-4 inline-block underline" href="/me">My orders</Link>
       </div>
     );
@@ -41,21 +41,21 @@ function Order() {
   const first = p.name.split(" ")[0];
 
   const headline: Record<string, string> = {
-    pledged: fresh ? `You're in, ${first}.` : "Pledged. Nothing charged yet.",
+    pledged: fresh ? `You're in, ${first}.` : "Asked for. Nothing charged yet.",
     paid: "Paid. It's happening.",
     fulfilled: "Collected. Enjoy it.",
     action_required: "Your bank needs a quick yes.",
     card_update_required: "Your card didn't work.",
     retry_scheduled: "We'll retry your card.",
     released: "Not this time. Not charged.",
-    withdrawn: "Pledge cancelled.",
-    unpaid: "Your pledge lapsed.",
+    withdrawn: "Order cancelled.",
+    unpaid: "Your order lapsed.",
     refunded: "Refunded.",
   };
 
   return (
     <div className="mx-auto max-w-[1100px] px-5 py-10 sm:px-8">
-      <Link href="/me" className="label hover:text-ink">← my orders</Link>
+      <Link href="/me" className="label hover:text-ink">← My orders</Link>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <PledgePill status={p.status} />
         <span className="text-[12px] text-mute">order {p.code}</span>
@@ -69,12 +69,12 @@ function Order() {
       )}
 
       {p.status === "action_required" && (
-        <Link href={`/pay/${p.id}`} className="mt-5 inline-flex h-12 items-center border border-ink bg-lime px-6 text-[13px] uppercase tracking-[0.14em] hover:shadow-[3px_3px_0_var(--color-ink)]">
+        <Link href={`/pay/${p.id}`} className="mt-5 inline-flex h-14 items-center bg-brick px-7 text-[17px] font-bold text-paper hover:bg-brick-deep">
           Confirm {aud(p.amount)} payment →
         </Link>
       )}
       {p.status === "card_update_required" && (
-        <Button variant="lime" size="lg" className="mt-5" onClick={() => setCardOpen(true)}>
+        <Button variant="brick" size="lg" className="mt-5" onClick={() => setCardOpen(true)}>
           Add a new card →
         </Button>
       )}
@@ -112,13 +112,13 @@ function Order() {
                 size="sm"
                 disabled={p.status !== "pledged" || r.status !== "live"}
                 onClick={() => {
-                  if (confirm("Cancel your pledge? Your card will be removed.")) {
+                  if (confirm("Cancel your order? Your card will be removed.")) {
                     act(withdrawPledge(p.id));
-                    toast("Pledge cancelled", "neutral");
+                    toast("Order cancelled", "neutral");
                   }
                 }}
               >
-                Cancel pledge
+                Cancel order
               </Button>
               <Button variant="secondary" size="sm" onClick={() => setIssueOpen((o) => !o)} disabled={!["paid", "fulfilled"].includes(p.status) || !!issue}>
                 Report a problem
@@ -128,7 +128,7 @@ function Order() {
               <div className="mt-4 flex gap-2 border-t border-dashed border-line pt-4">
                 <Input placeholder="New card number (try 4242 4242 4242 4242)" value={newCard} onChange={(e) => setNewCard(e.target.value)} />
                 <Button
-                  variant="lime"
+                  variant="brick"
                   onClick={() => {
                     const d = newCard.replace(/\D/g, "");
                     if (d.length < 15) return toast("Enter a full card number", "warn");
@@ -193,7 +193,7 @@ function Order() {
               }}
             />
           </Panel>
-          <Link href={`/r/${r.slug}`} className="block text-center text-[12px] uppercase tracking-[0.14em] text-ash underline underline-offset-4">
+          <Link href={`/r/${r.slug}`} className="block text-center text-[15px] font-bold text-ash underline">
             View round page
           </Link>
         </div>

@@ -8,8 +8,11 @@ import { DEMO_FAN } from "@/lib/domain";
 import { aud, date, weekday } from "@/lib/format";
 import { DemoControls, ProgressBlock, useRound } from "@/components/round-bits";
 import { MerchMock } from "@/components/visuals";
-import { Button, H3, Label, PixelNum, PledgePill, RoundPill, Stamp, cx } from "@/components/ui";
+import { PledgePill, RoundPill, Stamp, cx } from "@/components/ui";
 import { Footer } from "@/components/footer";
+
+const toggle = (on: boolean) =>
+  cx("min-h-[52px] border-[3px] border-ink px-5 text-[18px] font-bold transition", on ? "bg-ink text-paper" : "bg-transparent text-ink hover:bg-stone");
 
 export default function RoundPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -18,128 +21,140 @@ export default function RoundPage() {
   const router = useRouter();
   const [side, setSide] = useState<"front" | "back">("front");
   const [size, setSize] = useState<string | null>(null);
+  const [mode, setMode] = useState<"pickup" | "delivery">("pickup");
   const [nudge, setNudge] = useState(false);
 
   if (!round || !artist || !c) return <NotFound />;
 
   const mine = world.pledges.filter((p) => p.roundId === round.id && p.email === DEMO_FAN.email && p.status !== "withdrawn");
   const open = round.status === "live";
-  const chosen = size ?? (round.sizes.length === 1 ? round.sizes[0] : null);
+  const chosen = size ?? (round.sizes.includes("M") ? "M" : round.sizes.length === 1 ? round.sizes[0] : null);
+  const printInk = round.colorway === "bone" ? "#15181C" : "#F3EFE6";
 
-  const pledge = () => {
+  const buy = () => {
     if (!chosen) {
       setNudge(true);
       setTimeout(() => setNudge(false), 600);
       return;
     }
-    router.push(`/r/${round.slug}/pledge?size=${encodeURIComponent(chosen)}`);
+    router.push(`/r/${round.slug}/pledge?size=${encodeURIComponent(chosen)}&get=${mode}`);
   };
 
   return (
     <>
-      <div className="h-1.5" style={{ background: artist.accent }} />
-      <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-8 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:py-12">
-        {/* gallery */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <div className="relative aspect-square overflow-hidden border border-line dotgrid bg-card">
+      <div className="mx-auto grid max-w-[1280px] items-start gap-12 px-5 pt-8 pb-24 sm:px-8 lg:grid-cols-2">
+        {/* artwork */}
+        <div className="lg:sticky lg:top-24">
+          <div className="relative flex min-h-[420px] items-center justify-center sm:min-h-[560px]" style={{ background: artist.accent }}>
             <div className="absolute top-4 left-4 z-10">
               <RoundPill status={round.status} fan />
             </div>
-            <div className="absolute top-4 right-4 z-10 flex border border-ink/70 bg-card text-[11px] uppercase tracking-[0.14em]">
+            <div className="absolute top-4 right-4 z-10 flex border-2 border-paper text-[14px] font-bold text-paper">
               {(["front", "back"] as const).map((s) => (
-                <button key={s} onClick={() => setSide(s)} className={cx("px-3 py-1.5", side === s ? "bg-ink text-paper" : "text-ash hover:text-ink")}>
+                <button key={s} onClick={() => setSide(s)} className={cx("px-3 py-1.5 capitalize", side === s ? "bg-paper text-ink" : "hover:bg-paper/15")}>
                   {s}
                 </button>
               ))}
             </div>
-            <div key={side} className="animate-rise absolute inset-[8%]">
-              <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={artist.accent} label={artist.name} back={side === "back"} />
+            <div key={side} className="animate-rise absolute inset-[9%]">
+              <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={printInk} label={artist.name} back={side === "back"} />
             </div>
             {round.status === "failed" && (
               <div className="absolute inset-x-0 bottom-8 flex justify-center">
-                <Stamp tone="stop" rot={-6} className="bg-card text-2xl">Not this time</Stamp>
+                <Stamp tone="stop" rot={-6} className="text-[30px]">Not this time</Stamp>
               </div>
             )}
             {["confirmed", "in_production", "delivered", "paid_out"].includes(round.status) && (
               <div className="absolute inset-x-0 bottom-8 flex justify-center">
-                <Stamp tone="lime" rot={-5} className="text-2xl">It&apos;s happening</Stamp>
+                <Stamp tone="ink" rot={-5} className="bg-paper text-[30px]">It&apos;s happening</Stamp>
               </div>
             )}
           </div>
-          <div className="mt-3 hidden grid-cols-4 gap-3 lg:grid">
-            {round.details.slice(0, 4).map((d, i) => (
-              <div key={d} className="border border-line bg-card p-3 text-[11px] leading-snug text-ash">
-                <PixelNum className="block text-base">{String(i + 1).padStart(2, "0")}</PixelNum>
+          <ul className="mt-4 hidden grid-cols-2 gap-x-6 gap-y-2 text-[15px] text-ash lg:grid">
+            {round.details.slice(0, 4).map((d) => (
+              <li key={d} className="border-t-2 border-ink/15 pt-2">
                 {d}
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
-        {/* info */}
-        <div>
-          <Link href={`/rounds`} className="label hover:text-ink">
-            ← {artist.name} · {artist.city}
-          </Link>
-          <h1 className="mt-3 font-display text-[40px] leading-[0.95] font-bold tracking-tight uppercase sm:text-[52px]">{round.title}</h1>
-          <div className="mt-4 flex items-baseline gap-3">
-            <span className="font-display text-[32px] font-bold tabular">{aud(round.price)}</span>
-            <span className="label">the full price · no extra fees</span>
+        {/* buy */}
+        <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-2">
+            <Link href="/rounds" className="text-[15px] tracking-[0.14em] text-ash uppercase hover:text-ink">
+              {artist.name} · {artist.city}
+            </Link>
+            <h1 className="font-display text-[52px] leading-[0.95] sm:text-[clamp(52px,6vw,88px)]">{round.title}</h1>
+            <div className="text-[28px] font-bold tabular">{aud(round.price)}</div>
           </div>
 
-          <div className="mt-7 border border-line bg-card p-5">
-            <ProgressBlock round={round} artist={artist} big />
+          <div className="bg-ink p-6 text-paper">
+            <ProgressBlock round={round} artist={artist} big dark />
+            {open && (
+              <p className="mt-3 text-[17px] leading-[1.4] text-cloud">
+                This round closes {date(round.closesAt, true)}. If we reach the number, it gets made. If we don&apos;t, nobody pays.
+              </p>
+            )}
           </div>
 
           {open && !mine.length && (
-            <div className="mt-6">
+            <>
               {round.sizes.length > 1 && (
-                <>
-                  <div className="flex items-center justify-between">
-                    <span className="label">size</span>
-                    <span className="text-[12px] text-ash underline decoration-line underline-offset-4">size chart</span>
+                <div className="flex flex-col gap-3">
+                  <div id="size-label" className="text-[15px] tracking-[0.14em] text-ash uppercase">
+                    Size
                   </div>
-                  <div className={cx("mt-2 grid grid-cols-4 gap-2", nudge && "animate-[rise_.3s]")}>
+                  <div role="group" aria-labelledby="size-label" className={cx("flex flex-wrap gap-3", nudge && "animate-[rise_.3s]")}>
                     {round.sizes.map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setSize(s)}
-                        className={cx(
-                          "h-12 border font-display text-[16px] font-bold transition",
-                          chosen === s ? "border-ink bg-ink text-paper" : nudge ? "border-stop bg-stop-soft" : "border-line bg-card hover:border-ink",
-                        )}
-                      >
+                      <button key={s} type="button" aria-pressed={chosen === s} onClick={() => setSize(s)} className={cx(toggle(chosen === s), "min-w-16", nudge && !chosen && "border-stop")}>
                         {s}
                       </button>
                     ))}
                   </div>
-                </>
+                </div>
               )}
-              <Button variant="lime" size="lg" className="mt-4 w-full text-[14px]" onClick={pledge}>
-                Pledge for {aud(round.price)} →
-              </Button>
-              <p className="mt-3 border-l-[3px] border-lime pl-3 text-[13px] leading-relaxed">
-                You&apos;re only charged on <b>{date(round.closesAt, true)}</b> if this hits <b>{round.target}</b>. Otherwise nothing is
-                charged.
-              </p>
-            </div>
+
+              <div className="flex flex-col gap-3">
+                <div id="get-label" className="text-[15px] tracking-[0.14em] text-ash uppercase">
+                  Get it
+                </div>
+                <div role="group" aria-labelledby="get-label" className="flex flex-wrap gap-3">
+                  <button type="button" aria-pressed={mode === "pickup"} onClick={() => setMode("pickup")} className={toggle(mode === "pickup")}>
+                    Pick up at the show
+                  </button>
+                  {round.delivery && (
+                    <button type="button" aria-pressed={mode === "delivery"} onClick={() => setMode("delivery")} className={toggle(mode === "delivery")}>
+                      Delivered <span className="font-medium opacity-70">+{aud(round.deliveryFee)}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button type="button" onClick={buy} className="min-h-[60px] bg-brick px-8 text-[20px] font-bold text-paper transition hover:bg-brick-deep active:translate-y-px">
+                  Buy now
+                </button>
+                <div className="text-[16px] leading-[1.4] text-ash">You&apos;re only charged if this round hits the number.</div>
+              </div>
+            </>
           )}
 
           {mine.length > 0 && (
-            <div className="mt-6 border-2 border-ink bg-lime-soft p-5">
-              <div className="flex items-center justify-between">
-                <span className="font-display text-[20px] font-bold">You&apos;re in, Sam.</span>
+            <div className="border-[3px] border-ink p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="font-display text-[30px] leading-none">You&apos;re in, Sam.</span>
                 <PledgePill status={mine[0].status} />
               </div>
-              <p className="mt-1 text-[13px] text-ash">
+              <p className="mt-2 text-[16px] text-ash">
                 {mine[0].size} · {mine[0].fulfilment === "pickup" ? "pick up at the show" : "posted to you"} · card •••• {mine[0].card.last4}
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Link href={`/o/${mine[0].id}`} className="inline-flex h-10 items-center border border-ink bg-ink px-4 text-[12px] uppercase tracking-[0.14em] text-paper">
-                  View order & ticket
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link href={`/o/${mine[0].id}`} className="inline-flex min-h-12 items-center bg-ink px-5 text-[16px] font-bold text-paper hover:bg-coal">
+                  Your order and ticket
                 </Link>
                 {mine[0].status === "action_required" && (
-                  <Link href={`/pay/${mine[0].id}`} className="inline-flex h-10 items-center border border-ink bg-lime px-4 text-[12px] uppercase tracking-[0.14em]">
+                  <Link href={`/pay/${mine[0].id}`} className="inline-flex min-h-12 items-center bg-brick px-5 text-[16px] font-bold text-paper hover:bg-brick-deep">
                     Confirm payment
                   </Link>
                 )}
@@ -148,65 +163,60 @@ export default function RoundPage() {
           )}
 
           {!open && !mine.length && (
-            <div className="mt-6 border border-line bg-haze p-4 text-[13px] text-ash">
+            <div className="border-l-[6px] border-ink bg-stone p-5 text-[17px] leading-[1.45]">
               {round.status === "failed"
                 ? `This round closed at ${c.pledgedCount + c.all.filter((p) => p.status === "released").length} of ${round.target}. Nobody was charged and nothing will be printed.`
                 : round.status === "pending_review" || round.status === "draft"
-                  ? "This round isn't open yet."
+                  ? "This round isn't open yet. Check back soon."
                   : round.status === "cancelled"
                     ? "This round was cancelled. Everyone who paid has been refunded."
-                    : "Pledging has closed for this round."}
+                    : "This round has closed, and it's going ahead."}
             </div>
           )}
 
-          <div className="mt-8 grid grid-cols-2 border-t border-l border-line">
+          <dl className="grid grid-cols-2 border-t-[3px] border-ink">
             {[
-              ["show", round.showName],
-              ["when", weekday(round.showDate)],
-              ["pick up", round.venue],
-              ["delivery", round.delivery ? `+${aud(round.deliveryFee)} Australia-wide` : "Pick up only"],
-            ].map(([k, v]) => (
-              <div key={k} className="scanlines border-r border-b border-line p-3">
-                <div className="label">{k}</div>
-                <div className="mt-1 text-[13px]">{v}</div>
+              ["Show", round.showName],
+              ["When", weekday(round.showDate)],
+              ["Pick up", round.venue],
+              ["Delivery", round.delivery ? `+${aud(round.deliveryFee)} Australia-wide` : "Pick up only"],
+            ].map(([k, v], i) => (
+              <div key={k} className={cx("border-b-2 border-ink/15 py-3", i % 2 === 0 && "pr-4")}>
+                <dt className="text-[13px] tracking-[0.14em] text-ash uppercase">{k}</dt>
+                <dd className="mt-0.5 text-[16px] font-medium">{v}</dd>
               </div>
             ))}
-          </div>
+          </dl>
 
-          <section className="mt-8">
-            <Label>about</Label>
-            <p className="mt-2 text-[14px] leading-relaxed">{round.description}</p>
-            <ul className="mt-3 space-y-1 text-[13px] text-ash lg:hidden">
+          <section>
+            <div className="text-[15px] tracking-[0.14em] text-ash uppercase">About it</div>
+            <p className="mt-2 text-[17px] leading-[1.5]">{round.description}</p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-[15px] text-ash lg:hidden">
               {round.details.map((d) => (
-                <li key={d}>◇ {d}</li>
+                <li key={d}>{d}</li>
               ))}
             </ul>
+            <p className="mt-4 text-[14px] text-ash">Payments are handled by Stripe. Merch Round never sees your card number.</p>
           </section>
 
-          <section className="mt-8">
-            <Label>how this works</Label>
-            <ol className="mt-3 grid gap-px border border-line bg-line sm:grid-cols-2">
-              {[
-                ["Pledge", "Save your card. Nothing is charged."],
-                [`Hits ${round.target}?`, `Cards are charged on ${date(round.closesAt)}.`],
-                ["Misses?", "Nobody pays. Card released."],
-                ["Pick up", `Show your QR at ${round.venue.split(",")[0]}.`],
-              ].map(([t, b], i) => (
-                <li key={t} className="bg-card p-4">
-                  <PixelNum className="text-lg">{String(i + 1).padStart(2, "0")}</PixelNum>
-                  <H3 className="mt-1 !text-[17px]">{t}</H3>
-                  <p className="text-[12px] text-ash">{b}</p>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-3 text-[11px] text-mute">Payments secured by Stripe. Merch Round never sees your card number.</p>
-          </section>
-
-          <div className="mt-8">
-            <DemoControls round={round} />
-          </div>
+          <DemoControls round={round} />
         </div>
       </div>
+
+      <section className="bg-ink text-paper">
+        <div className="mx-auto grid max-w-[1280px] gap-8 px-5 py-18 sm:px-8 md:grid-cols-3">
+          {[
+            ["Open for a while", `This round closes on ${date(round.closesAt, true)}. After that it either goes ahead or it doesn't.`],
+            ["Made once we reach the number", "When enough of us have bought, the run gets made. If not, nobody pays and nothing is left sitting in a warehouse."],
+            ["Collect it at the show", `Pick it up at ${round.venue.split(",")[0]} on the night, or have it delivered if you can't make it.`],
+          ].map(([t, b]) => (
+            <div key={t} className="flex flex-col gap-2.5">
+              <div className="font-display text-[36px] leading-none text-brick-light">{t}</div>
+              <p className="text-[18px] leading-[1.45] text-cloud">{b}</p>
+            </div>
+          ))}
+        </div>
+      </section>
       <Footer />
     </>
   );
@@ -215,10 +225,10 @@ export default function RoundPage() {
 function NotFound() {
   return (
     <div className="mx-auto max-w-[640px] px-5 py-24 text-center">
-      <div className="font-pixel text-3xl text-mute">404_</div>
-      <p className="mt-3 text-ash">That round doesn&apos;t exist (or the demo was reset).</p>
-      <Link href="/rounds" className="mt-6 inline-block underline">
-        Browse rounds
+      <div className="font-display text-[56px] leading-none">Not found</div>
+      <p className="mt-3 text-[17px] text-ash">That round doesn&apos;t exist, or the demo was reset.</p>
+      <Link href="/rounds" className="mt-6 inline-block text-[17px] font-bold underline">
+        See open rounds
       </Link>
     </div>
   );

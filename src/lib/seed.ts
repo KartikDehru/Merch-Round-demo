@@ -1,7 +1,7 @@
 import { DAY, DEMO_FAN, HOUR, ADMIN_EMAIL, hash, suggestTarget } from "./domain";
 import type { Artist, Email, LogEvent, Pledge, PledgeStatus, Round, World } from "./types";
 
-export const SEED_VERSION = 3;
+export const SEED_VERSION = 4;
 
 const FIRST = [
   "Alex", "Jess", "Riley", "Mia", "Noah", "Ava", "Liam", "Zoe", "Ethan", "Chloe", "Ollie", "Grace", "Jack",
@@ -47,7 +47,7 @@ export function createSeed(now = Date.now()): World {
       name: "The Static Hours",
       slug: "the-static-hours",
       city: "Wollongong, NSW",
-      accent: "#9ad84a",
+      accent: "#C8452B",
       bio: "Four-piece fuzz-pop from the Illawarra. Loud guitars, quiet apologies.",
       instagram: "@thestatichours",
       stripe: "verified",
@@ -57,7 +57,7 @@ export function createSeed(now = Date.now()): World {
       name: "Neon Gravel",
       slug: "neon-gravel",
       city: "Melbourne, VIC",
-      accent: "#ff6b3d",
+      accent: "#1D4B4F",
       bio: "Post-punk from Brunswick. Songs about trams, rent, and better days.",
       instagram: "@neongravel",
       stripe: "verified",
@@ -67,7 +67,7 @@ export function createSeed(now = Date.now()): World {
       name: "Saltwater Choir",
       slug: "saltwater-choir",
       city: "Byron Bay, NSW",
-      accent: "#3ba7c9",
+      accent: "#2F6A84",
       bio: "Folk harmonies, salt in the strings.",
       instagram: "@saltwaterchoir",
       stripe: "verified",
@@ -77,7 +77,7 @@ export function createSeed(now = Date.now()): World {
       name: "Dial Tone Dogs",
       slug: "dial-tone-dogs",
       city: "Brisbane, QLD",
-      accent: "#e4b637",
+      accent: "#B07D24",
       bio: "Garage rock with the phone off the hook.",
       instagram: "@dialtonedogs",
       stripe: "verified",
@@ -87,7 +87,7 @@ export function createSeed(now = Date.now()): World {
       name: "Low Tide Club",
       slug: "low-tide-club",
       city: "Perth, WA",
-      accent: "#b48cf2",
+      accent: "#5B4C7E",
       bio: "Dream-pop for the long drive down the coast.",
       instagram: "@lowtideclub",
       stripe: "verified",
@@ -97,7 +97,7 @@ export function createSeed(now = Date.now()): World {
       name: "Velvet Mile",
       slug: "velvet-mile",
       city: "Sydney, NSW",
-      accent: "#e8577b",
+      accent: "#8E2F45",
       bio: "Synth-heavy heartbreak, best played loud.",
       instagram: "@velvetmile",
       stripe: "verified",
@@ -456,14 +456,14 @@ export function createSeed(now = Date.now()): World {
     const n = pledges.filter((p) => p.roundId === r.id).length;
     if (r.reachedAt) ev(r.reachedAt, "system", `Reached target of ${r.target}`, r.id, "good");
     if (r.status === "live") {
-      ev(now - 2 * HOUR, "system", `${n} fans have pledged`, r.id);
+      ev(now - 2 * HOUR, "system", `${n} fans have asked for one`, r.id);
       continue;
     }
     if (r.status === "failed") {
       ev(r.closesAt, "system", `Closed at ${n} of ${r.target}. Nobody charged, cards released.`, r.id, "bad");
       continue;
     }
-    ev(r.closesAt, "system", `Closed at ${n} pledges. Charging saved cards.`, r.id);
+    ev(r.closesAt, "system", `Closed at ${n} orders. Charging saved cards.`, r.id);
     ev(r.closesAt + HOUR, "stripe", "Off-session charges created", r.id, "money");
     if (r.status === "charging") {
       ev(r.closesAt + 2 * HOUR, "stripe", "6 charges need attention: 3 soft declines, 2 need 3-D Secure, 1 expired card", r.id, "warn");

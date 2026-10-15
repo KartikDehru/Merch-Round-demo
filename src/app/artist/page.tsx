@@ -43,14 +43,14 @@ function Dashboard() {
             <H1 className="mt-1 !text-[36px] sm:!text-[48px]">{artist.name}</H1>
           </div>
         </div>
-        <LinkButton href="/artist/new" variant="lime" size="lg">
+        <LinkButton href="/artist/new" variant="brick" size="lg">
           + New round
         </LinkButton>
       </div>
 
       {artist.stripe !== "verified" && (
         <div className="mt-8 flex flex-wrap items-center gap-4 border-2 border-hold bg-hold-soft p-4">
-          <span className="font-pixel text-2xl text-hold">!</span>
+          <span className="font-display text-2xl text-hold">!</span>
           <div className="flex-1">
             <div className="font-display text-[17px] font-bold">Finish Stripe setup to publish rounds</div>
             <div className="text-[13px] text-ash">Stripe verifies your ID and bank account so we can pay you.</div>
@@ -96,7 +96,7 @@ function Dashboard() {
               <Link
                 key={r.id}
                 href={`/artist/rounds/${r.id}`}
-                className="group grid gap-5 border border-line bg-card p-4 transition hover:border-ink hover:shadow-[5px_5px_0_var(--color-ink)] sm:grid-cols-[96px_1fr_auto] sm:items-center"
+                className="group grid gap-5 border-t-[3px] border-ink bg-card p-4 transition hover:bg-stone sm:grid-cols-[96px_1fr_auto] sm:items-center"
               >
                 <div className="hidden size-24 border border-line dotgrid sm:block">
                   <MerchMock product={r.product} colorway={r.colorway} motif={r.motif} accent={artist.accent} />
@@ -120,7 +120,7 @@ function Dashboard() {
                 </div>
                 <div className="flex gap-6 sm:flex-col sm:items-end sm:gap-1 sm:text-right">
                   <div>
-                    <div className="label">{pre ? `${c.pledgedCount}/${r.target} fans` : `${c.paidCount} paid`}</div>
+                    <div className="label">{pre ? `${c.pledgedCount} of ${r.target} asked for` : `${c.paidCount} paid`}</div>
                     {pre && <Countdown to={r.closesAt} now={now} className="text-[13px]" />}
                   </div>
                   <div>

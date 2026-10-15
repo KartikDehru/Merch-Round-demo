@@ -25,30 +25,42 @@ export function RoundCard({ round, artist, href, index }: { round: Round; artist
   const c = counts(round, world.pledges);
   const shown = round.status === "live" ? c.pledgedCount : c.paidCount || c.pledgedCount;
   return (
-    <Link href={href} className="group block border border-line bg-card transition hover:-translate-y-0.5 hover:border-ink hover:shadow-[5px_5px_0_var(--color-ink)]">
-      <div className="relative aspect-[5/4] overflow-hidden border-b border-line dotgrid">
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-          {index !== undefined && <span className="font-pixel text-lg text-mute">{String(index + 1).padStart(2, "0")}</span>}
-        </div>
-        <div className="absolute top-3 right-3 z-10">
+    <Link href={href} className="group block bg-ink text-paper transition duration-300 hover:-translate-y-1 hover:-rotate-1">
+      <div className="p-4 pb-0">
+        <div className="flex items-baseline justify-between text-[12px] tracking-[0.14em] text-fog uppercase">
+          <span>{index !== undefined ? `Round ${String(index + 1).padStart(2, "0")}` : artist.city}</span>
           <RoundPill status={round.status} fan />
         </div>
-        <div className="absolute inset-6 transition-transform duration-500 group-hover:scale-[1.04]">
-          <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={artist.accent} label={artist.name} />
+        <div className="relative mt-3 aspect-[5/4] overflow-hidden" style={{ background: artist.accent }}>
+          <div className="absolute inset-5 transition-transform duration-500 group-hover:scale-[1.05]">
+            <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={round.colorway === "bone" ? "#15181C" : "#F3EFE6"} label={artist.name} />
+          </div>
+        </div>
+        <div className="mt-4 font-display text-[28px] leading-none">{artist.name}</div>
+        <div className="mt-1 text-[15px] text-fog">
+          {round.title} · {aud(round.price)}
         </div>
       </div>
-      <div className="p-4">
-        <div className="label">{artist.name}</div>
-        <div className="mt-1 flex items-baseline justify-between gap-3">
-          <div className="font-display text-[20px] leading-tight font-bold tracking-tight">{round.title}</div>
-          <div className="font-display text-[18px] font-bold tabular">{aud(round.price)}</div>
+      <div className="relative mx-3 mt-4 h-0.5 ticket-edge text-paper/70">
+        <span className="absolute top-1/2 -left-5 size-5 -translate-y-1/2 rounded-full bg-paper" />
+        <span className="absolute top-1/2 -right-5 size-5 -translate-y-1/2 rounded-full bg-paper" />
+      </div>
+      <div className="p-4 pt-4">
+        <div className="flex justify-between text-[15px] font-bold tabular">
+          <span>{shown} asked for</span>
+          <span className="font-medium text-fog">{round.target} needed</span>
         </div>
-        <Tally pledged={shown} target={round.target} accent={artist.accent} size="sm" className="mt-3" />
-        <div className="mt-2 flex items-center justify-between text-[12px] text-ash">
-          <span className="tabular">
-            <b className="text-ink">{shown}</b> of {round.target} fans
-          </span>
-          {round.status === "live" ? <Countdown to={round.closesAt} now={now} className="text-[12px]" /> : <span>{date(round.showDate)} · {round.venue.split(",")[1]?.trim() ?? round.venue}</span>}
+        <Tally pledged={shown} target={round.target} size="sm" dark className="mt-2.5" />
+        <div className="mt-2.5 text-[13px] text-fog">
+          {round.status === "live" ? (
+            <>
+              Closes in <Countdown to={round.closesAt} now={now} className="text-[13px] !text-paper" />
+            </>
+          ) : (
+            <span>
+              {date(round.showDate)} · {round.venue.split(",")[0]}
+            </span>
+          )}
         </div>
       </div>
     </Link>
@@ -59,19 +71,19 @@ export function RoundCard({ round, artist, href, index }: { round: Round; artist
 
 export function Receipt({ rows, total, className }: { rows: { label: ReactNode; value: ReactNode; muted?: boolean }[]; total?: { label: ReactNode; value: ReactNode }; className?: string }) {
   return (
-    <div className={cx("font-mono text-[13px]", className)}>
+    <div className={cx("text-[15px]", className)}>
       {rows.map((r, i) => (
-        <div key={i} className={cx("flex items-baseline gap-2 py-1", r.muted && "text-ash")}>
+        <div key={i} className={cx("flex items-baseline gap-2 py-1", r.muted && "opacity-60")}>
           <span className="shrink-0">{r.label}</span>
-          <span className="mb-1 flex-1 border-b border-dotted border-mute/60" />
+          <span className="mb-1 flex-1 border-b border-dotted border-current opacity-30" />
           <span className="shrink-0 tabular">{r.value}</span>
         </div>
       ))}
       {total && (
-        <div className="mt-2 flex items-baseline gap-2 border-t-2 border-ink pt-2">
-          <span className="font-display text-[15px] font-bold uppercase">{total.label}</span>
+        <div className="mt-2 flex items-baseline gap-2 border-t-[3px] border-current pt-2">
+          <span className="font-display text-[18px]">{total.label}</span>
           <span className="flex-1" />
-          <span className="font-display text-[22px] font-bold tabular">{total.value}</span>
+          <span className="font-display text-[28px] tabular">{total.value}</span>
         </div>
       )}
     </div>
@@ -89,7 +101,7 @@ export function FanTimeline({ round, pledge }: { round: Round; pledge: Pledge })
   const reached = !!round.reachedAt || !["live", "draft", "pending_review"].includes(round.status);
 
   const steps = [
-    { label: "Pledged · card saved", sub: date(pledge.createdAt), on: true },
+    { label: "Bought · card saved", sub: date(pledge.createdAt), on: true },
     { label: `Round hits ${round.target}`, sub: reached ? "Reached" : `Closes ${date(round.closesAt)}`, on: reached && round.status !== "failed" },
     { label: `Charged ${aud(pledge.amount)}`, sub: paid ? date(pledge.paidAt ?? round.closesAt) : pledge.status === "action_required" ? "Needs your OK" : pledge.status === "card_update_required" ? "Card declined" : "Only if it hits", on: paid, warn: ["action_required", "card_update_required", "retry_scheduled"].includes(pledge.status) },
     { label: "Printing", sub: printing ? `Ready ${date(round.printer.expectedReadyAt ?? round.showDate)}` : `${round.printer.name}`, on: printing && paid },
@@ -105,18 +117,18 @@ export function FanTimeline({ round, pledge }: { round: Round; pledge: Pledge })
     <ol className="relative">
       {steps.map((s, i) => (
         <li key={i} className="relative flex gap-4 pb-5 last:pb-0">
-          {i < steps.length - 1 && <span className={cx("absolute top-5 bottom-0 left-[9px] w-[2px]", s.on && steps[i + 1].on ? "bg-ink" : "bg-line")} />}
+          {i < steps.length - 1 && <span className={cx("absolute top-6 bottom-0 left-[11px] w-[3px]", s.on && steps[i + 1].on ? "bg-ink" : "bg-line")} />}
           <span
             className={cx(
-              "relative mt-0.5 flex size-5 shrink-0 items-center justify-center border-2 text-[10px]",
-              s.on ? "border-ink bg-lime" : s.warn ? "border-hold bg-hold-soft" : failed ? "border-line bg-haze" : "border-line bg-card",
+              "relative flex size-6 shrink-0 items-center justify-center rounded-full border-[3px] text-[11px] font-bold",
+              s.on ? "border-ink bg-ink text-paper" : s.warn ? "border-hold bg-hold-soft text-hold" : failed ? "border-line bg-haze" : "border-ink/25 bg-paper",
             )}
           >
             {s.on ? "✓" : s.warn ? "!" : ""}
           </span>
           <div>
-            <div className={cx("font-display text-[16px] leading-tight font-bold", !s.on && "text-ash")}>{s.label}</div>
-            {s.sub && <div className="text-[12px] text-mute">{s.sub}</div>}
+            <div className={cx("text-[17px] leading-tight font-bold", !s.on && "text-ash")}>{s.label}</div>
+            {s.sub && <div className="text-[14px] text-ash">{s.sub}</div>}
           </div>
         </li>
       ))}
@@ -131,40 +143,40 @@ export function Ticket({ round, artist, pledge }: { round: Round; artist: Artist
   const dead = ["withdrawn", "released", "unpaid", "refunded"].includes(pledge.status);
   return (
     <div className="relative">
-      <div className="relative flex border-2 border-ink bg-card shadow-[6px_6px_0_var(--color-ink)]">
-        <div className="w-2.5 shrink-0" style={{ background: artist.accent }} />
-        <div className="min-w-0 flex-1 p-4 sm:p-5">
-          <div className="label">{pledge.fulfilment === "pickup" ? "show pick-up ticket" : "delivery order"}</div>
-          <div className="mt-2 font-display text-[22px] leading-none font-extrabold uppercase">{artist.name}</div>
-          <div className="mt-1 text-[13px]">
-            {round.title} · <b>{pledge.size}</b>
+      <div className="relative flex -rotate-1 bg-ink text-paper">
+        <div className="w-3 shrink-0" style={{ background: artist.accent }} />
+        <div className="min-w-0 flex-1 p-5 sm:p-6">
+          <div className="text-[12px] tracking-[0.14em] text-fog uppercase">{pledge.fulfilment === "pickup" ? "Show pick-up ticket" : "Delivery order"}</div>
+          <div className="mt-2 font-display text-[34px] leading-none">{artist.name}</div>
+          <div className="mt-1 text-[16px] text-fog">
+            {round.title} · <b className="text-paper">{pledge.size}</b>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-3 text-[12px]">
+          <div className="mt-5 grid grid-cols-2 gap-4 text-[14px]">
             <div>
-              <div className="label">name</div>
+              <div className="text-[11px] tracking-[0.14em] text-fog uppercase">Name</div>
               <div className="mt-0.5 truncate">{pledge.name}</div>
             </div>
             <div>
-              <div className="label">code</div>
-              <div className="mt-0.5 font-pixel text-[16px] tracking-wider">{pledge.code}</div>
+              <div className="text-[11px] tracking-[0.14em] text-fog uppercase">Code</div>
+              <div className="mt-0.5 font-display text-[20px] leading-tight text-brick-light">{pledge.code}</div>
             </div>
             <div>
-              <div className="label">{pledge.fulfilment === "pickup" ? "where" : "to"}</div>
+              <div className="text-[11px] tracking-[0.14em] text-fog uppercase">{pledge.fulfilment === "pickup" ? "Where" : "To"}</div>
               <div className="mt-0.5 truncate">{pledge.fulfilment === "pickup" ? round.venue : pledge.address}</div>
             </div>
             <div>
-              <div className="label">when</div>
+              <div className="text-[11px] tracking-[0.14em] text-fog uppercase">When</div>
               <div className="mt-0.5">{date(round.showDate, true)}</div>
             </div>
           </div>
         </div>
-        <div className="relative flex w-[132px] shrink-0 flex-col items-center justify-center border-l-2 border-dashed border-ink/60 p-3 sm:w-[150px]">
-          <span className="absolute -top-3 -left-3 size-6 rounded-full border-2 border-ink bg-paper" />
-          <span className="absolute -bottom-3 -left-3 size-6 rounded-full border-2 border-ink bg-paper" />
-          <div className={cx("bg-white p-1.5 transition", !active && "opacity-25 blur-[1.5px]")}>
-            <QRCodeSVG value={`merchround:${pledge.code}:${pledge.id}`} size={96} level="M" fgColor="#111216" />
+        <div className="relative flex w-[132px] shrink-0 flex-col items-center justify-center border-l-2 border-dashed border-paper/60 p-3 sm:w-[160px]">
+          <span className="absolute -top-3 -left-[13px] size-6 rounded-full bg-paper" />
+          <span className="absolute -bottom-3 -left-[13px] size-6 rounded-full bg-paper" />
+          <div className={cx("bg-paper p-2 transition", !active && "opacity-25 blur-[1.5px]")}>
+            <QRCodeSVG value={`merchround:${pledge.code}:${pledge.id}`} size={96} level="M" fgColor="#15181C" bgColor="#F3EFE6" />
           </div>
-          <div className="mt-2 text-center text-[10px] uppercase tracking-[0.14em] text-ash">
+          <div className="mt-2 text-center text-[11px] tracking-[0.12em] text-fog uppercase">
             {active ? "show at the desk" : dead ? "not valid" : "unlocks when paid"}
           </div>
         </div>
@@ -172,7 +184,7 @@ export function Ticket({ round, artist, pledge }: { round: Round; artist: Artist
       <div className="pointer-events-none absolute -top-4 right-28 sm:right-36">
         {pledge.status === "fulfilled" && <Stamp tone="ink" rot={-8}>Collected</Stamp>}
         {pledge.status === "paid" && <Stamp tone="go" rot={-6}>Paid</Stamp>}
-        {pledge.status === "pledged" && <Stamp tone="lime" rot={-5}>Pledged</Stamp>}
+        {pledge.status === "pledged" && <Stamp tone="brick" rot={-5}>Asked for</Stamp>}
         {pledge.status === "action_required" && <Stamp tone="hold" rot={-5}>Action needed</Stamp>}
         {pledge.status === "card_update_required" && <Stamp tone="stop" rot={-5}>Card declined</Stamp>}
         {pledge.status === "retry_scheduled" && <Stamp tone="hold" rot={-5}>Retrying</Stamp>}
@@ -190,7 +202,7 @@ export function Ticket({ round, artist, pledge }: { round: Round; artist: Artist
 export function DemoControls({ round, compact = false }: { round: Round; compact?: boolean }) {
   const { act, toast, world } = useWorld();
   const c = counts(round, world.pledges);
-  const steps: { label: string; hint: string; run: () => void; tone?: "lime" | "secondary" | "danger" }[] = [];
+  const steps: { label: string; hint: string; run: () => void; tone?: "brick" | "secondary" | "danger" }[] = [];
 
   const go = (fn: (w: typeof world) => void, msg: string, tone: "good" | "warn" | "bad" | "neutral" = "good") => () => {
     act(fn);
@@ -199,54 +211,54 @@ export function DemoControls({ round, compact = false }: { round: Round; compact
 
   switch (round.status) {
     case "pending_review":
-      steps.push({ label: "Admin approves", hint: "Publishes the round", run: go(A.approveRound(round.id), "Round approved and live"), tone: "lime" });
+      steps.push({ label: "Admin approves", hint: "Publishes the round", run: go(A.approveRound(round.id), "Round approved and live"), tone: "brick" });
       break;
     case "live":
-      steps.push({ label: "+5 fans pledge", hint: "Simulate traffic from Instagram", run: go(A.simAddPledges(round.id, 5), "5 fans pledged"), tone: "secondary" });
+      steps.push({ label: "+5 fans buy", hint: "Simulate traffic from Instagram", run: go(A.simAddPledges(round.id, 5), "5 more fans bought"), tone: "secondary" });
       if (c.pledgedCount < round.target)
         steps.push({ label: `Fill to ${round.target}`, hint: "Get it over the line", run: go(A.simAddPledges(round.id, round.target - c.pledgedCount), `Reached ${round.target}`), tone: "secondary" });
       steps.push({
         label: "Jump to close date",
         hint: c.pledgedCount >= round.target ? "Closes and charges saved cards" : "Closes below target: nobody charged",
         run: go(A.simClose(round.id), c.pledgedCount >= round.target ? "Closed. Charging cards." : "Closed below target. Nobody charged.", c.pledgedCount >= round.target ? "good" : "bad"),
-        tone: "lime",
+        tone: "brick",
       });
       break;
     case "charging":
       steps.push({ label: "+24h: retry soft declines", hint: "Stripe retries insufficient funds etc.", run: go(A.simRetry(round.id), "Retried declined cards"), tone: "secondary" });
       steps.push({ label: "Some fans fix payment", hint: "Half complete 3-D Secure or add a card", run: go(A.simFansAct(round.id), "Fans updated payments"), tone: "secondary" });
-      steps.push({ label: "Jump +72h: end window", hint: "Lapses unpaid, confirms or asks artist", run: go(A.simEndWindow(round.id), "Charge window closed"), tone: "lime" });
+      steps.push({ label: "Jump +72h: end window", hint: "Lapses unpaid, confirms or asks artist", run: go(A.simEndWindow(round.id), "Charge window closed"), tone: "brick" });
       break;
     case "awaiting_decision":
       steps.push({ label: "Let 48h pass", hint: "No decision = cancel + refund", run: go(A.simExpireDecision(round.id), "Decision expired. Round cancelled.", "bad"), tone: "danger" });
       break;
     case "confirmed":
-      steps.push({ label: "Admin sends printer order", hint: "Size breakdown goes to printer", run: go(A.sendPrinterOrder(round.id), "Order sent to printer"), tone: "lime" });
+      steps.push({ label: "Admin sends printer order", hint: "Size breakdown goes to printer", run: go(A.sendPrinterOrder(round.id), "Order sent to printer"), tone: "brick" });
       break;
     case "in_production":
-      steps.push({ label: "Jump: printer delivers", hint: "Invoice paid, merch at artist", run: go(A.printerDelivered(round.id), "Merch delivered to artist"), tone: "lime" });
+      steps.push({ label: "Jump: printer delivers", hint: "Invoice paid, merch at artist", run: go(A.printerDelivered(round.id), "Merch delivered to artist"), tone: "brick" });
       break;
     case "delivered":
-      steps.push({ label: "Artist confirms + gets paid", hint: "Stripe transfer to artist", run: go(A.confirmDelivery(round.id), "Artist paid out"), tone: "lime" });
+      steps.push({ label: "Artist confirms + gets paid", hint: "Stripe transfer to artist", run: go(A.confirmDelivery(round.id), "Artist paid out"), tone: "brick" });
       break;
     case "paid_out":
-      steps.push({ label: "Jump to show night", hint: "Hand over everyone except Sam", run: go(A.simShowNight(round.id), "Show night done"), tone: "lime" });
+      steps.push({ label: "Jump to show night", hint: "Hand over everyone except Sam", run: go(A.simShowNight(round.id), "Show night done"), tone: "brick" });
       break;
   }
 
   if (!steps.length) return null;
 
   return (
-    <div className={cx("relative border border-dashed border-ink/50 bg-lime-soft/60", compact ? "p-3" : "p-4")}>
+    <div className={cx("relative border-2 border-dashed border-ink/40 bg-stone", compact ? "p-3" : "p-4")}>
       <div className="flex items-center justify-between gap-3">
-        <Label>demo controls · time travel</Label>
+        <Label>Demo controls · time travel</Label>
         <RoundPill status={round.status} />
       </div>
       <div className={cx("mt-3 grid gap-2", !compact && "sm:grid-cols-2")}>
         {steps.map((s) => (
-          <Button key={s.label} variant={s.tone ?? "secondary"} onClick={s.run} className="h-auto flex-col items-start gap-0.5 py-2.5 text-left normal-case tracking-normal">
-            <span className="text-[12px] uppercase tracking-[0.14em]">{s.label}</span>
-            <span className="text-[11px] opacity-70">{s.hint}</span>
+          <Button key={s.label} variant={s.tone ?? "secondary"} onClick={s.run} className="h-auto flex-col items-start gap-0.5 py-2.5 text-left">
+            <span className="text-[15px]">{s.label}</span>
+            <span className="text-[12px] font-normal opacity-75">{s.hint}</span>
           </Button>
         ))}
       </div>
@@ -256,33 +268,32 @@ export function DemoControls({ round, compact = false }: { round: Round; compact
 
 /* ───────── Round hero numbers ───────── */
 
-export function ProgressBlock({ round, artist, big = false }: { round: Round; artist: Artist; big?: boolean }) {
+export function ProgressBlock({ round, big = false, dark = false }: { round: Round; artist?: Artist; big?: boolean; dark?: boolean }) {
   const { world, now } = useWorld();
   const c = counts(round, world.pledges);
   const pre = round.status === "live";
   const shown = pre ? c.pledgedCount : c.paidCount;
   return (
     <div>
-      <div className="flex items-end justify-between gap-4">
-        <div className="font-display leading-none font-extrabold tabular">
-          <span className={big ? "text-[64px]" : "text-[44px]"}>{shown}</span>
-          <span className="text-[22px] text-mute"> / {round.target}</span>
-        </div>
-        {pre && (
-          <div className="text-right">
-            <div className="label">closes in</div>
-            <Countdown to={round.closesAt} now={now} className="text-[15px]" />
-          </div>
-        )}
+      <div className={cx("flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-bold tabular", big ? "text-[20px]" : "text-[17px]")}>
+        <span>
+          {shown} {pre ? "asked for" : "paid"}
+        </span>
+        <span className={cx("font-medium", dark ? "text-fog" : "text-ash")}>{round.target} needed</span>
       </div>
       <Tally
         pledged={pre ? c.pledgedCount : c.paidCount + c.owed.length}
         paid={pre ? 0 : c.paidCount}
         target={round.target}
-        accent={artist.accent}
+        dark={dark}
         className="mt-3"
       />
-      <div className="mt-2 text-[13px] text-ash">
+      {pre && (
+        <div className={cx("mt-3 text-[15px]", dark ? "text-fog" : "text-ash")}>
+          Closes in <Countdown to={round.closesAt} now={now} className={cx("text-[15px]", dark && "!text-paper")} />
+        </div>
+      )}
+      <div className={cx("mt-1 text-[15px] leading-snug", dark ? "text-cloud" : "text-ash")}>
         {pre
           ? c.pledgedCount >= round.target
             ? `Target reached. Still open until ${date(round.closesAt)}.`
@@ -297,15 +308,15 @@ export function ProgressBlock({ round, artist, big = false }: { round: Round; ar
 
 /* ───────── Size bars ───────── */
 
-export function SizeBars({ sizes, accent }: { sizes: Record<string, number>; accent: string }) {
+export function SizeBars({ sizes }: { sizes: Record<string, number>; accent?: string }) {
   const max = Math.max(1, ...Object.values(sizes));
   return (
     <div className="space-y-2">
       {Object.entries(sizes).map(([s, n]) => (
         <div key={s} className="flex items-center gap-3">
-          <span className="w-16 shrink-0 font-display text-[14px] font-bold">{s}</span>
-          <div className="h-5 flex-1 border border-line bg-paper">
-            <div className="h-full border-r border-ink transition-all" style={{ width: `${(n / max) * 100}%`, background: accent }} />
+          <span className="w-16 shrink-0 text-[15px] font-bold">{s}</span>
+          <div className="h-5 flex-1 bg-ink/10">
+            <div className="h-full bg-brick transition-all" style={{ width: `${(n / max) * 100}%` }} />
           </div>
           <span className="w-8 text-right tabular">{n}</span>
         </div>

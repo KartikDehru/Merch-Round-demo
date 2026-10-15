@@ -8,20 +8,20 @@ export function cx(...c: (string | false | null | undefined)[]) {
   return c.filter(Boolean).join(" ");
 }
 
-type Variant = "primary" | "secondary" | "ghost" | "lime" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "brick" | "danger";
 
 const btnBase =
-  "inline-flex items-center justify-center gap-2 font-mono uppercase tracking-[0.14em] text-[12px] transition-[transform,background,color,box-shadow] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-lime focus-visible:outline-offset-2 select-none";
+  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-brick focus-visible:outline-offset-2 select-none";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-ink text-paper hover:bg-coal border border-ink",
-  secondary: "bg-card text-ink border border-ink/80 hover:bg-haze",
-  ghost: "text-ash hover:text-ink",
-  lime: "bg-lime text-ink border border-ink hover:shadow-[3px_3px_0_var(--color-ink)] hover:-translate-y-px",
-  danger: "bg-card text-stop border border-stop/60 hover:bg-stop-soft",
+  primary: "bg-ink text-paper hover:bg-coal border-2 border-ink",
+  secondary: "bg-transparent text-ink border-2 border-ink hover:bg-ink hover:text-paper",
+  ghost: "text-ash hover:text-ink hover:underline",
+  brick: "bg-brick text-paper border-2 border-brick hover:bg-brick-deep hover:border-brick-deep",
+  danger: "bg-transparent text-stop border-2 border-stop/70 hover:bg-stop-soft",
 };
 
-const sizes = { sm: "h-8 px-3", md: "h-10 px-4", lg: "h-12 px-6 text-[13px]" };
+const sizes = { sm: "h-9 px-3 text-[13px]", md: "h-11 px-5 text-[15px]", lg: "h-14 px-7 text-[17px]" };
 
 export function Button({
   variant = "primary",
@@ -41,22 +41,17 @@ export function LinkButton({
   return <Link className={cx(btnBase, variants[variant], sizes[size], className)} {...rest} />;
 }
 
-export function Label({ children, className, slash = true }: { children: ReactNode; className?: string; slash?: boolean }) {
-  return (
-    <div className={cx("label", className)}>
-      {slash && <span className="text-mute">{"// "}</span>}
-      {children}
-    </div>
-  );
+export function Label({ children, className }: { children: ReactNode; className?: string; slash?: boolean }) {
+  return <div className={cx("label", className)}>{children}</div>;
 }
 
 export function PixelNum({ children, className }: { children: ReactNode; className?: string }) {
-  return <span className={cx("font-pixel text-2xl text-mute", className)}>{children}</span>;
+  return <span className={cx("font-display text-[28px] leading-none text-brick", className)}>{children}</span>;
 }
 
 export function Cell({ children, className, ...rest }: ComponentProps<"div">) {
   return (
-    <div className={cx("scanlines border border-line", className)} {...rest}>
+    <div className={cx("border border-line bg-card", className)} {...rest}>
       {children}
     </div>
   );
@@ -64,7 +59,7 @@ export function Cell({ children, className, ...rest }: ComponentProps<"div">) {
 
 export function Panel({ title, action, children, className }: { title: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <section className={cx("border border-line bg-card", className)}>
+    <section className={cx("border-t-[3px] border-ink bg-card", className)}>
       <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <Label>{title}</Label>
         {action}
@@ -75,32 +70,32 @@ export function Panel({ title, action, children, className }: { title: ReactNode
 }
 
 export function H1({ children, className }: { children: ReactNode; className?: string }) {
-  return <h1 className={cx("font-display text-[40px] leading-[0.95] font-bold tracking-tight uppercase sm:text-[56px]", className)}>{children}</h1>;
+  return <h1 className={cx("font-display text-[48px] leading-[0.95] sm:text-[72px]", className)}>{children}</h1>;
 }
 
 export function H2({ children, className }: { children: ReactNode; className?: string }) {
-  return <h2 className={cx("font-display text-[28px] leading-[1.05] font-bold tracking-tight sm:text-[36px]", className)}>{children}</h2>;
+  return <h2 className={cx("font-display text-[34px] leading-none sm:text-[48px]", className)}>{children}</h2>;
 }
 
 export function H3({ children, className }: { children: ReactNode; className?: string }) {
-  return <h3 className={cx("font-display text-[20px] leading-tight font-bold tracking-tight sm:text-[24px]", className)}>{children}</h3>;
+  return <h3 className={cx("font-display text-[22px] leading-[1.05] sm:text-[26px]", className)}>{children}</h3>;
 }
 
 type Tone = "good" | "warn" | "bad" | "neutral" | "live" | "dark";
 
 const toneCls: Record<Tone, string> = {
-  good: "bg-go-soft text-go border-go/30",
-  warn: "bg-hold-soft text-hold border-hold/30",
-  bad: "bg-stop-soft text-stop border-stop/30",
+  good: "bg-teal text-paper border-teal",
+  warn: "bg-hold-soft text-hold border-hold/40",
+  bad: "bg-transparent text-stop border-stop",
   neutral: "bg-haze text-ash border-line",
-  live: "bg-lime-soft text-ink border-lime",
+  live: "bg-brick text-paper border-brick",
   dark: "bg-ink text-paper border-ink",
 };
 
 export function Pill({ tone = "neutral", children, dot, className }: { tone?: Tone; children: ReactNode; dot?: boolean; className?: string }) {
   return (
-    <span className={cx("inline-flex items-center gap-1.5 border px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] whitespace-nowrap", toneCls[tone], className)}>
-      {dot && <span className={cx("size-1.5 rounded-full", tone === "live" ? "animate-blink bg-go" : "bg-current")} />}
+    <span className={cx("inline-flex items-center gap-1.5 border-2 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] whitespace-nowrap", toneCls[tone], className)}>
+      {dot && <span className={cx("size-1.5 rounded-full bg-current", tone === "live" && "animate-blink")} />}
       {children}
     </span>
   );
@@ -122,8 +117,8 @@ export const ROUND_META: Record<RoundStatus, { label: string; tone: Tone; fan: s
 };
 
 export const PLEDGE_META: Record<PledgeStatus, { label: string; tone: Tone }> = {
-  pledged: { label: "Pledged", tone: "live" },
-  withdrawn: { label: "Withdrawn", tone: "neutral" },
+  pledged: { label: "Asked for", tone: "live" },
+  withdrawn: { label: "Cancelled", tone: "neutral" },
   released: { label: "Released · not charged", tone: "neutral" },
   paid: { label: "Paid", tone: "good" },
   retry_scheduled: { label: "Retrying", tone: "warn" },
@@ -148,18 +143,18 @@ export function PledgePill({ status }: { status: PledgeStatus }) {
   return <Pill tone={m.tone}>{m.label}</Pill>;
 }
 
-export function Stamp({ children, tone = "ink", rot = -4, className }: { children: ReactNode; tone?: "ink" | "go" | "stop" | "hold" | "lime"; rot?: number; className?: string }) {
+export function Stamp({ children, tone = "ink", rot = -4, className }: { children: ReactNode; tone?: "ink" | "go" | "stop" | "hold" | "brick"; rot?: number; className?: string }) {
   const c = {
     ink: "text-ink border-ink",
-    go: "text-go border-go",
-    stop: "text-stop border-stop",
-    hold: "text-hold border-hold",
-    lime: "text-ink border-ink bg-lime",
+    go: "text-teal border-teal bg-paper",
+    stop: "text-stop border-stop bg-paper",
+    hold: "text-hold border-hold bg-paper",
+    brick: "text-paper border-brick bg-brick",
   }[tone];
   return (
     <span
       style={{ ["--stamp-rot" as string]: `${rot}deg` }}
-      className={cx("animate-stamp inline-block border-[3px] px-3 py-1 font-display text-lg font-extrabold tracking-wide uppercase", c, className)}
+      className={cx("animate-stamp inline-block border-[3px] px-3 py-1 font-display text-[22px] leading-tight", c, className)}
     >
       {children}
     </span>
@@ -171,13 +166,13 @@ export function Field({ label, hint, children, className }: { label: string; hin
     <label className={cx("block", className)}>
       <span className="label mb-1.5 block">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-[12px] text-ash">{hint}</span>}
+      {hint && <span className="mt-1 block text-[13px] text-ash">{hint}</span>}
     </label>
   );
 }
 
 export const inputCls =
-  "w-full h-11 border border-line bg-card px-3 text-[14px] text-ink placeholder:text-mute focus:border-ink focus:outline-none focus:ring-2 focus:ring-lime/60 transition";
+  "w-full h-12 border-2 border-ink/25 bg-card px-3 text-[16px] text-ink placeholder:text-mute focus:border-ink focus:outline-none transition";
 
 export function Input(props: ComponentProps<"input">) {
   return <input {...props} className={cx(inputCls, props.className)} />;
@@ -203,15 +198,16 @@ export function Segmented<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cx("inline-flex border border-ink/70 bg-card p-0.5", className)}>
+    <div className={cx("inline-flex border-2 border-ink", className)}>
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
+          aria-pressed={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            "h-8 px-3 font-mono text-[11px] uppercase tracking-[0.16em] transition",
-            value === o.value ? "bg-ink text-paper" : "text-ash hover:text-ink",
+            "h-9 px-3.5 text-[14px] font-bold transition",
+            value === o.value ? "bg-ink text-paper" : "text-ink hover:bg-haze",
           )}
         >
           {o.label}
@@ -225,16 +221,16 @@ export function Stat({ label, value, sub, className }: { label: string; value: R
   return (
     <div className={cx("min-w-0", className)}>
       <div className="label">{label}</div>
-      <div className="mt-1 font-display text-[28px] leading-none font-bold tracking-tight tabular">{value}</div>
-      {sub && <div className="mt-1 text-[12px] text-ash">{sub}</div>}
+      <div className="mt-2 font-display text-[34px] leading-none tabular">{value}</div>
+      {sub && <div className="mt-1.5 text-[13px] text-ash">{sub}</div>}
     </div>
   );
 }
 
 export function Empty({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <div className="dotgrid flex flex-col items-center justify-center border border-dashed border-line px-6 py-14 text-center">
-      <div className="font-pixel text-xl text-mute">{title}</div>
+    <div className="flex flex-col items-center justify-center border-2 border-dashed border-ink/20 px-6 py-14 text-center">
+      <div className="font-display text-[26px] text-ash">{title}</div>
       {children && <div className="mt-3 text-ash">{children}</div>}
     </div>
   );

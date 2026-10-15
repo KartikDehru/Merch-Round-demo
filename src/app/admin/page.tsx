@@ -51,7 +51,7 @@ function Queue() {
       hint: "Round confirmed. Email the size breakdown.",
       rounds: by(["confirmed"]),
       render: (r) => (
-        <Button size="sm" variant="lime" onClick={() => { act(A.sendPrinterOrder(r.id)); toast(`Order sent to ${r.printer.name}`, "good"); }}>
+        <Button size="sm" variant="brick" onClick={() => { act(A.sendPrinterOrder(r.id)); toast(`Order sent to ${r.printer.name}`, "good"); }}>
           Send order
         </Button>
       ),
@@ -201,7 +201,7 @@ function ReviewActions({ r }: { r: Round }) {
       ) : (
         <Button size="sm" variant="ghost" onClick={() => setOpen(true)}>Request changes</Button>
       )}
-      <Button size="sm" variant="lime" onClick={() => { act(A.approveRound(r.id)); toast(`${r.title} is live`, "good"); }}>Approve</Button>
+      <Button size="sm" variant="brick" onClick={() => { act(A.approveRound(r.id)); toast(`${r.title} is live`, "good"); }}>Approve</Button>
     </div>
   );
 }
@@ -221,7 +221,7 @@ function ProductionActions({ r }: { r: Round }) {
       ) : (
         <span className="text-[12px] text-go">invoice {aud(r.printer.invoiceAmount!)} paid</span>
       )}
-      <Button size="sm" variant="lime" onClick={() => { act(A.printerDelivered(r.id)); toast("Marked delivered to artist", "good"); }}>Delivered</Button>
+      <Button size="sm" variant="brick" onClick={() => { act(A.printerDelivered(r.id)); toast("Marked delivered to artist", "good"); }}>Delivered</Button>
     </div>
   );
 }

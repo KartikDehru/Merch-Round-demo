@@ -1,90 +1,52 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { cx } from "./ui";
 import { left, pad } from "@/lib/format";
 import type { Colorway, PrintMotif, ProductKind } from "@/lib/types";
 
 /* ───────── Logo ───────── */
 
-export function Logo({ className, cursor = false }: { className?: string; cursor?: boolean }) {
+const TEE_PATH = "M42 36 L52 32 Q60 42 68 32 L78 36 L90 50 L80 58 L74 53 L74 88 L46 88 L46 53 L40 58 L30 50 Z";
+
+export function LogoMark({ size = 44, dot = "var(--color-brick)", className }: { size?: number; dot?: string | null; className?: string }) {
   return (
-    <span className={cx("inline-flex items-center font-pixel text-[22px] leading-none tracking-tight", className)}>
-      <span className="bg-lime px-1 pt-0.5 pb-1 text-ink">MERCH</span>
-      <span className="pl-1 text-ink">ROUND</span>
-      {cursor && <span className="animate-blink text-ink">_</span>}
+    <svg viewBox="0 0 120 120" width={size} height={size} aria-hidden className={cx("shrink-0", className)}>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="10" strokeDasharray="262 52.16" transform="rotate(-15 60 60)" />
+      {dot !== null && <circle cx="95.36" cy="24.64" r="9" fill={dot} />}
+      <path transform="translate(60 60) scale(1.12) translate(-60 -60)" fill="currentColor" d={TEE_PATH} />
+    </svg>
+  );
+}
+
+export function TeeGlyph({ size = 150, className }: { size?: number; className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" width={size} height={size} aria-hidden className={className}>
+      <path transform="translate(60 60) scale(1.12) translate(-60 -60)" fill="currentColor" d={TEE_PATH} />
+    </svg>
+  );
+}
+
+export function Logo({ className, dark = false, size = 40 }: { className?: string; dark?: boolean; size?: number; cursor?: boolean }) {
+  return (
+    <span className={cx("inline-flex items-center gap-2.5", dark ? "text-paper" : "text-ink", className)}>
+      <LogoMark size={size} dot={dark ? "var(--color-brick-light)" : "var(--color-brick)"} />
+      <span className="font-display leading-none whitespace-nowrap" style={{ fontSize: size * 0.62 }}>
+        Merch Round
+      </span>
     </span>
   );
 }
 
-/* ───────── Halftone field (animated canvas) ───────── */
+/* ───────── Big decorative ring (from the logo) ───────── */
 
-export function Halftone({ className, dark = false, density = 11 }: { className?: string; dark?: boolean; density?: number }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let raf = 0;
-    let w = 0;
-    let h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    const resize = () => {
-      const r = canvas.getBoundingClientRect();
-      w = r.width;
-      h = r.height;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
-
-    const field = (x: number, y: number, t: number) => {
-      const nx = x / w;
-      const ny = y / h;
-      let v =
-        Math.sin(nx * 5.2 + t * 0.35) * 0.5 +
-        Math.sin(ny * 4.1 - t * 0.28 + nx * 2.3) * 0.5 +
-        Math.sin((nx + ny) * 7.3 + t * 0.21) * 0.35 +
-        Math.cos(Math.hypot(nx - 0.62, ny - 0.45) * 9 - t * 0.5) * 0.45;
-      const cx = nx - 0.6;
-      const cy = ny - 0.5;
-      const fall = Math.max(0, 1 - Math.hypot(cx * 1.2, cy * 1.5) * 1.55);
-      v = (v + 1.8) / 3.6;
-      return Math.max(0, Math.min(1, v * fall * 1.35));
-    };
-
-    const draw = (time: number) => {
-      const t = time / 1000;
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = dark ? "rgba(246,246,247,0.9)" : "rgba(17,18,22,0.82)";
-      const step = density;
-      for (let y = step / 2; y < h; y += step) {
-        for (let x = step / 2; x < w; x += step) {
-          const v = field(x, y, t);
-          const r = v * step * 0.52;
-          if (r < 0.35) continue;
-          ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      if (!reduce) raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, [dark, density]);
-
-  return <canvas ref={ref} aria-hidden className={cx("block h-full w-full", className)} />;
+export function Ring({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 120 120" aria-hidden className={cx("pointer-events-none", className)}>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="10" strokeDasharray="262 52.16" transform="rotate(-15 60 60)" />
+      <circle cx="95.36" cy="24.64" r="9" fill="currentColor" />
+    </svg>
+  );
 }
 
 /* ───────── Merch mock-up (SVG) ───────── */
@@ -248,8 +210,8 @@ export function Tally({
   paid = 0,
   pledged,
   target,
-  accent = "var(--color-lime)",
   size = "md",
+  dark = false,
   className,
 }: {
   paid?: number;
@@ -257,40 +219,20 @@ export function Tally({
   target: number;
   accent?: string;
   size?: "sm" | "md";
+  dark?: boolean;
   className?: string;
 }) {
-  const total = Math.max(target, pledged);
-  if (total > 120) {
-    const pct = Math.min(100, (pledged / target) * 100);
-    return (
-      <div className={cx("h-4 border border-ink/70 bg-card", className)}>
-        <div className="h-full" style={{ width: `${pct}%`, background: accent }} />
-      </div>
-    );
-  }
-  const cell = size === "sm" ? "h-2.5" : "h-5";
+  const pct = (n: number) => `${Math.min(100, (n / Math.max(1, target)) * 100)}%`;
   return (
     <div
-      className={cx("grid gap-[3px]", className)}
-      style={{ gridTemplateColumns: `repeat(${Math.min(total, size === "sm" ? 40 : 25)}, minmax(0, 1fr))` }}
+      role="img"
       aria-label={`${pledged} of ${target}`}
+      className={cx("relative overflow-hidden", size === "sm" ? "h-2.5" : "h-4", dark ? "bg-track" : "bg-ink/12", className)}
     >
-      {Array.from({ length: total }).map((_, i) => {
-        const isPaid = i < paid;
-        const isPledged = i < pledged;
-        const over = i >= target;
-        return (
-          <span
-            key={i}
-            className={cx(cell, "border transition-colors", isPledged ? "border-ink" : "border-ink/25 bg-transparent")}
-            style={{
-              background: isPaid ? "var(--color-ink)" : isPledged ? accent : undefined,
-              opacity: over && !isPledged ? 0.3 : 1,
-              animation: `rise .4s ${Math.min(i, 40) * 18}ms both`,
-            }}
-          />
-        );
-      })}
+      <div className="absolute inset-y-0 left-0 bg-brick transition-[width] duration-700" style={{ width: pct(pledged) }} />
+      {paid > 0 && (
+        <div className={cx("absolute inset-y-0 left-0 transition-[width] duration-700", dark ? "bg-brick-light" : "bg-brick-deep")} style={{ width: pct(paid) }} />
+      )}
     </div>
   );
 }
@@ -305,19 +247,19 @@ export function Countdown({ to, now, className }: { to: number; now: number; cla
   }, [to]);
   const l = left(to, t || now);
   const urgent = l.days === 0;
-  if (l.done) return <span className={cx("font-mono text-ash", className)}>closed</span>;
+  if (l.done) return <span className={cx("text-ash", className)}>closed</span>;
   return (
-    <span className={cx("font-mono tabular", urgent ? "text-hold" : "text-ink", className)}>
+    <span className={cx("tabular", urgent ? "text-hold" : "text-ink", className)}>
       {l.days > 0 && (
         <>
           <b className="font-display text-[1.25em]">{l.days}</b>
-          <span className="text-ash">d </span>
+          <span className="opacity-60">d </span>
         </>
       )}
       <b className="font-display text-[1.25em]">{pad(l.hrs)}</b>
-      <span className="text-ash">h </span>
+      <span className="opacity-60">h </span>
       <b className="font-display text-[1.25em]">{pad(l.mins)}</b>
-      <span className="text-ash">m</span>
+      <span className="opacity-60">m</span>
     </span>
   );
 }

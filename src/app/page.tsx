@@ -3,188 +3,163 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useWorld } from "@/lib/store";
-import { FEE_RATE, suggestTarget } from "@/lib/domain";
-import { aud } from "@/lib/format";
-import { Halftone, Logo, MerchMock, Tally } from "@/components/visuals";
+import { FEE_RATE, counts, suggestTarget } from "@/lib/domain";
+import { aud, date } from "@/lib/format";
+import { Ring, TeeGlyph } from "@/components/visuals";
 import { Receipt, RoundCard } from "@/components/round-bits";
-import { Cell, H2, H3, Input, Label, LinkButton, PixelNum, Stamp } from "@/components/ui";
+import { Input, LinkButton } from "@/components/ui";
 import { Footer } from "@/components/footer";
 import { DemoAccounts } from "@/components/demo-accounts";
+
+const STEPS = [
+  ["Open a round", "Choose how long it runs. It has a start and a finish, and when the next release is ready you can come back and run another."],
+  ["Fans buy", "Your fans see the price up front and can check out in a few seconds. No pre-order forms, no chasing people in your DMs."],
+  ["Hit the number", "Once enough people have bought to make the run worthwhile, it goes ahead. You still pick your own designer and printer, and we're around if you'd like a hand."],
+  ["Collect it at the show", "Fans pick it up on the night, or have it sent to them if they can't make it."],
+];
+
+const VALUES = [
+  ["Accessibility", "Fans see the price early, check out in a few seconds, and either collect it at the show or have it delivered."],
+  ["Sustainability", "Artists only make what's been asked for, so there's no heap of unsold shirts heading for landfill."],
+  ["Community", "Artists and fans do this together. When the community reaches the number, the run gets made."],
+  ["Empowerment", "Pick your own designer and your own printer, the way the DIY scene always has. We'll help whenever you'd like us to."],
+  ["Partnership", "We do well when you do. Even a round that falls short keeps something out of landfill."],
+];
 
 export default function Home() {
   const { world } = useWorld();
   const live = world.rounds.filter((r) => r.status === "live");
+  const sample = [...live].sort((a, b) => counts(b, world.pledges).pledgedCount / b.target - counts(a, world.pledges).pledgedCount / a.target)[0];
 
   return (
     <div>
       {/* ───────── hero ───────── */}
-      <section className="relative overflow-hidden border-b border-line">
-        <div className="absolute inset-y-0 right-0 w-full opacity-80 md:w-[62%]">
-          <Halftone />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/80 to-transparent md:via-paper/40" />
-        <div className="relative mx-auto max-w-[1240px] px-5 pt-16 pb-20 sm:px-8 sm:pt-24 sm:pb-28">
-          <Logo cursor className="text-[18px]" />
-          <h1 className="mt-6 max-w-[760px] font-display text-[52px] leading-[0.9] font-bold tracking-tight uppercase sm:text-[88px]">
-            Know before
-            <br />
-            you print.<span className="animate-blink ml-1 inline-block h-[0.8em] w-[3px] translate-y-[0.06em] bg-ink align-baseline" />
-          </h1>
-          <p className="mt-7 max-w-[560px] text-[15px] leading-relaxed text-ash sm:text-[17px]">
-            Artists set the number that makes a print run worth it. Fans pledge with a saved card. Hit the number and it gets made. Miss it
-            and nobody pays.
-          </p>
-          <Link
-            href="/demo"
-            className="mt-8 inline-flex items-center gap-3 rounded-full border border-ink/40 bg-paper/70 px-5 py-2.5 text-[13px] backdrop-blur transition hover:border-ink"
-          >
-            <span className="text-go">◇</span> interactive demo · fan, artist & admin accounts <span>↗</span>
-          </Link>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <LinkButton href="/rounds" size="lg">
-              Browse live rounds
-            </LinkButton>
-            <LinkButton href="/demo" size="lg" variant="lime">
-              Try the demo
-            </LinkButton>
-          </div>
-          <div className="mt-14">
-            <Label>built on</Label>
-            <div className="mt-3 flex flex-wrap items-center gap-x-8 gap-y-2 font-pixel text-[22px] text-ink/70">
-              <span>stripe</span>
-              <span>supabase</span>
-              <span>next.js</span>
-              <span>resend</span>
+      <section className="relative overflow-hidden">
+        <Ring className="absolute -top-16 -right-60 hidden w-[900px] text-stone md:block" />
+        <div className="relative mx-auto grid max-w-[1280px] items-center gap-14 px-5 pt-14 pb-24 sm:px-8 lg:grid-cols-2">
+          <div className="flex flex-col gap-8">
+            <h1 className="font-display text-[52px] leading-[0.98] sm:text-[clamp(52px,6.6vw,96px)]">
+              Find out who wants the shirt <span className="text-brick">before</span> you pay for it.
+            </h1>
+            <p className="max-w-[520px] text-[20px] leading-[1.4] sm:text-[22px]">
+              Open a Merch Round and let your fans tell you what&apos;s worth making. If enough of them buy, it gets printed. If they don&apos;t,
+              nobody&apos;s out of pocket and there&apos;s no box of unsold shirts left in the van.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-7 gap-y-4">
+              <LinkButton href="/demo" variant="brick" size="lg">
+                Try the demo
+              </LinkButton>
+              <Link href="#how" className="text-[18px] font-medium underline">
+                See how a round works
+              </Link>
             </div>
           </div>
+
+          <div className="flex justify-center p-4">{sample && <SampleTicket roundId={sample.id} />}</div>
         </div>
       </section>
 
-      {/* ───────── how it works ───────── */}
-      <section id="how" className="mx-auto max-w-[1240px] scroll-mt-20 px-5 py-20 sm:px-8">
-        <Label>how a round works</Label>
-        <H2 className="mt-3 max-w-[640px]">Reach it and it gets made. Miss it and nobody pays.</H2>
-        <div className="mt-10 grid border-t border-l border-line md:grid-cols-2">
-          <Step n="01" tag="set" title="Set your number." body="Enter the printer's quote, minimum run, price and show date. We suggest the number of fans you need and the latest safe close date.">
-            <div className="flex h-full flex-col justify-center gap-2 px-6 font-mono text-[12px] text-paper/80">
-              {[
-                ["printer quote", "A$650"],
-                ["min run", "25"],
-                ["price", "A$45"],
-              ].map(([k, v]) => (
-                <div key={k} className="flex justify-between border-b border-dashed border-paper/20 pb-1">
-                  <span className="uppercase tracking-[0.14em] text-paper/50">{k}</span>
-                  <span>{v}</span>
-                </div>
-              ))}
-              <div className="mt-2 flex items-end justify-between">
-                <span className="uppercase tracking-[0.14em] text-lime">target</span>
-                <span className="font-display text-[40px] leading-none font-bold text-lime">25</span>
+      {/* ───────── how a round goes ───────── */}
+      <section id="how" className="scroll-mt-20 bg-ink text-paper">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-14 px-5 py-24 sm:px-8">
+          <h2 className="font-display text-[44px] leading-none sm:text-[clamp(44px,6vw,80px)]">How a round goes</h2>
+          <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map(([t, b], i) => (
+              <div key={t} className="flex flex-col gap-3 border-t-[3px] border-paper pt-5">
+                <div className="font-display text-[56px] leading-none text-brick-light">{String(i + 1).padStart(2, "0")}</div>
+                <div className="text-[24px] font-bold">{t}</div>
+                <p className="text-[18px] leading-[1.45] text-cloud">{b}</p>
               </div>
-            </div>
-          </Step>
-          <Step n="02" tag="pledge" title="Fans pledge. Nobody pays yet.">
-            <div className="flex h-full flex-col justify-center px-6">
-              <Tally pledged={17} target={25} accent="#9ad84a" />
-              <div className="mt-3 flex justify-between font-mono text-[12px] text-paper/70">
-                <span>17 of 25 fans</span>
-                <span>6d 04h left</span>
-              </div>
-            </div>
-          </Step>
-          <Step n="03" tag="charge" title="Hit it, and every card is charged." body="Declined cards are retried for 72 hours. Banks that want a yes get a link. If it ends up short, the artist covers the gap or cancels and everyone is refunded.">
-            <div className="flex h-full items-center justify-center gap-3 px-4">
-              <Stamp tone="lime" rot={-6}>It&apos;s happening</Stamp>
-            </div>
-          </Step>
-          <Step n="04" tag="hand over" title="We pay the printer. You hand it over." body="We pay the printer's invoice from the round. When the merch arrives, the artist confirms and gets paid. Fans show a QR ticket at the desk.">
-            <div className="flex h-full items-center justify-center">
-              <div className="flex items-center gap-3 border border-paper/30 bg-ink/60 px-4 py-3">
-                <span className="font-pixel text-[18px] text-lime">MR-7K3Q</span>
-                <span className="h-6 w-px bg-paper/30" />
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-paper/70">handed over ✓</span>
-              </div>
-            </div>
-          </Step>
-        </div>
-      </section>
-
-      {/* ───────── live rounds ───────── */}
-      <section className="border-y border-line bg-card/50">
-        <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <Label>live now</Label>
-              <H2 className="mt-3">Rounds filling up.</H2>
-            </div>
-            <LinkButton href="/rounds" variant="secondary">
-              All rounds →
-            </LinkButton>
-          </div>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {live.slice(0, 3).map((r, i) => (
-              <RoundCard key={r.id} round={r} artist={world.artists.find((a) => a.id === r.artistId)!} href={`/r/${r.slug}`} index={i} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ───────── why ───────── */}
-      <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
-        <Label>why it exists</Label>
-        <H2 className="mt-3 max-w-[720px]">The problems bands are tired of.</H2>
-        <div className="mt-10 grid border-t border-l border-line md:grid-cols-2">
-          {[
-            ["01", "leftover stock", "No more boxes of unsold shirts.", "Guessing quantities means dead stock under the bed. Rounds only print what fans have already paid for, in the sizes they picked."],
-            ["02", "no chasing", "No chasing pre-order payments.", "Cards are saved at pledge and charged automatically. Declines are retried. You never send a “hey, did you pay?” DM again."],
-            ["03", "no upfront risk", "No paying the printer upfront.", "The printer is paid from fans' money after the round succeeds. If it doesn't, nothing is spent."],
-            ["04", "no fee surprises", "Card fees are on us.", "Fans pay the listed price. Merch Round takes 10% and covers the card fees out of it. Nothing extra comes out of your share."],
-          ].map(([n, tag, title, body]) => (
-            <Cell key={n} className="border-t-0 border-l-0 p-6 sm:p-8">
-              <div className="flex items-center justify-between">
-                <PixelNum>{n}</PixelNum>
-                <span className="label">{tag}</span>
-              </div>
-              <H3 className="mt-6">{title}</H3>
-              <p className="mt-3 max-w-[460px] text-ash">{body}</p>
-            </Cell>
+      {/* ───────── falls short ───────── */}
+      <section className="bg-teal text-paper">
+        <div className="mx-auto grid max-w-[1280px] items-end gap-x-14 gap-y-8 px-5 py-22 sm:px-8 lg:grid-cols-2">
+          <h2 className="font-display text-[52px] leading-[0.95] sm:text-[clamp(52px,7vw,100px)]">And if it falls short, that&apos;s alright.</h2>
+          <p className="text-[22px] leading-[1.4] font-medium sm:text-[24px]">
+            Nobody pays, nothing gets printed, and you&apos;ve learned something before spending anything. A round that doesn&apos;t make it still
+            keeps a pile of unsold merch out of landfill.
+          </p>
+        </div>
+      </section>
+
+      {/* ───────── open now ───────── */}
+      <section className="mx-auto max-w-[1280px] px-5 py-24 sm:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="font-display text-[44px] leading-none sm:text-[clamp(44px,6vw,80px)]">Open right now</h2>
+          <LinkButton href="/rounds" variant="secondary">
+            All rounds
+          </LinkButton>
+        </div>
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {live.slice(0, 3).map((r, i) => (
+            <RoundCard key={r.id} round={r} artist={world.artists.find((a) => a.id === r.artistId)!} href={`/r/${r.slug}`} index={i} />
           ))}
         </div>
       </section>
 
-      {/* ───────── artists / calculator ───────── */}
-      <section id="artists" className="scroll-mt-20 border-y border-line bg-ink text-paper">
-        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1fr_1fr]">
-          <div>
-            <div className="label !text-paper/60">
-              <span className="text-paper/40">{"// "}</span>for artists
-            </div>
-            <h2 className="mt-3 font-display text-[36px] leading-[1.02] font-bold tracking-tight sm:text-[48px]">What you take home.</h2>
-            <p className="mt-4 max-w-[460px] text-paper/70">
-              Plug in your numbers. We suggest the target with a 30% buffer, so a few declined cards don&apos;t sink the round.
+      {/* ───────── take-home calculator ───────── */}
+      <section id="artists" className="scroll-mt-20 bg-stone">
+        <div className="mx-auto grid max-w-[1280px] gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2">
+          <div className="flex flex-col gap-6">
+            <h2 className="font-display text-[44px] leading-none sm:text-[clamp(44px,6vw,80px)]">What you take home</h2>
+            <p className="max-w-[500px] text-[20px] leading-[1.45]">
+              Put in your printer&apos;s quote and your price. We suggest how many fans you need, with a little room for the odd declined card.
             </p>
-            <div className="relative mt-10 aspect-square max-w-[380px] overflow-hidden border border-paper/15">
-              <div className="absolute inset-0 opacity-60">
-                <Halftone dark density={10} />
-              </div>
-              <div className="absolute inset-10">
-                <MerchMock product="tee" colorway="black" motif="rings" accent="#9ad84a" label="The Static Hours" />
-              </div>
-            </div>
+            <p className="max-w-[500px] text-[18px] leading-[1.45] text-ash">
+              Fans pay the price you set and nothing more. Merch Round keeps 10%, which also covers card fees. The printer is paid from the round,
+              and the rest is yours.
+            </p>
           </div>
           <Calculator />
         </div>
       </section>
 
+      {/* ───────── what we care about ───────── */}
+      <section id="care" className="scroll-mt-20">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-12 px-5 py-24 sm:px-8">
+          <h2 className="font-display text-[44px] leading-none sm:text-[clamp(44px,6vw,80px)]">What we care about</h2>
+          <div className="flex flex-col border-b-[3px] border-ink">
+            {VALUES.map(([t, b]) => (
+              <div key={t} className="flex flex-wrap gap-x-12 gap-y-3 border-t-[3px] border-ink py-7">
+                <div className="flex-[1_1_280px] font-display text-[36px] leading-none sm:text-[44px]">{t}</div>
+                <p className="flex-[2_1_380px] text-[19px] leading-[1.45] sm:text-[20px]">{b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ───────── demo accounts ───────── */}
-      <section className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8">
-        <Label>try it</Label>
-        <H2 className="mt-3">Three demo accounts. One full round.</H2>
-        <p className="mt-3 max-w-[620px] text-ash">
-          Everything is simulated in your browser. Pledge as a fan, run a round as an artist, and approve, print and pay out as admin. Use
-          the demo controls to jump through time.
-        </p>
-        <DemoAccounts />
+      <section className="border-t-[3px] border-ink">
+        <div className="mx-auto max-w-[1280px] px-5 py-24 sm:px-8">
+          <h2 className="font-display text-[44px] leading-none sm:text-[clamp(44px,6vw,80px)]">Have a go</h2>
+          <p className="mt-5 max-w-[640px] text-[20px] leading-[1.45]">
+            Three demo accounts and a full round, all running in your browser. Buy as a fan, run a round as an artist, and approve, print and pay
+            out as the Merch Round team. Nothing here is real money.
+          </p>
+          <DemoAccounts />
+        </div>
+      </section>
+
+      {/* ───────── call to action ───────── */}
+      <section className="bg-brick text-paper">
+        <div className="mx-auto flex max-w-[1280px] flex-col items-start gap-8 px-5 py-24 sm:px-8">
+          <h2 className="font-display text-[52px] leading-[0.95] sm:text-[clamp(52px,8vw,116px)]">
+            Let&apos;s do a
+            <br />
+            Merch Round.
+          </h2>
+          <p className="max-w-[560px] text-[22px] leading-[1.4]">
+            Got a release coming up? Start a round and see what your fans ask for. If it goes well, run another next time.
+          </p>
+          <Link href="/demo" className="inline-flex min-h-14 items-center bg-paper px-8 text-[19px] font-bold text-ink transition hover:bg-stone">
+            Open a Merch Round
+          </Link>
+        </div>
       </section>
 
       <Footer />
@@ -192,23 +167,45 @@ export default function Home() {
   );
 }
 
-function Step({ n, tag, title, body, children }: { n: string; tag: string; title: string; body?: string; children: React.ReactNode }) {
+function SampleTicket({ roundId }: { roundId: string }) {
+  const { world } = useWorld();
+  const round = world.rounds.find((r) => r.id === roundId)!;
+  const artist = world.artists.find((a) => a.id === round.artistId)!;
+  const c = counts(round, world.pledges);
   return (
-    <Cell className="border-t-0 border-l-0 p-6 sm:p-8">
-      <div className="flex items-center justify-between">
-        <PixelNum>{n}</PixelNum>
-        <span className="label">{tag}</span>
+    <Link href={`/r/${round.slug}`} className="block w-full max-w-[400px] -rotate-3 bg-ink text-paper transition duration-300 hover:-rotate-1">
+      <div className="flex flex-col gap-4 px-6 pt-6 pb-5">
+        <div className="flex items-baseline justify-between text-[13px] tracking-[0.14em] text-fog uppercase">
+          <span>Live round</span>
+          <span>Open</span>
+        </div>
+        <div className="flex h-[220px] items-center justify-center bg-brick text-paper">
+          <TeeGlyph size={150} />
+        </div>
+        <div className="flex flex-col gap-0.5">
+          <div className="font-display text-[34px] leading-[1.05]">{artist.name}</div>
+          <div className="text-[17px] text-fog">
+            {round.title} · {aud(round.price)}
+          </div>
+        </div>
       </div>
-      <div className="halftone-dark mt-6 h-[170px] overflow-hidden rounded-[6px]">{children}</div>
-      <H3 className="mt-6">{title}</H3>
-      {body && <p className="mt-3 max-w-[460px] text-ash">{body}</p>}
-      {!body && (
-        <p className="mt-3 max-w-[460px] text-ash">
-          Fans pick a size, save a card and get told the exact date they&apos;d be charged. No account needed. If the round misses, cards are
-          released and nothing is charged.
-        </p>
-      )}
-    </Cell>
+      <div className="relative mx-3.5 h-0.5 ticket-edge text-paper">
+        <span className="absolute -top-3 -left-[26px] size-6 rounded-full bg-paper" />
+        <span className="absolute -top-3 -right-[26px] size-6 rounded-full bg-paper" />
+      </div>
+      <div className="flex flex-col gap-3.5 px-6 pt-5 pb-6">
+        <div className="flex justify-between text-[17px] font-bold tabular">
+          <span>{c.pledgedCount} asked for</span>
+          <span className="font-medium text-fog">{round.target} needed</span>
+        </div>
+        <div className="h-3.5 bg-track">
+          <div className="h-full bg-brick" style={{ width: `${Math.min(100, (c.pledgedCount / round.target) * 100)}%` }} />
+        </div>
+        <div className="text-[15px] text-fog">
+          Closes {date(round.closesAt)} · Pick up at the show
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -222,45 +219,42 @@ function Calculator() {
   const take = gross - fee - quote;
   const num = (v: string) => Math.max(0, Number(v.replace(/[^0-9.]/g, "")) || 0);
   return (
-    <div className="border border-paper/20 bg-coal p-6 sm:p-8">
+    <div className="bg-ink p-6 text-paper sm:p-8">
       <div className="grid gap-4 sm:grid-cols-3">
-        {[
-          ["price (A$)", price, setPrice],
-          ["printer quote (A$)", quote, setQuote],
-          ["printer min run", minRun, setMinRun],
-        ].map(([l, v, set]) => (
-          <label key={l as string} className="block">
-            <span className="mb-1.5 block text-[11px] uppercase tracking-[0.16em] text-paper/60">{l as string}</span>
-            <Input
-              inputMode="numeric"
-              value={String(v)}
-              onChange={(e) => (set as (n: number) => void)(num(e.target.value))}
-              className="border-paper/20 bg-ink text-paper focus:border-lime"
-            />
+        {(
+          [
+            ["Price (A$)", price, setPrice],
+            ["Printer quote (A$)", quote, setQuote],
+            ["Printer's minimum", minRun, setMinRun],
+          ] as const
+        ).map(([l, v, set]) => (
+          <label key={l} className="block">
+            <span className="mb-1.5 block text-[12px] tracking-[0.14em] text-fog uppercase">{l}</span>
+            <Input inputMode="numeric" value={String(v)} onChange={(e) => set(num(e.target.value))} className="border-paper/25 bg-coal text-paper focus:border-paper" />
           </label>
         ))}
       </div>
-      <div className="mt-8 flex items-end justify-between border-y border-paper/15 py-5">
+      <div className="mt-8 flex items-end justify-between border-y-2 border-paper/20 py-5">
         <div>
-          <div className="text-[11px] uppercase tracking-[0.16em] text-paper/60">suggested target</div>
-          <div className="font-display text-[56px] leading-none font-extrabold text-lime tabular">{target}</div>
+          <div className="text-[12px] tracking-[0.14em] text-fog uppercase">Fans needed</div>
+          <div className="font-display text-[72px] leading-none text-brick-light tabular">{target}</div>
         </div>
-        <div className="text-right text-[12px] text-paper/60">
-          fans at {aud(price)}
+        <div className="text-right text-[15px] text-fog">
+          at {aud(price)} each
           <br />
           over 14 days
         </div>
       </div>
       <Receipt
-        className="mt-5 text-paper [&_.border-mute\/60]:border-paper/30"
+        className="mt-5"
         rows={[
           { label: `Fans pay (${target} × ${aud(price)})`, value: aud(gross, { cents: true }) },
-          { label: "Merch Round (10%, incl. card fees)", value: `−${aud(fee, { cents: true })}` },
+          { label: "Merch Round (10%, card fees included)", value: `−${aud(fee, { cents: true })}` },
           { label: "Printer", value: `−${aud(quote, { cents: true })}` },
         ]}
-        total={{ label: "You get", value: <span className="text-lime">{aud(Math.max(0, take), { cents: true })}</span> }}
+        total={{ label: "You take home", value: <span className="text-brick-light">{aud(Math.max(0, take), { cents: true })}</span> }}
       />
-      <p className="mt-4 text-[12px] text-paper/50">Every extra fan past the target adds {aud(price * 0.9, { cents: true })} to your share.</p>
+      <p className="mt-4 text-[14px] text-fog">Every fan past the number adds {aud(price * 0.9, { cents: true })} to your share.</p>
     </div>
   );
 }

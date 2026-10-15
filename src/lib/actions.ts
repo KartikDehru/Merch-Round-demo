@@ -98,13 +98,13 @@ export const createPledge = (roundId: string, input: PledgeInput) => (w: World) 
     createdAt: Date.now(),
   };
   w.pledges.push(p);
-  log(w, "fan", `${p.name} pledged (${p.size}, ${p.fulfilment})`, r.id, "neutral", p.id);
+  log(w, "fan", `${p.name} bought (${p.size}, ${p.fulfilment})`, r.id, "neutral", p.id);
   log(w, "stripe", `SetupIntent succeeded · card •••• ${p.card.last4} saved for later`, r.id, "money", p.id);
   mailFan(
     w,
     p,
     "You're in. Nothing charged yet.",
-    `You pledged for ${r.title} (${p.size}) from ${artistOf(w, r).name}. You'll only be charged ${aud(amount)} on ${date(r.closesAt, true)} if the round reaches ${r.target}. If it doesn't, nothing is charged.`,
+    `You asked for ${r.title} (${p.size}) from ${artistOf(w, r).name}. You'll only be charged ${aud(amount)} on ${date(r.closesAt, true)} if the round reaches ${r.target}. If it doesn't, nothing is charged.`,
   );
   if (before < r.target && before + 1 >= r.target) {
     r.reachedAt = Date.now();
@@ -119,8 +119,8 @@ export const withdrawPledge = (pledgeId: string) => (w: World) => {
   const r = find(w, p.roundId);
   if (r.status !== "live") return;
   p.status = "withdrawn";
-  log(w, "fan", `${p.name} cancelled their pledge`, r.id, "neutral", p.id);
-  mailFan(w, p, "Pledge cancelled", `Your pledge for ${r.title} is cancelled. Your saved card was removed. Nothing was charged.`);
+  log(w, "fan", `${p.name} cancelled their order`, r.id, "neutral", p.id);
+  mailFan(w, p, "Order cancelled", `Your order for ${r.title} is cancelled. Your saved card was removed. Nothing was charged.`);
 };
 
 export const confirmAuth = (pledgeId: string) => (w: World) => {
@@ -414,7 +414,7 @@ export const simClose = (roundId: string) => (w: World) => {
   }
   r.status = "charging";
   r.chargeDeadline = Date.now() + 72 * HOUR;
-  log(w, "system", `Closed at ${c.pledgedCount} pledges (target ${r.target}). Charging saved cards.`, r.id, "good");
+  log(w, "system", `Closed at ${c.pledgedCount} orders (target ${r.target}). Charging saved cards.`, r.id, "good");
   mailArtist(w, r, `${r.title} closed at ${c.pledgedCount}`, "We're charging fans now. Declined cards get retried for 72 hours.");
   runCharges(w, r);
 };
@@ -457,7 +457,7 @@ export const simEndWindow = (roundId: string) => (w: World) => {
   for (const p of w.pledges.filter((x) => x.roundId === r.id && OWED.includes(x.status))) {
     p.status = "unpaid";
     p.declineReason = "Not paid within 72 hours";
-    mailFan(w, p, "Your pledge has lapsed", `We couldn't take payment for ${r.title}, so your spot has been released.`);
+    mailFan(w, p, "Your order has lapsed", `We couldn't take payment for ${r.title}, so your spot has been released.`);
   }
   const c = counts(r, w.pledges);
   if (c.paidCount >= r.target) {

@@ -31,13 +31,13 @@ function Inner() {
   const [tab, setTab] = useState<Tab>("overview");
   const [checks, setChecks] = useState([false, false, false]);
 
-  if (!round || !artist || !c) return <div className="p-20 text-center font-pixel text-mute">round not found_</div>;
+  if (!round || !artist || !c) return <div className="p-20 text-center font-display text-[40px] text-ash">Round not found</div>;
   if (round.artistId !== world.session.artistId)
     return (
       <div className="mx-auto max-w-[560px] p-20 text-center">
-        <div className="font-pixel text-mute">not your round_</div>
+        <div className="font-display text-[40px] leading-none">Not your round</div>
         <p className="mt-2 text-ash">This round belongs to {artist.name}.</p>
-        <Button className="mt-5" variant="lime" onClick={() => act(login("artist", artist.id))}>
+        <Button className="mt-5" variant="brick" onClick={() => act(login("artist", artist.id))}>
           Sign in as {artist.name} →
         </Button>
       </div>
@@ -76,9 +76,9 @@ function Inner() {
 
       {/* ───── decision takeover ───── */}
       {round.status === "awaiting_decision" && (
-        <section className="mt-8 border-2 border-ink bg-card p-6 shadow-[6px_6px_0_var(--color-ink)] sm:p-10">
+        <section className="mt-8 border-t-[6px] border-brick bg-card p-6 sm:p-10">
           <Label>decision needed · by {dateTime(round.decisionDeadline!)}</Label>
-          <h2 className="mt-3 font-display text-[44px] leading-[0.95] font-extrabold uppercase sm:text-[64px]">
+          <h2 className="mt-3 font-display text-[44px] leading-[0.95] uppercase sm:text-[64px]">
             You&apos;re {round.target - c.paidCount} short.
           </h2>
           <p className="mt-4 max-w-[640px] text-[15px] text-ash">
@@ -90,7 +90,7 @@ function Inner() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button
-              variant="lime"
+              variant="brick"
               size="lg"
               onClick={() => {
                 act(decide(round.id, round.shortfall ? "cover" : "proceed"));
@@ -117,9 +117,9 @@ function Inner() {
 
       {/* ───── confirm delivery ───── */}
       {round.status === "delivered" && (
-        <section className="mt-8 border-2 border-ink bg-lime-soft p-6 sm:p-8">
+        <section className="mt-8 border-2 border-ink bg-brick-soft p-6 sm:p-8">
           <Label>merch arrived {round.printer.deliveredAt ? date(round.printer.deliveredAt) : ""}</Label>
-          <h2 className="mt-2 font-display text-[32px] leading-none font-extrabold uppercase">Check it, then get paid.</h2>
+          <h2 className="mt-2 font-display text-[32px] leading-none uppercase">Check it, then get paid.</h2>
           <div className="mt-5 grid gap-2 sm:grid-cols-3">
             {[`Count matches (${c.paidCount} items)`, "Print quality looks right", "Sizes match the order"].map((t, i) => (
               <label key={t} className={cx("flex cursor-pointer items-center gap-3 border bg-card p-3 text-[13px]", checks[i] ? "border-ink" : "border-line")}>
@@ -186,7 +186,7 @@ function Inner() {
               <Panel title="progress">
                 <ProgressBlock round={round} artist={artist} big />
               </Panel>
-              <Panel title={pre ? "size breakdown · pledged" : "size breakdown · paid"}>
+              <Panel title={pre ? "Size breakdown · asked for" : "Size breakdown · paid"}>
                 <SizeBars sizes={c.sizes} accent={artist.accent} />
               </Panel>
             </div>
@@ -229,7 +229,7 @@ function Inner() {
                     </td>
                     <td className="px-4 py-2.5 font-display font-bold">{p.size}</td>
                     <td className="px-4 py-2.5 text-ash">{p.fulfilment === "pickup" ? "Pick up" : "Post"}</td>
-                    <td className="px-4 py-2.5 font-pixel">{p.code}</td>
+                    <td className="px-4 py-2.5 font-display">{p.code}</td>
                     <td className="px-4 py-2.5"><PledgePill status={p.status} /></td>
                     <td className="px-4 py-2.5 text-right">
                       {p.fulfilment === "delivery" && p.status === "paid" && ["paid_out", "delivered"].includes(round.status) && (
@@ -283,7 +283,7 @@ function Inner() {
                   ["Card fees", "Covered by Merch Round's 10%. Nothing extra comes out of your share."],
                 ].map(([t, b], i) => (
                   <li key={t} className="flex gap-3">
-                    <span className="font-pixel text-mute">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-display text-mute">{String(i + 1).padStart(2, "0")}</span>
                     <span><b>{t}.</b> <span className="text-ash">{b}</span></span>
                   </li>
                 ))}

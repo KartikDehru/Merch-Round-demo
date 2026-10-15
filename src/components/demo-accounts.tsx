@@ -20,7 +20,7 @@ export function DemoAccounts() {
       meta: "sam.taylor@demo.fan",
       tag: "fan",
       href: "/rounds",
-      bullets: ["Pledge on a live round", "Confirm a payment your bank flagged", "Show your QR ticket", "See a round that missed (not charged)"],
+      bullets: ["Buy from a live round", "Confirm a payment your bank flagged", "Show your QR ticket", "See a round that missed (not charged)"],
     },
     {
       role: "artist",
@@ -58,7 +58,7 @@ export function DemoAccounts() {
               </li>
             ))}
           </ul>
-          <Button className="mt-6" variant={i === 0 ? "lime" : "primary"} onClick={() => enter(c.role, c.href, c.artistId)}>
+          <Button className="mt-6" variant={i === 0 ? "brick" : "primary"} onClick={() => enter(c.role, c.href, c.artistId)}>
             Enter as {c.tag} →
           </Button>
         </Cell>

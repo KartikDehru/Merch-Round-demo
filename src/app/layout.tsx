@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Pixelify_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Anton, Bricolage_Grotesque } from "next/font/google";
 import { WorldProvider } from "@/lib/store";
 import { SiteHeader } from "@/components/site-header";
 import { DemoDock } from "@/components/demo-dock";
 import "./globals.css";
 
+const anton = Anton({ variable: "--font-anton", weight: "400", subsets: ["latin"] });
 const bricolage = Bricolage_Grotesque({ variable: "--font-bricolage", subsets: ["latin"] });
-const splineMono = Spline_Sans_Mono({ variable: "--font-spline-mono", subsets: ["latin"] });
-const pixelify = Pixelify_Sans({ variable: "--font-pixelify", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Merch Round — know before you print",
   description:
-    "Artists set the number. Fans pledge. Hit it and it gets made. Miss it and nobody pays. Interactive demo.",
+    "Find out who wants the shirt before you pay for it. Fans buy, and if the round hits the number it gets made. If not, nobody pays. Interactive demo.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-AU" className={`${bricolage.variable} ${splineMono.variable} ${pixelify.variable}`}>
+    <html lang="en-AU" className={`${anton.variable} ${bricolage.variable}`}>
       <body className="min-h-dvh">
         <WorldProvider>
           <SiteHeader />

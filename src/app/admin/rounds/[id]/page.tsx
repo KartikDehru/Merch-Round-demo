@@ -24,7 +24,7 @@ function Inner() {
   const { id } = useParams<{ id: string }>();
   const { round, artist, c } = useRound(id);
   const { world, act, toast } = useWorld();
-  if (!round || !artist || !c) return <div className="p-20 text-center font-pixel text-mute">round not found_</div>;
+  if (!round || !artist || !c) return <div className="p-20 text-center font-display text-[40px] text-ash">Round not found</div>;
   const m = money(round, world.pledges);
   const canCancel = ["live", "charging", "awaiting_decision", "confirmed"].includes(round.status);
 
@@ -45,13 +45,13 @@ function Inner() {
         <div className="flex flex-wrap gap-2">
           <LinkButton href={`/r/${round.slug}`} variant="secondary">Public page ↗</LinkButton>
           {round.status === "pending_review" && (
-            <Button variant="lime" onClick={() => { act(A.approveRound(round.id)); toast("Approved", "good"); }}>Approve</Button>
+            <Button variant="brick" onClick={() => { act(A.approveRound(round.id)); toast("Approved", "good"); }}>Approve</Button>
           )}
           {round.status === "confirmed" && (
-            <Button variant="lime" onClick={() => { act(A.sendPrinterOrder(round.id)); toast("Order sent", "good"); }}>Send printer order</Button>
+            <Button variant="brick" onClick={() => { act(A.sendPrinterOrder(round.id)); toast("Order sent", "good"); }}>Send printer order</Button>
           )}
           {round.status === "in_production" && (
-            <Button variant="lime" onClick={() => { act(A.printerDelivered(round.id)); toast("Marked delivered", "good"); }}>Mark delivered</Button>
+            <Button variant="brick" onClick={() => { act(A.printerDelivered(round.id)); toast("Marked delivered", "good"); }}>Mark delivered</Button>
           )}
           {canCancel && (
             <Button
@@ -84,7 +84,7 @@ function Inner() {
         <Panel title="money">
           <Receipt
             rows={[
-              { label: round.status === "live" ? "Pledged (not charged)" : "Fans paid", value: aud(round.status === "live" ? m.pledgedGross : m.paidGross, { cents: true }) },
+              { label: round.status === "live" ? "Asked for (not charged)" : "Fans paid", value: aud(round.status === "live" ? m.pledgedGross : m.paidGross, { cents: true }) },
               { label: "Platform fee 10%", value: aud(m.fee, { cents: true }) },
               { label: "Est. Stripe card fees", value: `−${aud(m.cardFees, { cents: true })}`, muted: true },
               { label: "Printer", value: `${aud(m.printer, { cents: true })}${round.printer.invoicePaidAt ? " · paid" : ""}` },

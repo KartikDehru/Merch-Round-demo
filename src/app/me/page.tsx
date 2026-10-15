@@ -16,7 +16,7 @@ export default function MyOrders() {
         <Label>my orders</Label>
         <H1 className="mt-3">Find your orders.</H1>
         <p className="mt-3 text-ash">In the real product you enter your email and get a magic link. In the demo, sign in as Sam.</p>
-        <Button variant="lime" size="lg" className="mt-6" onClick={() => act(login("fan"))}>
+        <Button variant="brick" size="lg" className="mt-6" onClick={() => act(login("fan"))}>
           Continue as {DEMO_FAN.name}
         </Button>
       </div>
@@ -37,9 +37,9 @@ export default function MyOrders() {
           <Link
             key={p.id}
             href={p.status === "action_required" ? `/pay/${p.id}` : `/o/${p.id}`}
-            className="mt-6 flex items-center gap-4 border-2 border-hold bg-hold-soft p-4 transition hover:shadow-[4px_4px_0_var(--color-hold)]"
+            className="mt-6 flex items-center gap-4 border-2 border-hold bg-hold-soft p-4 transition hover:bg-hold-soft/70"
           >
-            <span className="font-pixel text-2xl text-hold">!</span>
+            <span className="font-display text-2xl text-hold">!</span>
             <span className="flex-1">
               <span className="block font-display text-[17px] font-bold">
                 {p.status === "action_required" ? "Your bank needs a quick yes" : "Your card was declined"}
@@ -76,7 +76,7 @@ export default function MyOrders() {
             </Link>
           );
         })}
-        {!mine.length && <Empty title="no orders yet">Pledge on a live round to see it here.</Empty>}
+        {!mine.length && <Empty title="No orders yet">Buy from a live round and it shows up here.</Empty>}
       </div>
     </div>
   );

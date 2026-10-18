@@ -59,25 +59,24 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="mt-10 grid grid-cols-2 gap-px border border-line bg-line md:grid-cols-4">
-        <Stat className="bg-card p-5" label="live rounds" value={live.length} sub={live[0] ? `next closes ${date(live[0].closesAt)}` : "none open"} />
-        <Stat className="bg-card p-5" label="fans in now" value={fans} sub="across active rounds" />
-        <Stat className="bg-card p-5" label="paid out" value={aud(paidOut)} sub="all time, via Stripe" />
-        <Stat className="bg-card p-5" label="stripe" value={artist.stripe === "verified" ? "✓" : "—"} sub={artist.stripe === "verified" ? "payouts enabled" : "setup needed"} />
+      <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <Stat className="bg-stone p-5" label="live rounds" value={live.length} sub={live[0] ? `next closes ${date(live[0].closesAt)}` : "none open"} />
+        <Stat className="bg-stone p-5" label="fans in now" value={fans} sub="across active rounds" />
+        <Stat className="bg-stone p-5" label="paid out" value={aud(paidOut)} sub="all time, via Stripe" />
+        <Stat className="bg-stone p-5" label="stripe" value={artist.stripe === "verified" ? "✓" : "—"} sub={artist.stripe === "verified" ? "payouts enabled" : "setup needed"} />
       </div>
 
       {todo.length > 0 && (
         <section className="mt-10">
           <Label>to do</Label>
-          <div className="mt-3 divide-y divide-line border border-line bg-card">
-            {todo.map(({ r, text, cta, urgent }) => (
-              <Link key={r.id} href={cta === "Desk" ? `/artist/rounds/${r.id}/desk` : `/artist/rounds/${r.id}`} className="flex items-center gap-4 p-4 hover:bg-haze">
-                <span className={`size-2.5 shrink-0 rounded-full ${urgent ? "animate-blink bg-hold" : "bg-go"}`} />
+          <div className="mt-3 divide-y divide-line border border-line bg-hold-soft/40">
+            {todo.map(({ r, text, cta }) => (
+              <Link key={r.id} href={cta === "Desk" ? `/artist/rounds/${r.id}/desk` : `/artist/rounds/${r.id}`} className="flex items-center gap-4 p-4 hover:bg-hold-soft/60">
                 <span className="min-w-0 flex-1">
-                  <span className="block font-display text-[16px] font-bold">{r.title}</span>
+                  <span className="block text-[16px] font-bold">{r.title}</span>
                   <span className="block text-[13px] text-ash">{text}</span>
                 </span>
-                <span className="text-[12px] uppercase tracking-[0.14em]">{cta} →</span>
+                <span className="border border-ink bg-paper px-3 py-1.5 text-[13px] font-bold">{cta} →</span>
               </Link>
             ))}
           </div>
@@ -86,7 +85,7 @@ function Dashboard() {
 
       <section className="mt-10">
         <Label>your rounds</Label>
-        <div className="mt-3 grid gap-4">
+        <div className="mt-3 divide-y divide-line border-y border-line">
           {rounds.map((r) => {
             const c = counts(r, world.pledges);
             const m = money(r, world.pledges);
@@ -96,7 +95,7 @@ function Dashboard() {
               <Link
                 key={r.id}
                 href={`/artist/rounds/${r.id}`}
-                className="group grid gap-5 border-t-[3px] border-ink bg-card p-4 transition hover:bg-stone sm:grid-cols-[96px_1fr_auto] sm:items-center"
+                className="group grid gap-5 bg-card py-5 transition hover:bg-stone/60 sm:grid-cols-[96px_1fr_auto] sm:items-center"
               >
                 <div className="hidden size-24 border border-line dotgrid sm:block">
                   <MerchMock product={r.product} colorway={r.colorway} motif={r.motif} accent={artist.accent} />

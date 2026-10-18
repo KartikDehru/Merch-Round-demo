@@ -25,42 +25,56 @@ export function RoundCard({ round, artist, href, index }: { round: Round; artist
   const c = counts(round, world.pledges);
   const shown = round.status === "live" ? c.pledgedCount : c.paidCount || c.pledgedCount;
   return (
-    <Link href={href} className="group block bg-ink text-paper transition duration-300 hover:-translate-y-1 hover:-rotate-1">
-      <div className="p-4 pb-0">
-        <div className="flex items-baseline justify-between text-[12px] tracking-[0.14em] text-fog uppercase">
-          <span>{index !== undefined ? `Round ${String(index + 1).padStart(2, "0")}` : artist.city}</span>
-          <RoundPill status={round.status} fan />
-        </div>
-        <div className="relative mt-3 aspect-[5/4] overflow-hidden" style={{ background: artist.accent }}>
-          <div className="absolute inset-5 transition-transform duration-500 group-hover:scale-[1.05]">
-            <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={round.colorway === "bone" ? "#15181C" : "#F3EFE6"} label={artist.name} />
-          </div>
-        </div>
-        <div className="mt-4 font-display text-[28px] leading-none">{artist.name}</div>
-        <div className="mt-1 text-[15px] text-fog">
-          {round.title} · {aud(round.price)}
+    <Link href={href} className="group block transition duration-300 hover:-translate-y-0.5">
+      <div className="label mb-2 flex items-center justify-between">
+        <span>{index !== undefined ? `Round ${String(index + 1).padStart(2, "0")}` : artist.name}</span>
+      </div>
+      <div className="relative aspect-square overflow-hidden bg-stone">
+        {round.status === "live" && (
+          <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 bg-brick px-2 py-0.5 text-[11px] font-bold tracking-[0.08em] text-ink uppercase">
+            <span className="size-1.5 animate-blink rounded-full bg-ink" />
+            Open
+          </span>
+        )}
+        {round.status !== "live" && (
+          <span className="absolute top-3 left-3 z-10">
+            <RoundPill status={round.status} fan />
+          </span>
+        )}
+        <div className="absolute inset-6 transition-transform duration-500 group-hover:scale-[1.04]">
+          <MerchMock
+            product={round.product}
+            colorway={round.colorway}
+            motif={round.motif}
+            accent={round.colorway === "bone" ? "#111111" : "#ffffff"}
+            label={artist.name}
+          />
         </div>
       </div>
-      <div className="relative mx-3 mt-4 h-0.5 ticket-edge text-paper/70">
-        <span className="absolute top-1/2 -left-5 size-5 -translate-y-1/2 rounded-full bg-paper" />
-        <span className="absolute top-1/2 -right-5 size-5 -translate-y-1/2 rounded-full bg-paper" />
+      <div className="mt-4">
+        <div className="label !text-mute">{artist.name}</div>
+        <div className="mt-1 text-[17px] font-bold leading-tight">{round.title}</div>
+        <div className="mt-0.5 text-[15px] text-ash">{aud(round.price)}</div>
       </div>
-      <div className="p-4 pt-4">
-        <div className="flex justify-between text-[15px] font-bold tabular">
-          <span>{shown} asked for</span>
-          <span className="font-medium text-fog">{round.target} needed</span>
+      <div className="mt-4">
+        <div className="flex justify-between text-[13px] tabular">
+          <span>
+            <b>{shown} asked for</b>
+          </span>
+          <span className="text-ash">{round.target} needed</span>
         </div>
-        <Tally pledged={shown} target={round.target} size="sm" dark className="mt-2.5" />
-        <div className="mt-2.5 text-[13px] text-fog">
+        <Tally pledged={shown} target={round.target} size="sm" className="mt-2" />
+        <div className="mt-2.5 flex items-center justify-between text-[13px] text-ash">
           {round.status === "live" ? (
-            <>
-              Closes in <Countdown to={round.closesAt} now={now} className="text-[13px] !text-paper" />
-            </>
+            <span>
+              Closes in <Countdown to={round.closesAt} now={now} className="text-[13px]" />
+            </span>
           ) : (
             <span>
               {date(round.showDate)} · {round.venue.split(",")[0]}
             </span>
           )}
+          <span className="font-semibold text-ink underline underline-offset-2">View round</span>
         </div>
       </div>
     </Link>

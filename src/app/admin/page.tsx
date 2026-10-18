@@ -102,11 +102,11 @@ function Queue() {
       <Label>merch round admin · priya</Label>
       <H1 className="mt-3">Queue.</H1>
 
-      <div className="mt-8 grid grid-cols-2 gap-px border border-line bg-line md:grid-cols-4">
-        <Stat className="bg-card p-5" label="fans charged" value={aud(totals.gross)} sub="active + completed rounds" />
-        <Stat className="bg-card p-5" label="our net" value={aud(totals.net)} sub="10% minus card fees" />
-        <Stat className="bg-card p-5" label="held in stripe" value={aud(totals.held)} sub="not yet paid out" />
-        <Stat className="bg-card p-5" label="live rounds" value={by(["live"]).length} sub={`${world.pledges.filter((p) => p.status === "pledged").length} saved cards`} />
+      <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <Stat className="bg-stone p-5" label="fans charged" value={aud(totals.gross)} sub="active + completed rounds" />
+        <Stat className="bg-stone p-5" label="our net" value={aud(totals.net)} sub="10% minus card fees" />
+        <Stat className="bg-stone p-5" label="held in stripe" value={aud(totals.held)} sub="not yet paid out" />
+        <Stat className="bg-stone p-5" label="live rounds" value={by(["live"]).length} sub={`${world.pledges.filter((p) => p.status === "pledged").length} saved cards`} />
       </div>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1.6fr_1fr]">

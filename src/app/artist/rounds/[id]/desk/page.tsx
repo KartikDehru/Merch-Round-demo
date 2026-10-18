@@ -108,7 +108,7 @@ function Desk() {
                 placeholder="Search name or code"
                 className="h-14 border border-paper/25 bg-coal px-4 text-[16px] text-paper placeholder:text-paper/40 focus:border-brick focus:outline-none"
               />
-              <button onClick={() => setScanning(true)} className="h-14 bg-brick px-7 text-[17px] font-bold text-paper active:translate-y-px">
+              <button onClick={() => setScanning(true)} className="h-14 bg-brick px-7 text-[17px] font-bold text-ink active:translate-y-px">
                 Scan
               </button>
             </div>
@@ -178,7 +178,7 @@ function Desk() {
                 Find
               </button>
             </div>
-            <button onClick={() => scan()} className="mt-3 h-14 w-full bg-brick text-[17px] font-bold text-paper">
+            <button onClick={() => scan()} className="mt-3 h-14 w-full bg-brick text-[17px] font-bold text-ink">
               Simulate a scan
             </button>
             <button onClick={() => setScanning(false)} className="mt-2 h-12 w-full text-[12px] uppercase tracking-[0.14em] text-paper/60">

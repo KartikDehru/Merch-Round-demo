@@ -23,9 +23,9 @@ export default function RoundsPage() {
       <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <Label>rounds</Label>
+            <Label>Rounds</Label>
             <H1 className="mt-3">Back the merch.</H1>
-            <p className="mt-3 max-w-[520px] text-ash">Buy now, and you only pay if the round hits its number. Pick it up at the show.</p>
+            <p className="mt-3 max-w-[520px] text-[16px] text-ash">Buy now, and you only pay if the round hits its number. Pick it up at the show.</p>
           </div>
           <Segmented<Filter>
             value={filter}
@@ -37,12 +37,12 @@ export default function RoundsPage() {
             ]}
           />
         </div>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((r, i) => (
             <RoundCard key={r.id} round={r} artist={world.artists.find((a) => a.id === r.artistId)!} href={`/r/${r.slug}`} index={i} />
           ))}
         </div>
-        {!list.length && <div className="mt-10 font-display text-mute">nothing here right now</div>}
+        {!list.length && <div className="mt-10 text-[18px] text-mute">Nothing here right now.</div>}
       </div>
       <Footer />
     </>

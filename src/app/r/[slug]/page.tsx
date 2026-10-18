@@ -132,7 +132,7 @@ export default function RoundPage() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <button type="button" onClick={buy} className="min-h-[60px] bg-brick px-8 text-[20px] font-bold text-paper transition hover:bg-brick-deep active:translate-y-px">
+                <button type="button" onClick={buy} className="min-h-[60px] bg-brick px-8 text-[20px] font-bold text-ink transition hover:bg-brick-deep active:translate-y-px">
                   Buy now
                 </button>
                 <div className="text-[16px] leading-[1.4] text-ash">You&apos;re only charged if this round hits the number.</div>
@@ -154,7 +154,7 @@ export default function RoundPage() {
                   Your order and ticket
                 </Link>
                 {mine[0].status === "action_required" && (
-                  <Link href={`/pay/${mine[0].id}`} className="inline-flex min-h-12 items-center bg-brick px-5 text-[16px] font-bold text-paper hover:bg-brick-deep">
+                  <Link href={`/pay/${mine[0].id}`} className="inline-flex min-h-12 items-center bg-brick px-5 text-[16px] font-bold text-ink hover:bg-brick-deep">
                     Confirm payment
                   </Link>
                 )}

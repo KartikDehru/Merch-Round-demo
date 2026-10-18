@@ -105,7 +105,7 @@ export function WorldProvider({ children }: { children: React.ReactNode }) {
             key={t.id}
             className={`animate-rise pointer-events-auto border px-4 py-2 text-[13px] ${
               t.tone === "good"
-                ? "border-ink bg-brick text-paper"
+                ? "border-ink bg-brick text-ink"
                 : t.tone === "bad"
                   ? "border-ink bg-stop text-white"
                   : t.tone === "warn"

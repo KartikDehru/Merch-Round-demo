@@ -9,12 +9,12 @@ import type { Colorway, PrintMotif, ProductKind } from "@/lib/types";
 
 const TEE_PATH = "M42 36 L52 32 Q60 42 68 32 L78 36 L90 50 L80 58 L74 53 L74 88 L46 88 L46 53 L40 58 L30 50 Z";
 
-export function LogoMark({ size = 44, dot = "var(--color-brick)", className }: { size?: number; dot?: string | null; className?: string }) {
+/** Solid circle mark with cut-out tee (Dawn). */
+export function LogoMark({ size = 36, className, inverted = false }: { size?: number; dot?: string | null; className?: string; inverted?: boolean }) {
   return (
     <svg viewBox="0 0 120 120" width={size} height={size} aria-hidden className={cx("shrink-0", className)}>
-      <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="10" strokeDasharray="262 52.16" transform="rotate(-15 60 60)" />
-      {dot !== null && <circle cx="95.36" cy="24.64" r="9" fill={dot} />}
-      <path transform="translate(60 60) scale(1.12) translate(-60 -60)" fill="currentColor" d={TEE_PATH} />
+      <circle cx="60" cy="60" r="60" fill={inverted ? "white" : "currentColor"} />
+      <path transform="translate(60 60) scale(1.05) translate(-60 -60)" fill={inverted ? "currentColor" : "white"} d={TEE_PATH} />
     </svg>
   );
 }
@@ -27,24 +27,23 @@ export function TeeGlyph({ size = 150, className }: { size?: number; className?:
   );
 }
 
-export function Logo({ className, dark = false, size = 40 }: { className?: string; dark?: boolean; size?: number; cursor?: boolean }) {
+export function Logo({ className, dark = false, size = 32 }: { className?: string; dark?: boolean; size?: number; cursor?: boolean }) {
   return (
     <span className={cx("inline-flex items-center gap-2.5", dark ? "text-paper" : "text-ink", className)}>
-      <LogoMark size={size} dot={dark ? "var(--color-brick-light)" : "var(--color-brick)"} />
-      <span className="font-display leading-none whitespace-nowrap" style={{ fontSize: size * 0.62 }}>
+      <LogoMark size={size} inverted={dark} />
+      <span className="font-display leading-none whitespace-nowrap tracking-[-0.03em]" style={{ fontSize: size * 0.55 }}>
         Merch Round
       </span>
     </span>
   );
 }
 
-/* ───────── Big decorative ring (from the logo) ───────── */
-
+/** Decorative ring kept for desk/viewfinder accents. */
 export function Ring({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 120 120" aria-hidden className={cx("pointer-events-none", className)}>
-      <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="10" strokeDasharray="262 52.16" transform="rotate(-15 60 60)" />
-      <circle cx="95.36" cy="24.64" r="9" fill="currentColor" />
+      <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" strokeWidth="6" />
+      <path transform="translate(60 60) scale(0.7) translate(-60 -60)" fill="currentColor" d={TEE_PATH} />
     </svg>
   );
 }
@@ -227,11 +226,11 @@ export function Tally({
     <div
       role="img"
       aria-label={`${pledged} of ${target}`}
-      className={cx("relative overflow-hidden", size === "sm" ? "h-2.5" : "h-4", dark ? "bg-track" : "bg-ink/12", className)}
+      className={cx("relative overflow-hidden", size === "sm" ? "h-1" : "h-1.5", dark ? "bg-paper/20" : "bg-track", className)}
     >
       <div className="absolute inset-y-0 left-0 bg-brick transition-[width] duration-700" style={{ width: pct(pledged) }} />
       {paid > 0 && (
-        <div className={cx("absolute inset-y-0 left-0 transition-[width] duration-700", dark ? "bg-brick-light" : "bg-brick-deep")} style={{ width: pct(paid) }} />
+        <div className="absolute inset-y-0 left-0 bg-brick-deep transition-[width] duration-700" style={{ width: pct(paid) }} />
       )}
     </div>
   );

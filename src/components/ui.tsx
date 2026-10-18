@@ -11,17 +11,17 @@ export function cx(...c: (string | false | null | undefined)[]) {
 type Variant = "primary" | "secondary" | "ghost" | "brick" | "danger";
 
 const btnBase =
-  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-brick focus-visible:outline-offset-2 select-none";
+  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-ink focus-visible:outline-offset-2 select-none rounded-none";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-ink text-paper hover:bg-coal border-2 border-ink",
-  secondary: "bg-transparent text-ink border-2 border-ink hover:bg-ink hover:text-paper",
+  primary: "bg-ink text-paper hover:bg-coal border border-ink",
+  secondary: "bg-transparent text-ink border border-ink hover:bg-ink hover:text-paper",
   ghost: "text-ash hover:text-ink hover:underline",
-  brick: "bg-brick text-paper border-2 border-brick hover:bg-brick-deep hover:border-brick-deep",
-  danger: "bg-transparent text-stop border-2 border-stop/70 hover:bg-stop-soft",
+  brick: "bg-brick text-ink border border-brick hover:bg-brick-deep hover:border-brick-deep",
+  danger: "bg-transparent text-stop border border-stop/70 hover:bg-stop-soft",
 };
 
-const sizes = { sm: "h-9 px-3 text-[13px]", md: "h-11 px-5 text-[15px]", lg: "h-14 px-7 text-[17px]" };
+const sizes = { sm: "h-9 px-3 text-[13px]", md: "h-11 px-5 text-[15px]", lg: "h-14 px-8 text-[16px]" };
 
 export function Button({
   variant = "primary",
@@ -46,7 +46,7 @@ export function Label({ children, className }: { children: ReactNode; className?
 }
 
 export function PixelNum({ children, className }: { children: ReactNode; className?: string }) {
-  return <span className={cx("font-display text-[28px] leading-none text-brick", className)}>{children}</span>;
+  return <span className={cx("font-display text-[28px] leading-none text-ink", className)}>{children}</span>;
 }
 
 export function Cell({ children, className, ...rest }: ComponentProps<"div">) {
@@ -59,7 +59,7 @@ export function Cell({ children, className, ...rest }: ComponentProps<"div">) {
 
 export function Panel({ title, action, children, className }: { title: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <section className={cx("border-t-[3px] border-ink bg-card", className)}>
+    <section className={cx("border border-line bg-card", className)}>
       <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <Label>{title}</Label>
         {action}
@@ -84,17 +84,17 @@ export function H3({ children, className }: { children: ReactNode; className?: s
 type Tone = "good" | "warn" | "bad" | "neutral" | "live" | "dark";
 
 const toneCls: Record<Tone, string> = {
-  good: "bg-teal text-paper border-teal",
-  warn: "bg-hold-soft text-hold border-hold/40",
-  bad: "bg-transparent text-stop border-stop",
-  neutral: "bg-haze text-ash border-line",
-  live: "bg-brick text-paper border-brick",
-  dark: "bg-ink text-paper border-ink",
+  good: "bg-go-soft text-go border-transparent",
+  warn: "bg-hold-soft text-hold border-transparent",
+  bad: "bg-stop-soft text-stop border-transparent",
+  neutral: "bg-haze text-ash border-transparent",
+  live: "bg-brick text-ink border-transparent",
+  dark: "bg-ink text-paper border-transparent",
 };
 
 export function Pill({ tone = "neutral", children, dot, className }: { tone?: Tone; children: ReactNode; dot?: boolean; className?: string }) {
   return (
-    <span className={cx("inline-flex items-center gap-1.5 border-2 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] whitespace-nowrap", toneCls[tone], className)}>
+    <span className={cx("inline-flex items-center gap-1.5 border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.1em] whitespace-nowrap", toneCls[tone], className)}>
       {dot && <span className={cx("size-1.5 rounded-full bg-current", tone === "live" && "animate-blink")} />}
       {children}
     </span>
@@ -149,12 +149,12 @@ export function Stamp({ children, tone = "ink", rot = -4, className }: { childre
     go: "text-teal border-teal bg-paper",
     stop: "text-stop border-stop bg-paper",
     hold: "text-hold border-hold bg-paper",
-    brick: "text-paper border-brick bg-brick",
+    brick: "text-ink border-brick bg-brick",
   }[tone];
   return (
     <span
       style={{ ["--stamp-rot" as string]: `${rot}deg` }}
-      className={cx("animate-stamp inline-block border-[3px] px-3 py-1 font-display text-[22px] leading-tight", c, className)}
+      className={cx("animate-stamp inline-block border-2 px-3 py-1 font-display text-[22px] leading-tight", c, className)}
     >
       {children}
     </span>
@@ -172,7 +172,7 @@ export function Field({ label, hint, children, className }: { label: string; hin
 }
 
 export const inputCls =
-  "w-full h-12 border-2 border-ink/25 bg-card px-3 text-[16px] text-ink placeholder:text-mute focus:border-ink focus:outline-none transition";
+  "w-full h-12 border border-line bg-card px-3 text-[16px] text-ink placeholder:text-mute focus:border-ink focus:outline-none transition rounded-none";
 
 export function Input(props: ComponentProps<"input">) {
   return <input {...props} className={cx(inputCls, props.className)} />;
@@ -198,7 +198,7 @@ export function Segmented<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cx("inline-flex border-2 border-ink", className)}>
+    <div className={cx("inline-flex items-center gap-5", className)}>
       {options.map((o) => (
         <button
           key={o.value}
@@ -206,8 +206,8 @@ export function Segmented<T extends string>({
           aria-pressed={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            "h-9 px-3.5 text-[14px] font-bold transition",
-            value === o.value ? "bg-ink text-paper" : "text-ink hover:bg-haze",
+            "h-9 text-[14px] font-semibold transition border-b-2",
+            value === o.value ? "border-brick text-ink" : "border-transparent text-ash hover:text-ink",
           )}
         >
           {o.label}

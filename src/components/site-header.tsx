@@ -7,14 +7,13 @@ import { useWorld } from "@/lib/store";
 import { login } from "@/lib/actions";
 import type { Role } from "@/lib/types";
 import { Logo } from "./visuals";
-import { Segmented, cx } from "./ui";
+import { cx } from "./ui";
 
 const NAV: Record<Role | "guest", { href: string; label: string }[]> = {
   guest: [
     { href: "/#how", label: "How it works" },
     { href: "/#care", label: "What we care about" },
     { href: "/rounds", label: "Rounds" },
-    { href: "/demo", label: "Demo accounts" },
   ],
   fan: [
     { href: "/rounds", label: "Rounds" },
@@ -25,13 +24,11 @@ const NAV: Record<Role | "guest", { href: string; label: string }[]> = {
     { href: "/artist", label: "Dashboard" },
     { href: "/artist/new", label: "New round" },
     { href: "/artist/settings", label: "Profile" },
-    { href: "/rounds", label: "Public site" },
   ],
   admin: [
     { href: "/admin", label: "Queue" },
     { href: "/admin/rounds", label: "Rounds" },
     { href: "/admin/ledger", label: "Ledger" },
-    { href: "/admin/emails", label: "Emails" },
   ],
 };
 
@@ -44,6 +41,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const role = world.session.role;
   const links = NAV[role ?? "guest"];
+  const overHero = path === "/" && !role;
 
   const switchRole = (r: Role) => {
     act(login(r));
@@ -52,10 +50,10 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-ink bg-paper">
-      <div className="mx-auto flex h-[72px] max-w-[1280px] items-center gap-8 px-5 sm:px-8">
+    <header className={cx("sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-md", overHero && "border-transparent")}>
+      <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-8 px-5 sm:px-8">
         <Link href="/" className="shrink-0" aria-label="Merch Round home">
-          <Logo size={42} />
+          <Logo size={30} />
         </Link>
         <nav className="hidden items-center gap-7 lg:flex">
           {links.map((l) => {
@@ -65,30 +63,46 @@ export function SiteHeader() {
                 key={l.href}
                 href={l.href}
                 className={cx(
-                  "text-[16px] font-medium transition hover:underline",
-                  active ? "text-ink underline decoration-brick decoration-[3px] underline-offset-[8px]" : "text-ink/80",
+                  "text-[14px] font-medium transition",
+                  active ? "text-ink underline decoration-ink decoration-1 underline-offset-[10px]" : "text-ink/70 hover:text-ink",
                 )}
               >
                 {l.label}
               </Link>
             );
           })}
+          {role === "artist" && (
+            <Link href="/rounds" className="text-[14px] font-medium text-ink/70 hover:text-ink">
+              Public site
+            </Link>
+          )}
+          {role === "admin" && (
+            <Link href="/admin/emails" className="text-[14px] font-medium text-ink/70 hover:text-ink">
+              Emails
+            </Link>
+          )}
         </nav>
         <div className="ml-auto hidden items-center gap-3 md:flex">
-          <span className="label hidden xl:inline">View as</span>
-          <Segmented<Role>
-            value={(role ?? "fan") as Role}
-            onChange={switchRole}
-            options={[
-              { value: "fan", label: "Fan" },
-              { value: "artist", label: "Artist" },
-              { value: "admin", label: "Admin" },
-            ]}
-            className={role ? "" : "opacity-70"}
-          />
+          {!role && <span className="text-[13px] text-ash">Demo accounts</span>}
+          <span className="label !tracking-[0.1em]">View as</span>
+          <div className="flex items-center gap-3">
+            {(["fan", "artist", "admin"] as Role[]).map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => switchRole(r)}
+                className={cx(
+                  "text-[14px] font-semibold capitalize transition",
+                  (role ?? "fan") === r ? "text-ink underline underline-offset-[6px]" : "text-ash hover:text-ink",
+                )}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
         </div>
         <button
-          className="ml-auto inline-flex h-10 items-center border-2 border-ink px-4 text-[14px] font-bold lg:hidden md:ml-0"
+          className="ml-auto inline-flex h-10 items-center border border-ink px-4 text-[14px] font-bold md:ml-3 lg:hidden"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
         >
@@ -105,15 +119,13 @@ export function SiteHeader() {
             ))}
           </nav>
           <div className="label mb-2">View as</div>
-          <Segmented<Role>
-            value={(role ?? "fan") as Role}
-            onChange={switchRole}
-            options={[
-              { value: "fan", label: "Fan" },
-              { value: "artist", label: "Artist" },
-              { value: "admin", label: "Admin" },
-            ]}
-          />
+          <div className="flex gap-4">
+            {(["fan", "artist", "admin"] as Role[]).map((r) => (
+              <button key={r} type="button" onClick={() => switchRole(r)} className="text-[15px] font-semibold capitalize underline">
+                {r}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </header>

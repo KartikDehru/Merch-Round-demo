@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useWorld } from "@/lib/store";
 import { login } from "@/lib/actions";
 import type { Role } from "@/lib/types";
-import { Button, Cell, H3, PixelNum } from "./ui";
+import { Button, Cell } from "./ui";
 
 export function DemoAccounts() {
   const { act, world } = useWorld();
@@ -41,25 +41,22 @@ export function DemoAccounts() {
     },
   ];
   return (
-    <div className="mt-10 grid border-t border-l border-line md:grid-cols-3">
-      {cards.map((c, i) => (
-        <Cell key={c.role} className="flex flex-col border-t-0 border-l-0 p-6 sm:p-8">
-          <div className="flex items-center justify-between">
-            <PixelNum>{String(i + 1).padStart(2, "0")}</PixelNum>
-            <span className="label">{c.tag}</span>
-          </div>
-          <H3 className="mt-6">{c.who}</H3>
-          <div className="text-[12px] text-mute">{c.meta}</div>
-          <ul className="mt-5 flex-1 space-y-2 text-[13px] text-ash">
+    <div className="mt-10 grid gap-5 md:grid-cols-3">
+      {cards.map((c) => (
+        <Cell key={c.role} className="flex flex-col border border-line p-6 sm:p-8">
+          <span className="label">{c.tag}</span>
+          <div className="mt-4 text-[22px] font-bold">{c.who}</div>
+          <div className="mt-1 text-[13px] text-mute">{c.meta}</div>
+          <ul className="mt-5 flex-1 space-y-2.5 text-[14px] text-ash">
             {c.bullets.map((b) => (
               <li key={b} className="flex gap-2">
-                <span className="text-go">◇</span>
+                <span className="mt-0.5 text-go">✓</span>
                 {b}
               </li>
             ))}
           </ul>
-          <Button className="mt-6" variant={i === 0 ? "brick" : "primary"} onClick={() => enter(c.role, c.href, c.artistId)}>
-            Enter as {c.tag} →
+          <Button className="mt-6 w-full" variant="secondary" onClick={() => enter(c.role, c.href, c.artistId)}>
+            Enter as {c.tag}
           </Button>
         </Cell>
       ))}

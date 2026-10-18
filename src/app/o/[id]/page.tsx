@@ -69,7 +69,7 @@ function Order() {
       )}
 
       {p.status === "action_required" && (
-        <Link href={`/pay/${p.id}`} className="mt-5 inline-flex h-14 items-center bg-brick px-7 text-[17px] font-bold text-paper hover:bg-brick-deep">
+        <Link href={`/pay/${p.id}`} className="mt-5 inline-flex h-14 items-center bg-brick px-7 text-[17px] font-bold text-ink hover:bg-brick-deep">
           Confirm {aud(p.amount)} payment →
         </Link>
       )}

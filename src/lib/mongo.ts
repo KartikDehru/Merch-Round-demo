@@ -1,14 +1,6 @@
-import { createRequire } from "node:module";
+import { MongoClient, type Collection } from "mongodb";
 import { SEED_VERSION, createSeed } from "./seed";
 import type { World } from "./types";
-import type { Collection, MongoClient } from "mongodb";
-
-const nodeRequire = createRequire(`${process.cwd()}/package.json`);
-
-function loadDriver(): { MongoClient: new (uri: string) => MongoClient } {
-  const spec = "mongodb";
-  return nodeRequire(spec);
-}
 
 export type SharedWorld = Omit<World, "session">;
 
@@ -41,8 +33,7 @@ async function getClient() {
   if (!uri) throw new Error("MONGODB_URI is not set");
   if (client) return client;
   if (!connectPromise) {
-    const { MongoClient: Client } = loadDriver();
-    const next = new Client(uri);
+    const next = new MongoClient(uri);
     connectPromise = next.connect().then(
       (c) => {
         client = c;

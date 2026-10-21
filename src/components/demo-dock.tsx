@@ -23,7 +23,7 @@ export function useInbox() {
 }
 
 export function DemoDock() {
-  const { world, reset, toast } = useWorld();
+  const { world, live, reset, toast } = useWorld();
   const router = useRouter();
   const [sheet, setSheet] = useState<null | "inbox" | "log">(null);
   const inbox = useInbox();
@@ -42,7 +42,9 @@ export function DemoDock() {
       <div className="fixed inset-x-0 bottom-0 z-50 px-3 pb-3 sm:px-5 sm:pb-4">
         <div className="mx-auto flex max-w-[1240px] items-center gap-2 border border-ink bg-ink px-2 py-2 text-paper sm:gap-3 sm:px-3">
           <span className="hidden bg-brick px-2 py-1 font-display text-[13px] leading-none text-ink sm:inline">DEMO</span>
-          <span className="hidden text-[11px] uppercase tracking-[0.16em] text-paper/60 md:inline">no real payments</span>
+          <span className="hidden text-[11px] uppercase tracking-[0.16em] text-paper/60 md:inline">
+            {live ? "Live" : "Offline"} · no real payments
+          </span>
           <span className="mx-1 hidden h-5 w-px bg-paper/20 md:inline" />
           <Link href="/demo" className="flex min-w-0 items-center gap-2 px-1 text-[12px] hover:text-brick">
             <span className={cx("size-2 shrink-0 rounded-full", role ? "bg-brick" : "bg-paper/40")} />

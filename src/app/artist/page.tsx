@@ -69,9 +69,9 @@ function Dashboard() {
       {todo.length > 0 && (
         <section className="mt-10">
           <Label>to do</Label>
-          <div className="mt-3 divide-y divide-line border border-line bg-hold-soft/40">
+          <div className="mt-3 divide-y divide-line border border-line bg-note/40">
             {todo.map(({ r, text, cta }) => (
-              <Link key={r.id} href={cta === "Desk" ? `/artist/rounds/${r.id}/desk` : `/artist/rounds/${r.id}`} className="flex items-center gap-4 p-4 hover:bg-hold-soft/60">
+              <Link key={r.id} href={cta === "Desk" ? `/artist/rounds/${r.id}/desk` : `/artist/rounds/${r.id}`} className="flex items-center gap-4 p-4 hover:bg-note/70">
                 <span className="min-w-0 flex-1">
                   <span className="block text-[16px] font-bold">{r.title}</span>
                   <span className="block text-[13px] text-ash">{text}</span>

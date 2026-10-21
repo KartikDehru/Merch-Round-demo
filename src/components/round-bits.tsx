@@ -31,7 +31,7 @@ export function RoundCard({ round, artist, href, index }: { round: Round; artist
       </div>
       <div className="relative aspect-square overflow-hidden bg-stone">
         {round.status === "live" && (
-          <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 bg-brick px-2 py-0.5 text-[11px] font-bold tracking-[0.08em] text-ink uppercase">
+          <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-brick px-2.5 py-0.5 text-[11px] font-bold tracking-[0.08em] text-ink uppercase">
             <span className="size-1.5 animate-blink rounded-full bg-ink" />
             Open
           </span>
@@ -41,13 +41,14 @@ export function RoundCard({ round, artist, href, index }: { round: Round; artist
             <RoundPill status={round.status} fan />
           </span>
         )}
-        <div className="absolute inset-6 transition-transform duration-500 group-hover:scale-[1.04]">
+        <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.04]">
           <MerchMock
             product={round.product}
             colorway={round.colorway}
             motif={round.motif}
             accent={round.colorway === "bone" ? "#111111" : "#ffffff"}
             label={artist.name}
+            fit="cover"
           />
         </div>
       </div>

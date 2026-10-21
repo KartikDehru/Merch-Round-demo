@@ -45,19 +45,19 @@ export default function RoundPage() {
       <div className="mx-auto grid max-w-[1280px] items-start gap-12 px-5 pt-8 pb-24 sm:px-8 lg:grid-cols-2">
         {/* artwork */}
         <div className="lg:sticky lg:top-24">
-          <div className="relative flex min-h-[420px] items-center justify-center sm:min-h-[560px]" style={{ background: artist.accent }}>
+          <div className="relative flex min-h-[420px] items-center justify-center bg-stone sm:min-h-[560px]">
             <div className="absolute top-4 left-4 z-10">
               <RoundPill status={round.status} fan />
             </div>
-            <div className="absolute top-4 right-4 z-10 flex border-2 border-paper text-[14px] font-bold text-paper">
+            <div className="absolute top-4 right-4 z-10 flex border border-ink text-[14px] font-bold text-ink">
               {(["front", "back"] as const).map((s) => (
-                <button key={s} onClick={() => setSide(s)} className={cx("px-3 py-1.5 capitalize", side === s ? "bg-paper text-ink" : "hover:bg-paper/15")}>
+                <button key={s} onClick={() => setSide(s)} className={cx("px-3 py-1.5 capitalize", side === s ? "bg-ink text-paper" : "hover:bg-ink/5")}>
                   {s}
                 </button>
               ))}
             </div>
             <div key={side} className="animate-rise absolute inset-[9%]">
-              <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={printInk} label={artist.name} back={side === "back"} />
+              <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={printInk} label={artist.name} back={side === "back"} fit="cover" />
             </div>
             {round.status === "failed" && (
               <div className="absolute inset-x-0 bottom-8 flex justify-center">

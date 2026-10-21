@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useId, useState } from "react";
 import { cx } from "./ui";
 import { left, pad } from "@/lib/format";
@@ -136,6 +137,12 @@ function Motif({ motif, x, y, s, color, pid }: { motif: PrintMotif; x: number; y
   );
 }
 
+const PRODUCT_PHOTO: Partial<Record<ProductKind, string>> = {
+  tee: "/merch/tee.jpg",
+  cap: "/merch/cap.jpg",
+  hoodie: "/merch/hoodie.jpg",
+};
+
 export function MerchMock({
   product,
   colorway,
@@ -143,6 +150,7 @@ export function MerchMock({
   accent,
   label,
   back = false,
+  fit = "contain",
   className,
 }: {
   product: ProductKind;
@@ -151,9 +159,24 @@ export function MerchMock({
   accent: string;
   label?: string;
   back?: boolean;
+  fit?: "contain" | "cover";
   className?: string;
 }) {
   const id = useId().replace(/:/g, "");
+  const photo = !back ? PRODUCT_PHOTO[product] : undefined;
+  if (photo) {
+    return (
+      <span className={cx("relative block h-full w-full", className)}>
+        <Image
+          src={photo}
+          alt=""
+          fill
+          className={fit === "cover" ? "object-cover" : "object-contain"}
+          sizes="(max-width: 768px) 90vw, 480px"
+        />
+      </span>
+    );
+  }
   const f = FABRIC[colorway];
   const pa = PRINT_AREA[product];
   const printColor = colorway === "bone" ? accent : accent;

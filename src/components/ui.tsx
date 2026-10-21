@@ -11,14 +11,14 @@ export function cx(...c: (string | false | null | undefined)[]) {
 type Variant = "primary" | "secondary" | "ghost" | "brick" | "danger";
 
 const btnBase =
-  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-ink focus-visible:outline-offset-2 select-none rounded-none";
+  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-ink focus-visible:outline-offset-2 select-none rounded-[4px]";
 
 const variants: Record<Variant, string> = {
   primary: "bg-ink text-paper hover:bg-coal border border-ink",
   secondary: "bg-transparent text-ink border border-ink hover:bg-ink hover:text-paper",
   ghost: "text-ash hover:text-ink hover:underline",
   brick: "bg-brick text-ink border border-brick hover:bg-brick-deep hover:border-brick-deep",
-  danger: "bg-transparent text-stop border border-stop/70 hover:bg-stop-soft",
+  danger: "bg-transparent text-stop border border-stop hover:bg-stop-soft",
 };
 
 const sizes = { sm: "h-9 px-3 text-[13px]", md: "h-11 px-5 text-[15px]", lg: "h-14 px-8 text-[16px]" };
@@ -94,7 +94,7 @@ const toneCls: Record<Tone, string> = {
 
 export function Pill({ tone = "neutral", children, dot, className }: { tone?: Tone; children: ReactNode; dot?: boolean; className?: string }) {
   return (
-    <span className={cx("inline-flex items-center gap-1.5 border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.1em] whitespace-nowrap", toneCls[tone], className)}>
+    <span className={cx("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] whitespace-nowrap", toneCls[tone], className)}>
       {dot && <span className={cx("size-1.5 rounded-full bg-current", tone === "live" && "animate-blink")} />}
       {children}
     </span>
@@ -172,7 +172,7 @@ export function Field({ label, hint, children, className }: { label: string; hin
 }
 
 export const inputCls =
-  "w-full h-12 border border-line bg-card px-3 text-[16px] text-ink placeholder:text-mute focus:border-ink focus:outline-none transition rounded-none";
+  "w-full h-12 rounded-[4px] border border-line bg-card px-3 text-[16px] text-ink placeholder:text-mute focus:border-ink focus:outline-none transition";
 
 export function Input(props: ComponentProps<"input">) {
   return <input {...props} className={cx(inputCls, props.className)} />;

@@ -1,33 +1,35 @@
 @import "tailwindcss";
 
 @theme {
+  /* Primitives from the Figma design system (Dev Mode variables) */
   --color-paper: #ffffff;
   --color-card: #ffffff;
-  --color-stone: #f5f5f5;
-  --color-ink: #111111;
-  --color-coal: #1a1a1a;
-  --color-track: #e8e8e8;
-  --color-ash: #6b6b6b;
-  --color-mute: #8a8a8a;
-  --color-line: #e5e5e5;
-  --color-haze: #f5f5f5;
-  --color-fog: #9a9a9a;
-  --color-cloud: #d4d4d4;
+  --color-haze: #fbfbff;
+  --color-stone: #f5f5f3;
+  --color-ink: #010100;
+  --color-coal: #010100;
+  --color-line: #dedfdc;
+  --color-track: #dedfdc;
+  --color-cloud: #dedfdc;
+  --color-mute: #6b6b6b;
+  --color-fog: #6b6b6b;
+  --color-ash: #5c5c5c;
 
-  /* Lime accent (Dawn) — used via brick aliases so existing classes keep working */
-  --color-brick: #d4ff3b;
-  --color-brick-deep: #c2ef28;
-  --color-brick-light: #e4ff7a;
-  --color-brick-soft: #f4ffc8;
-  --color-teal: #2d5a27;
-  --color-teal-soft: #e8f3e6;
+  /* Accent aliases (lime/500, orange/500, yellow/note) */
+  --color-brick: #c7e73f;
+  --color-brick-deep: #b4d42e;
+  --color-brick-light: #d6f06a;
+  --color-brick-soft: #f4fad4;
+  --color-teal: #010100;
+  --color-teal-soft: #f4fad4;
 
-  --color-go: #2d5a27;
-  --color-go-soft: #e8f3e6;
-  --color-hold: #9a6410;
-  --color-hold-soft: #f4e7cc;
-  --color-stop: #b42318;
-  --color-stop-soft: #fde8e6;
+  --color-go: #010100;
+  --color-go-soft: #f4fad4;
+  --color-hold: #ff4b1f;
+  --color-hold-soft: #ffe6df;
+  --color-stop: #ff4b1f;
+  --color-stop-soft: #ffe6df;
+  --color-note: #ffeb8c;
 
   --font-display: var(--font-jakarta), "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-jakarta), "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;

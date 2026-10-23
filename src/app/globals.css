@@ -15,11 +15,11 @@
   --color-fog: #6b6b6b;
   --color-ash: #5c5c5c;
 
-  /* Accent aliases (lime/500, orange/500, yellow/note) */
-  --color-brick: #c7e73f;
-  --color-brick-deep: #b4d42e;
-  --color-brick-light: #d6f06a;
-  --color-brick-soft: #f4fad4;
+  /* Accent aliases from Figma: lime #8CD92B, green-deep #1F8A3C */
+  --color-brick: #8cd92b;
+  --color-brick-deep: #74c41f;
+  --color-brick-light: #c6f56a;
+  --color-brick-soft: #f3fbe0;
   --color-teal: #010100;
   --color-teal-soft: #f4fad4;
 

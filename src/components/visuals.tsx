@@ -10,12 +10,23 @@ import type { Colorway, PrintMotif, ProductKind } from "@/lib/types";
 
 const TEE_PATH = "M42 36 L52 32 Q60 42 68 32 L78 36 L90 50 L80 58 L74 53 L74 88 L46 88 L46 53 L40 58 L30 50 Z";
 
-/** Solid circle mark with cut-out tee (Dawn). */
-export function LogoMark({ size = 36, className, inverted = false }: { size?: number; dot?: string | null; className?: string; inverted?: boolean }) {
+/** Open ring, tee, and lime dot from the Figma round mark. */
+export function LogoMark({ size = 36, className }: { size?: number; dot?: string | null; className?: string; inverted?: boolean }) {
   return (
     <svg viewBox="0 0 120 120" width={size} height={size} aria-hidden className={cx("shrink-0", className)}>
-      <circle cx="60" cy="60" r="60" fill={inverted ? "white" : "currentColor"} />
-      <path transform="translate(60 60) scale(1.05) translate(-60 -60)" fill={inverted ? "currentColor" : "white"} d={TEE_PATH} />
+      <circle
+        cx="60"
+        cy="60"
+        r="46"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="10"
+        strokeLinecap="round"
+        strokeDasharray="236 54"
+        transform="rotate(28 60 60)"
+      />
+      <circle cx="98" cy="28" r="9" fill="#8CD92B" />
+      <path transform="translate(60 62) scale(0.72) translate(-60 -60)" fill="currentColor" d={TEE_PATH} />
     </svg>
   );
 }
@@ -31,7 +42,7 @@ export function TeeGlyph({ size = 150, className }: { size?: number; className?:
 export function Logo({ className, dark = false, size = 32 }: { className?: string; dark?: boolean; size?: number; cursor?: boolean }) {
   return (
     <span className={cx("inline-flex items-center gap-2.5", dark ? "text-paper" : "text-ink", className)}>
-      <LogoMark size={size} inverted={dark} />
+      <LogoMark size={size} />
       <span className="font-display leading-none whitespace-nowrap tracking-[-0.03em]" style={{ fontSize: size * 0.55 }}>
         Merch Round
       </span>

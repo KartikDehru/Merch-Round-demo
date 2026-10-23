@@ -11,9 +11,9 @@ import { cx } from "./ui";
 
 const NAV: Record<Role | "guest", { href: string; label: string }[]> = {
   guest: [
-    { href: "/#how", label: "How it works" },
-    { href: "/#care", label: "What we care about" },
     { href: "/rounds", label: "Rounds" },
+    { href: "/me", label: "My orders" },
+    { href: "/#how", label: "How it works" },
   ],
   fan: [
     { href: "/rounds", label: "Rounds" },
@@ -41,7 +41,6 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const role = world.session.role;
   const links = NAV[role ?? "guest"];
-  const overHero = path === "/" && !role;
 
   const switchRole = (r: Role) => {
     act(login(r));
@@ -50,7 +49,7 @@ export function SiteHeader() {
   };
 
   return (
-    <header className={cx("sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-md", overHero && "border-transparent")}>
+    <header className="sticky top-0 z-40 border-b border-line bg-paper">
       <div className="mx-auto flex h-[64px] max-w-[1280px] items-center gap-8 px-5 sm:px-8">
         <Link href="/" className="shrink-0" aria-label="Merch Round home">
           <Logo size={30} />

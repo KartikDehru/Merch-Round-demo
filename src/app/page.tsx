@@ -33,25 +33,25 @@ export default function Home() {
   return (
     <div>
       {/* ───────── hero ───────── */}
-      <section className="relative isolate min-h-[78vh] overflow-hidden bg-ink text-paper">
+      <section className="relative isolate h-[min(78vh,760px)] min-h-[480px] overflow-hidden bg-ink text-paper">
         <Image
-          src="/hero.jpg"
-          alt=""
+          src="/photos/hero-booth.jpg"
+          alt="A merch booth at a show, with shirts hanging under a neon MERCH sign"
           fill
           priority
-          className="object-cover object-center opacity-55"
+          className="object-cover object-center"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/40 to-ink/70" />
-        <div className="relative mx-auto flex min-h-[78vh] max-w-[900px] flex-col items-center justify-center gap-7 px-5 py-28 text-center sm:px-8">
-          <h1 className="animate-rise font-display text-[clamp(40px,7vw,80px)] leading-[0.95] tracking-[-0.03em]">
+        <div className="absolute inset-0 bg-ink/45" />
+        <div className="relative mx-auto flex h-full max-w-[980px] flex-col items-center justify-center gap-6 px-5 py-24 text-center sm:px-8">
+          <h1 className="animate-rise font-display text-[clamp(40px,6.2vw,76px)] leading-[0.95] tracking-[-0.03em]">
             Don&apos;t gamble with your merchandise
           </h1>
           <Link href="#how" className="animate-rise text-[16px] font-medium text-paper underline underline-offset-4 [animation-delay:80ms]">
             See how a merch round works
           </Link>
           <LinkButton href="/demo" variant="brick" size="lg" className="animate-rise [animation-delay:140ms]">
-            Try Our Demo
+            Try our demo
           </LinkButton>
         </div>
       </section>
@@ -87,29 +87,27 @@ export default function Home() {
       </section>
 
       {/* ───────── how a round works ───────── */}
-      <section id="how" className="scroll-mt-20 border-t border-line bg-stone">
+      <section id="how" className="scroll-mt-20 border-t border-line">
         <div className="mx-auto flex max-w-[1280px] flex-col gap-14 px-5 py-24 sm:px-8">
-          <h2 className="text-center font-display text-[clamp(32px,5vw,52px)] leading-none">How a round works</h2>
+          <h2 className="text-center font-display text-[clamp(32px,5vw,52px)] leading-none">How a round works.</h2>
           <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map(([t, b], i) => (
               <div key={t} className="flex flex-col gap-3">
-                <div className="font-display text-[40px] leading-none text-mute">{String(i + 1).padStart(2, "0")}</div>
+                <div className="flex h-8 w-8 items-center justify-center bg-brick font-display text-[16px] leading-none text-ink">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
                 <div className="text-[20px] font-bold">{t}</div>
                 <p className="text-[15px] leading-[1.5] text-ash">{b}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ───────── falls short ───────── */}
-      <section className="bg-ink text-paper">
-        <div className="mx-auto grid max-w-[1280px] items-end gap-x-14 gap-y-8 px-5 py-22 sm:px-8 lg:grid-cols-2">
-          <h2 className="font-display text-[clamp(36px,5vw,64px)] leading-[0.95]">And if it falls short, that&apos;s alright.</h2>
-          <p className="text-[18px] leading-[1.45] text-cloud sm:text-[20px]">
-            Nobody pays, nothing gets printed, and you&apos;ve learned something before spending anything. A round that doesn&apos;t make it still
-            keeps a pile of unsold merch out of landfill.
-          </p>
+          <div className="grid items-start gap-x-14 gap-y-4 border-t border-line pt-12 lg:grid-cols-2">
+            <h3 className="font-display text-[clamp(28px,4vw,40px)] leading-none">And what if it falls short?</h3>
+            <p className="text-[17px] leading-[1.5] text-ash">
+              Nobody pays, nothing gets printed, and you&apos;ve learned something before spending anything. A round that doesn&apos;t make it still
+              keeps a pile of unsold merch out of landfill.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -117,7 +115,7 @@ export default function Home() {
       <section id="artists" className="scroll-mt-20">
         <div className="mx-auto grid max-w-[1280px] gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2">
           <div className="flex flex-col gap-6">
-            <h2 className="font-display text-[clamp(32px,5vw,52px)] leading-none">What you take home</h2>
+            <h2 className="font-display text-[clamp(32px,5vw,52px)] leading-none">OK, so how does the money work?</h2>
             <p className="max-w-[500px] text-[18px] leading-[1.5] text-ash">
               Put in your printer&apos;s quote and your price. We suggest how many fans you need, with a little room for the odd declined card.
             </p>
@@ -130,17 +128,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ───────── what we care about ───────── */}
-      <section id="care" className="scroll-mt-20 border-t border-line bg-stone">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-12 px-5 py-24 sm:px-8">
-          <h2 className="font-display text-[clamp(32px,5vw,52px)] leading-none">What we care about</h2>
-          <div className="flex flex-col border-b border-ink">
-            {VALUES.map(([t, b]) => (
-              <div key={t} className="flex flex-wrap gap-x-12 gap-y-3 border-t border-ink py-7">
-                <div className="flex-[1_1_240px] text-[22px] font-bold">{t}</div>
-                <p className="flex-[2_1_380px] text-[16px] leading-[1.5] text-ash sm:text-[17px]">{b}</p>
-              </div>
-            ))}
+      {/* ───────── what we stand for ───────── */}
+      <section id="care" className="scroll-mt-20 border-t border-line">
+        <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-5 py-24 sm:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="relative aspect-square bg-stone">
+            <Image
+              src="/photos/values-tee.jpg"
+              alt="Black tee printed with there's a better, greener, simpler way"
+              fill
+              className="object-contain p-6"
+              sizes="(max-width: 1024px) 90vw, 560px"
+            />
+          </div>
+          <div>
+            <h2 className="font-display text-[clamp(32px,5vw,52px)] leading-none">What we stand for.</h2>
+            <div className="mt-8 flex flex-col border-b border-line">
+              {VALUES.map(([t, b]) => (
+                <div key={t} className="flex flex-col gap-2 border-t border-line py-5">
+                  <div className="text-[18px] font-bold">{t}</div>
+                  <p className="text-[15px] leading-[1.5] text-ash">{b}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -157,19 +166,26 @@ export default function Home() {
       </section>
 
       {/* ───────── call to action ───────── */}
-      <section className="bg-brick text-ink">
-        <div className="mx-auto flex max-w-[1280px] flex-col items-start gap-8 px-5 py-24 sm:px-8">
-          <h2 className="font-display text-[clamp(40px,7vw,80px)] leading-[0.95]">
-            Let&apos;s do a
-            <br />
-            Merch Round.
-          </h2>
-          <p className="max-w-[560px] text-[18px] leading-[1.45]">
-            Got a release coming up? Start a round and see what your fans ask for. If it goes well, run another next time.
-          </p>
-          <Link href="/demo" className="inline-flex min-h-14 items-center bg-ink px-8 text-[16px] font-bold text-paper transition hover:bg-coal">
-            Open a Merch Round
-          </Link>
+      <section className="border-t border-line">
+        <div className="mx-auto grid max-w-[1280px] items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-2">
+          <div className="relative aspect-[4/3] overflow-hidden bg-stone">
+            <Image
+              src="/photos/crowd.jpg"
+              alt="A crowd waiting behind barriers at an outdoor show"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 90vw, 640px"
+            />
+          </div>
+          <div className="flex flex-col items-start gap-6">
+            <h2 className="font-display text-[clamp(36px,5vw,56px)] leading-[0.95]">Let&apos;s do a Merch Round.</h2>
+            <p className="max-w-[460px] text-[17px] leading-[1.5] text-ash">
+              Got a release coming up? Start a round and see what your fans ask for. If it goes well, run another next time.
+            </p>
+            <LinkButton href="/demo" variant="brick" size="lg">
+              Open a Merch Round
+            </LinkButton>
+          </div>
         </div>
       </section>
 

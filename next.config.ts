@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const devServer = process.argv.some((arg) => arg === "dev");
 
 const nextConfig: NextConfig = {
+  experimental: {
+    agentUpgrade: "security",
+  },
   // Dev loads the driver through the alias below. Production must keep the real package external so it is traced into the server function.
   ...(!devServer ? { serverExternalPackages: ["mongodb"] } : {}),
   turbopack: {

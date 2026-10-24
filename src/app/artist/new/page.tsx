@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useWorld } from "@/lib/store";
 import { createRound, uid } from "@/lib/actions";
 import { DAY, FEE_RATE, ROUND_DAYS, latestSafeClose, suggestTarget } from "@/lib/domain";
 import { aud, date } from "@/lib/format";
-import type { Colorway, PrintMotif, ProductKind, Round } from "@/lib/types";
+import type { ProductKind, Round } from "@/lib/types";
 import { RequireRole } from "@/components/require-role";
 import { Receipt } from "@/components/round-bits";
 import { MerchMock, Tally } from "@/components/visuals";
@@ -37,8 +37,8 @@ function Wizard() {
 
   const [title, setTitle] = useState("Encore Longsleeve");
   const [product, setProduct] = useState<ProductKind>("tee");
-  const [colorway, setColorway] = useState<Colorway>("black");
-  const [motif, setMotif] = useState<PrintMotif>("sun");
+  const colorway = "black" as const;
+  const motif = "rings" as const;
   const [description, setDescription] = useState("Long sleeve for the encore. Front sun print, dates down the sleeve.");
   const [sizes, setSizes] = useState(["S", "M", "L", "XL"]);
   const [price, setPrice] = useState(55);
@@ -66,11 +66,6 @@ function Wizard() {
 
   const steps = ["The merch", "The numbers", "The show", "Review"];
   const canNext = [title.trim() && sizes.length > 0, price > 0 && quote > 0 && minRun > 0, !!showName && !!venue && !tooSoon, agree][step];
-
-  const preview = useMemo(
-    () => ({ product, colorway, motif }),
-    [product, colorway, motif],
-  );
 
   const submit = () => {
     const id = uid("r");
@@ -135,62 +130,29 @@ function Wizard() {
               </Field>
               <div>
                 <span className="label">item</span>
-                <div className="mt-2 grid grid-cols-4 gap-2">
-                  {(["tee", "hoodie", "tote", "cap"] as ProductKind[]).map((p) => (
+                <div className="mt-2 grid grid-cols-3 gap-2">
+                  {(["tee", "hoodie", "cap"] as ProductKind[]).map((p) => (
                     <button
                       key={p}
                       onClick={() => {
                         setProduct(p);
-                        if (p === "tote" || p === "cap") setSizes(["One size"]);
+                        if (p === "cap") setSizes(["One size"]);
                         else if (sizes[0] === "One size") setSizes(["S", "M", "L", "XL"]);
                       }}
                       className={cx("border p-2 text-[11px] uppercase tracking-[0.14em]", product === p ? "border-ink bg-brick-soft" : "border-line hover:border-ink")}
                     >
                       <div className="mx-auto size-14">
-                        <MerchMock product={p} colorway={colorway} motif={motif} accent={artist.accent} />
+                        <MerchMock product={p} colorway="black" motif="rings" accent={artist.accent} />
                       </div>
                       {p}
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <span className="label">colour</span>
-                  <div className="mt-2 flex gap-2">
-                    {(
-                      [
-                        ["black", "#17181c"],
-                        ["bone", "#ece6d8"],
-                        ["olive", "#5b6142"],
-                        ["navy", "#1d2640"],
-                      ] as [Colorway, string][]
-                    ).map(([c, hex]) => (
-                      <button
-                        key={c}
-                        aria-label={c}
-                        onClick={() => setColorway(c)}
-                        className={cx("size-10 border-2", colorway === c ? "border-ink ring-2 ring-brick ring-offset-2" : "border-line")}
-                        style={{ background: hex }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <span className="label">artwork (demo motifs)</span>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {(["rings", "wave", "diamond", "sun", "grid"] as PrintMotif[]).map((m) => (
-                      <button key={m} onClick={() => setMotif(m)} className={cx("h-10 border px-2.5 text-[11px] uppercase tracking-[0.12em]", motif === m ? "border-ink bg-ink text-paper" : "border-line")}>
-                        {m}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
               <Field label="Description">
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} />
               </Field>
-              {product !== "tote" && product !== "cap" && (
+              {product !== "cap" && (
                 <div>
                   <span className="label">sizes</span>
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -340,7 +302,7 @@ function Wizard() {
             <div className="relative aspect-[5/4] border-b border-line dotgrid">
               <div className="absolute top-3 left-3 label">live preview</div>
               <div className="absolute inset-8">
-                <MerchMock {...preview} accent={artist.accent} label={artist.name} />
+                <MerchMock product={product} colorway={colorway} motif={motif} accent={artist.accent} label={artist.name} />
               </div>
             </div>
             <div className="p-4">

@@ -1,7 +1,7 @@
 import { DAY, DEMO_FAN, HOUR, ADMIN_EMAIL, hash, suggestTarget } from "./domain";
 import type { Artist, Email, LogEvent, Pledge, PledgeStatus, Round, World } from "./types";
 
-export const SEED_VERSION = 5;
+export const SEED_VERSION = 6;
 
 const FIRST = [
   "Alex", "Jess", "Riley", "Mia", "Noah", "Ava", "Liam", "Zoe", "Ethan", "Chloe", "Ollie", "Grace", "Jack",
@@ -148,7 +148,7 @@ export function createSeed(now = Date.now()): World {
     base({
       id: "r-static-night-drive",
       artistId: "a-static",
-      title: "Night Drive Hoodie",
+      title: "Heartline Hoodie",
       product: "hoodie",
       colorway: "navy",
       motif: "wave",
@@ -157,7 +157,7 @@ export function createSeed(now = Date.now()): World {
       price: 85,
       printerQuote: 1400,
       minRun: 20,
-      showName: "Night Drive Launch",
+      showName: "Merch Round · Heartline",
       venue: "Oxford Art Factory, Sydney",
       showDate: now + 5 * DAY,
       createdAt: now - 45 * DAY,
@@ -175,40 +175,9 @@ export function createSeed(now = Date.now()): World {
       },
     }),
     base({
-      id: "r-static-demo-tape",
-      artistId: "a-static",
-      title: "Demo Tape Tote",
-      product: "tote",
-      colorway: "bone",
-      motif: "grid",
-      description: "Heavy canvas tote. Fits a laptop, three records and a regret.",
-      details: ["AS Colour Carrie Tote", "12oz canvas", "One-colour print"],
-      price: 30,
-      printerQuote: 420,
-      minRun: 25,
-      sizes: ["One size"],
-      showName: "Demo Tape Night",
-      venue: "La La La's, Wollongong",
-      showDate: now - 40 * DAY,
-      createdAt: now - 95 * DAY,
-      closesAt: now - 81 * DAY,
-      status: "completed",
-      reachedAt: now - 85 * DAY,
-      chargeDeadline: now - 78 * DAY,
-      qcConfirmedAt: now - 45 * DAY,
-      printer: {
-        name: "Inkhouse Wollongong",
-        sentAt: now - 77 * DAY,
-        invoiceAmount: 420,
-        invoicePaidAt: now - 76 * DAY,
-        expectedReadyAt: now - 46 * DAY,
-        deliveredAt: now - 46 * DAY,
-      },
-    }),
-    base({
       id: "r-static-sunburn-cap",
       artistId: "a-static",
-      title: "Sunburn Cap",
+      title: "Gravel Cap",
       product: "cap",
       colorway: "olive",
       motif: "sun",
@@ -338,11 +307,12 @@ export function createSeed(now = Date.now()): World {
     base({
       id: "r-velvet-heartline",
       artistId: "a-velvet",
-      title: "Heartline Tee",
+      title: "Heartline Hoodie",
+      product: "hoodie",
       colorway: "black",
       motif: "sun",
-      description: "Black tee with a pink heartline across the chest.",
-      details: ["AS Colour Classic Tee", "Pink plastisol print"],
+      description: "Black hoodie with a pink heartline across the chest.",
+      details: ["AS Colour Stencil Hood", "320gsm cotton blend", "Pink plastisol print"],
       price: 42,
       printerQuote: 600,
       minRun: 25,
@@ -395,7 +365,6 @@ export function createSeed(now = Date.now()): World {
 
   add("r-static-tour-tee", 17, () => "pledged");
   add("r-static-night-drive", 31, () => "paid");
-  add("r-static-demo-tape", 29, () => "fulfilled", (i) => ({ handedOverAt: now - 40 * DAY + i * 60000 }));
   add("r-neon-gravel-rash", 37, (i) =>
     i < 31 ? "paid" : i < 34 ? "retry_scheduled" : i < 35 ? "action_required" : i < 36 ? "card_update_required" : "action_required",
   );
@@ -425,7 +394,6 @@ export function createSeed(now = Date.now()): World {
     });
   };
   fan("r-static-night-drive", "paid");
-  fan("r-static-demo-tape", "fulfilled", { handedOverAt: now - 40 * DAY });
   fan("r-neon-gravel-rash", "action_required", { declineReason: "Bank needs you to confirm" });
   fan("r-dial-off-the-hook", "paid", {
     fulfilment: "delivery",
@@ -433,12 +401,6 @@ export function createSeed(now = Date.now()): World {
     amount: 55,
   });
   fan("r-lowtide-rip-current", "released");
-
-  rounds.find((r) => r.id === "r-static-demo-tape")!.payout = {
-    amount: Math.round((29 * 30 + 30) * 0.9 - 420),
-    at: now - 45 * DAY,
-    transferId: "tr_1Q8demoTape",
-  };
 
   let eid = 0;
   const events: LogEvent[] = [];
@@ -493,11 +455,11 @@ export function createSeed(now = Date.now()): World {
   mail(now - 21 * HOUR, DEMO_FAN.email, "fan", "Your bank wants a quick yes (A$40)",
     "Neon Gravel's Gravel Rash Tee hit its number. Your bank needs you to confirm the A$40 payment. You have until the charge window closes.", "r-neon-gravel-rash");
   mail(now - 1 * DAY, "merchround@demo.band", "artist", "Your hoodies have arrived",
-    "Inkhouse Wollongong marked the Night Drive Hoodie order as delivered. Check them over and confirm to get paid.", "r-static-night-drive");
+    "Inkhouse Wollongong marked the Heartline Hoodie order as delivered. Check them over and confirm to get paid.", "r-static-night-drive");
   mail(now - 2 * HOUR, "merchround@demo.band", "artist", "17 fans are in",
     "Live / 2026 Tour Tee is at 17 of 25 with 6 days to go. Share the link to get it over the line.", "r-static-tour-tee");
-  mail(now - 1 * DAY + HOUR, ADMIN_EMAIL, "admin", "New round to review: Sunburn Cap",
-    "Merch Round submitted Sunburn Cap (A$35, target 24). Check the printer quote and approve.", "r-static-sunburn-cap");
+  mail(now - 1 * DAY + HOUR, ADMIN_EMAIL, "admin", "New round to review: Gravel Cap",
+    "Merch Round submitted Gravel Cap (A$35, target 24). Check the printer quote and approve.", "r-static-sunburn-cap");
   for (const e of emails) if (e.at > now - 3 * HOUR) e.read = false;
 
   return {

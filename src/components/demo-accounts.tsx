@@ -24,11 +24,11 @@ export function DemoAccounts() {
     },
     {
       role: "artist",
-      who: world.artists[0].name,
-      meta: "Wollongong · Stripe verified",
-      tag: "artist",
+      who: "Merch Round",
+      meta: "Example account · Stripe verified",
+      tag: "merch round",
       href: "/artist",
-      artistId: world.artists[0].id,
+      artistId: world.artists.find((a) => a.id === "a-static")?.id ?? world.artists[0].id,
       bullets: ["Watch a live round fill up", "Create a round with the calculator", "Confirm delivery and get paid", "Run the show-night merch desk"],
     },
     {

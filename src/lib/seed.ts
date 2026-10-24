@@ -1,7 +1,7 @@
 import { DAY, DEMO_FAN, HOUR, ADMIN_EMAIL, hash, suggestTarget } from "./domain";
 import type { Artist, Email, LogEvent, Pledge, PledgeStatus, Round, World } from "./types";
 
-export const SEED_VERSION = 4;
+export const SEED_VERSION = 5;
 
 const FIRST = [
   "Alex", "Jess", "Riley", "Mia", "Noah", "Ava", "Liam", "Zoe", "Ethan", "Chloe", "Ollie", "Grace", "Jack",
@@ -44,12 +44,12 @@ export function createSeed(now = Date.now()): World {
   const artists: Artist[] = [
     {
       id: "a-static",
-      name: "The Static Hours",
-      slug: "the-static-hours",
+      name: "Merch Round",
+      slug: "merch-round",
       city: "Wollongong, NSW",
-      accent: "#C8452B",
-      bio: "Four-piece fuzz-pop from the Illawarra. Loud guitars, quiet apologies.",
-      instagram: "@thestatichours",
+      accent: "#8CD92B",
+      bio: "The Merch Round example account. Run a round from this side and see what an artist sees, without inventing a band.",
+      instagram: "@merchround",
       stripe: "verified",
     },
     {
@@ -137,7 +137,7 @@ export function createSeed(now = Date.now()): World {
       price: 45,
       printerQuote: 650,
       minRun: 25,
-      showName: "The Static Hours · Live 2026",
+      showName: "Merch Round · Live 2026",
       venue: "The Servo, Wollongong",
       showDate: now + 38 * DAY,
       createdAt: now - 8 * DAY,
@@ -492,12 +492,12 @@ export function createSeed(now = Date.now()): World {
     "Low Tide Club's Rip Current Hoodie closed at 14 of 25. Your card was released and nothing was charged.", "r-lowtide-rip-current");
   mail(now - 21 * HOUR, DEMO_FAN.email, "fan", "Your bank wants a quick yes (A$40)",
     "Neon Gravel's Gravel Rash Tee hit its number. Your bank needs you to confirm the A$40 payment. You have until the charge window closes.", "r-neon-gravel-rash");
-  mail(now - 1 * DAY, "thestatichours@demo.band", "artist", "Your hoodies have arrived",
+  mail(now - 1 * DAY, "merchround@demo.band", "artist", "Your hoodies have arrived",
     "Inkhouse Wollongong marked the Night Drive Hoodie order as delivered. Check them over and confirm to get paid.", "r-static-night-drive");
-  mail(now - 2 * HOUR, "thestatichours@demo.band", "artist", "17 fans are in",
+  mail(now - 2 * HOUR, "merchround@demo.band", "artist", "17 fans are in",
     "Live / 2026 Tour Tee is at 17 of 25 with 6 days to go. Share the link to get it over the line.", "r-static-tour-tee");
   mail(now - 1 * DAY + HOUR, ADMIN_EMAIL, "admin", "New round to review: Sunburn Cap",
-    "The Static Hours submitted Sunburn Cap (A$35, target 24). Check the printer quote and approve.", "r-static-sunburn-cap");
+    "Merch Round submitted Sunburn Cap (A$35, target 24). Check the printer quote and approve.", "r-static-sunburn-cap");
   for (const e of emails) if (e.at > now - 3 * HOUR) e.read = false;
 
   return {

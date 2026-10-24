@@ -23,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-dvh font-sans">
         <WorldProvider>
           <div className="bg-ink px-4 py-2 text-center text-[13px] text-paper">
-            Nothing here is real money. Try the demo as a fan, artist or admin.
+            Nothing here is real money. Try the demo as a fan, as Merch Round, or as admin.
           </div>
           <SiteHeader />
           <main className="pb-28">{children}</main>

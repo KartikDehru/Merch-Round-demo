@@ -24,8 +24,8 @@ export default function DemoPage() {
 
       <div className="mt-14 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
         <section>
-          <Label>sign in as a different artist</Label>
-          <p className="mt-2 text-[13px] text-ash">Each artist has rounds at a different stage, so you can see every screen.</p>
+          <Label>other example accounts</Label>
+          <p className="mt-2 text-[13px] text-ash">Merch Round is the main example. The others sit at different stages, so you can see every screen.</p>
           <div className="mt-4 divide-y divide-line border border-line bg-card">
             {world.artists.map((a) => {
               const rounds = world.rounds.filter((r) => r.artistId === a.id);
@@ -61,10 +61,10 @@ export default function DemoPage() {
             {[
               ["Fan", "Open Velvet Mile's Heartline Tee and buy one. It's 2 away from the number."],
               ["Fan", "In My orders, confirm the Gravel Rash payment your bank flagged."],
-              ["Artist", "Static Hours → Tour Tee → use demo controls to fill and close it."],
+              ["Merch Round", "Open the Live / 2026 Tour Tee and use the demo controls to fill and close it."],
               ["Admin", "Approve the Sunburn Cap, then send the Tour Tee to the printer."],
-              ["Artist", "Night Drive Hoodie → confirm delivery → get paid → open the merch desk."],
-              ["Artist", "Sign in as Saltwater Choir and make the shortfall decision."],
+              ["Merch Round", "Night Drive Hoodie → confirm delivery → get paid → open the merch desk."],
+              ["Merch Round", "From the list below, open Saltwater Choir and make the shortfall decision."],
             ].map(([who, text], i) => (
               <li key={i} className="flex gap-3 border border-line bg-card p-3">
                 <span className="font-display text-[16px] text-mute">{String(i + 1).padStart(2, "0")}</span>

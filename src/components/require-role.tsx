@@ -7,7 +7,7 @@ import { Button, H1, Label } from "./ui";
 
 const COPY: Record<Role, { title: string; who: string }> = {
   fan: { title: "Fan area", who: "Sam Taylor" },
-  artist: { title: "Artist dashboard", who: "The Static Hours" },
+  artist: { title: "Merch Round example", who: "Merch Round" },
   admin: { title: "Merch Round admin", who: "Priya · Ops" },
 };
 

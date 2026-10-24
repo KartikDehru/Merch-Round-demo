@@ -34,6 +34,8 @@ const NAV: Record<Role | "guest", { href: string; label: string }[]> = {
 
 export const ROLE_HOME: Record<Role, string> = { fan: "/rounds", artist: "/artist", admin: "/admin" };
 
+const ROLE_LABEL: Record<Role, string> = { fan: "Fan", artist: "Merch Round", admin: "Admin" };
+
 export function SiteHeader() {
   const { world, act } = useWorld();
   const router = useRouter();
@@ -91,11 +93,11 @@ export function SiteHeader() {
                 type="button"
                 onClick={() => switchRole(r)}
                 className={cx(
-                  "text-[14px] font-semibold capitalize transition",
+                  "text-[14px] font-semibold transition",
                   (role ?? "fan") === r ? "text-ink underline underline-offset-[6px]" : "text-ash hover:text-ink",
                 )}
               >
-                {r}
+                {ROLE_LABEL[r]}
               </button>
             ))}
           </div>
@@ -120,8 +122,8 @@ export function SiteHeader() {
           <div className="label mb-2">View as</div>
           <div className="flex gap-4">
             {(["fan", "artist", "admin"] as Role[]).map((r) => (
-              <button key={r} type="button" onClick={() => switchRole(r)} className="text-[15px] font-semibold capitalize underline">
-                {r}
+              <button key={r} type="button" onClick={() => switchRole(r)} className="text-[15px] font-semibold underline">
+                {ROLE_LABEL[r]}
               </button>
             ))}
           </div>

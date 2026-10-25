@@ -13,6 +13,13 @@ import { Receipt } from "@/components/round-bits";
 import { MerchMock, Tally } from "@/components/visuals";
 import { Button, Field, H1, Input, Select, Textarea, cx } from "@/components/ui";
 
+const ITEM_COPY: Record<ProductKind, { title: string; description: string }> = {
+  tee: { title: "Merch Round Tee", description: "Merch Round Tee" },
+  hoodie: { title: "Merch Round Hoodie", description: "Merch Round Hoodie" },
+  cap: { title: "Merch Round Hat", description: "Merch Round Hat" },
+  tote: { title: "Merch Round Tee", description: "Merch Round Tee" },
+};
+
 const PRINTERS = [
   { name: "Inkhouse Wollongong", lead: 3 },
   { name: "Marrickville Screenworks", lead: 2 },
@@ -35,11 +42,11 @@ function Wizard() {
   const [step, setStep] = useState(0);
   const [now] = useState(() => Date.now());
 
-  const [title, setTitle] = useState("Encore Longsleeve");
+  const [title, setTitle] = useState("Merch Round Tee");
   const [product, setProduct] = useState<ProductKind>("tee");
   const colorway = "black" as const;
   const motif = "rings" as const;
-  const [description, setDescription] = useState("Long sleeve for the encore. Front sun print, dates down the sleeve.");
+  const [description, setDescription] = useState("Merch Round Tee");
   const [sizes, setSizes] = useState(["S", "M", "L", "XL"]);
   const [price, setPrice] = useState(55);
   const [printer, setPrinter] = useState(PRINTERS[0].name);
@@ -47,7 +54,7 @@ function Wizard() {
   const [minRun, setMinRun] = useState(25);
   const [lead, setLead] = useState(3);
   const [targetBump, setTargetBump] = useState(0);
-  const [showName, setShowName] = useState(`${artist.name} · Encore Night`);
+  const [showName, setShowName] = useState(artist.name);
   const [venue, setVenue] = useState("Oxford Art Factory, Sydney");
   const [showDate, setShowDate] = useState(() => new Date(now + 52 * DAY).toISOString().slice(0, 10));
   const [delivery, setDelivery] = useState(true);
@@ -136,6 +143,9 @@ function Wizard() {
                       key={p}
                       onClick={() => {
                         setProduct(p);
+                        const copy = ITEM_COPY[p];
+                        setTitle(copy.title);
+                        setDescription(copy.description);
                         if (p === "cap") setSizes(["One size"]);
                         else if (sizes[0] === "One size") setSizes(["S", "M", "L", "XL"]);
                       }}
@@ -168,7 +178,7 @@ function Wizard() {
                   </div>
                 </div>
               )}
-              <div className="border border-dashed border-line p-4 text-center text-[12px] text-ash">Drop front & back images here · PNG/JPG (demo uses generated mock-ups)</div>
+              <div className="border border-dashed border-line p-4 text-center text-[12px] text-ash">Drop a front image here · PNG/JPG (demo uses the product photo)</div>
             </div>
           )}
 

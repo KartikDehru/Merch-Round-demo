@@ -1,7 +1,7 @@
 import { DAY, DEMO_FAN, HOUR, ADMIN_EMAIL, hash, suggestTarget } from "./domain";
 import type { Artist, Email, LogEvent, Pledge, PledgeStatus, Round, World } from "./types";
 
-export const SEED_VERSION = 6;
+export const SEED_VERSION = 7;
 
 const FIRST = [
   "Alex", "Jess", "Riley", "Mia", "Noah", "Ava", "Liam", "Zoe", "Ethan", "Chloe", "Ollie", "Grace", "Jack",
@@ -129,15 +129,16 @@ export function createSeed(now = Date.now()): World {
   const rounds: Round[] = [
     base({
       id: "r-static-tour-tee",
+      slug: "this-round-is-on-us-tee",
       artistId: "a-static",
-      title: "Live / 2026 Tour Tee",
+      title: "This Round Is On Us Tee",
       motif: "rings",
-      description: "The official 2026 tour tee. Front: our ring logo. Back: every date of the run.",
-      details: ["AS Colour Classic Tee", "100% combed cotton, 180gsm", "Front print + full back print", "Water-based inks"],
+      description: "Merch Round Tee",
+      details: ["Merch Round Tee"],
       price: 45,
       printerQuote: 650,
       minRun: 25,
-      showName: "Merch Round · Live 2026",
+      showName: "Merch Round",
       venue: "The Servo, Wollongong",
       showDate: now + 38 * DAY,
       createdAt: now - 8 * DAY,
@@ -148,16 +149,16 @@ export function createSeed(now = Date.now()): World {
     base({
       id: "r-static-night-drive",
       artistId: "a-static",
-      title: "Heartline Hoodie",
+      title: "Circle Hoodie",
       product: "hoodie",
-      colorway: "navy",
-      motif: "wave",
-      description: "Heavyweight hoodie for the cold walk home after the show.",
-      details: ["AS Colour Stencil Hood", "320gsm cotton blend", "Puff print front", "Kangaroo pocket"],
+      colorway: "black",
+      motif: "rings",
+      description: "Merch Round Hoodie",
+      details: ["Merch Round Hoodie"],
       price: 85,
       printerQuote: 1400,
       minRun: 20,
-      showName: "Merch Round · Heartline",
+      showName: "Merch Round",
       venue: "Oxford Art Factory, Sydney",
       showDate: now + 5 * DAY,
       createdAt: now - 45 * DAY,
@@ -177,17 +178,17 @@ export function createSeed(now = Date.now()): World {
     base({
       id: "r-static-sunburn-cap",
       artistId: "a-static",
-      title: "Gravel Cap",
+      title: "Circle Cap",
       product: "cap",
-      colorway: "olive",
-      motif: "sun",
-      description: "Six-panel cap with embroidered sun. For the summer festival run.",
-      details: ["AS Colour Access Cap", "Cotton twill", "Embroidered front"],
+      colorway: "black",
+      motif: "rings",
+      description: "Merch Round Hat",
+      details: ["Merch Round Hat"],
       price: 35,
       printerQuote: 560,
       minRun: 24,
       sizes: ["One size"],
-      showName: "Summer festival run",
+      showName: "Merch Round",
       venue: "Yours & Owls Festival, Wollongong",
       showDate: now + 60 * DAY,
       createdAt: now - 1 * DAY,
@@ -217,18 +218,20 @@ export function createSeed(now = Date.now()): World {
     }),
     base({
       id: "r-neon-gravel-cap",
-      artistId: "a-neon",
-      title: "Gravel Cap",
+      slug: "circle-cap",
+      artistId: "a-static",
+      title: "Circle Cap",
       product: "cap",
       colorway: "black",
-      motif: "diamond",
-      description: "Black cap, orange diamond embroidery.",
-      details: ["Six-panel", "Embroidered front"],
-      price: 38,
+      motif: "rings",
+      description: "Merch Round Hat",
+      details: ["Merch Round Hat"],
+      price: 30,
+      target: 24,
       printerQuote: 600,
       minRun: 24,
       sizes: ["One size"],
-      showName: "Neon Gravel · Gravel Rash Tour",
+      showName: "Merch Round",
       venue: "Corner Hotel, Melbourne",
       showDate: now + 44 * DAY,
       createdAt: now - 3 * DAY,
@@ -306,17 +309,18 @@ export function createSeed(now = Date.now()): World {
     }),
     base({
       id: "r-velvet-heartline",
-      artistId: "a-velvet",
-      title: "Heartline Hoodie",
+      slug: "circle-hoodie",
+      artistId: "a-static",
+      title: "Circle Hoodie",
       product: "hoodie",
       colorway: "black",
-      motif: "sun",
-      description: "Black hoodie with a pink heartline across the chest.",
-      details: ["AS Colour Stencil Hood", "320gsm cotton blend", "Pink plastisol print"],
-      price: 42,
+      motif: "rings",
+      description: "Merch Round Hoodie",
+      details: ["Merch Round Hoodie"],
+      price: 70,
       printerQuote: 600,
       minRun: 25,
-      showName: "Velvet Mile · Heartline",
+      showName: "Merch Round",
       venue: "The Lansdowne, Sydney",
       showDate: now + 33 * DAY,
       createdAt: now - 12 * DAY,
@@ -455,11 +459,11 @@ export function createSeed(now = Date.now()): World {
   mail(now - 21 * HOUR, DEMO_FAN.email, "fan", "Your bank wants a quick yes (A$40)",
     "Neon Gravel's Gravel Rash Tee hit its number. Your bank needs you to confirm the A$40 payment. You have until the charge window closes.", "r-neon-gravel-rash");
   mail(now - 1 * DAY, "merchround@demo.band", "artist", "Your hoodies have arrived",
-    "Inkhouse Wollongong marked the Heartline Hoodie order as delivered. Check them over and confirm to get paid.", "r-static-night-drive");
+    "Inkhouse Wollongong marked the Circle Hoodie order as delivered. Check them over and confirm to get paid.", "r-static-night-drive");
   mail(now - 2 * HOUR, "merchround@demo.band", "artist", "17 fans are in",
-    "Live / 2026 Tour Tee is at 17 of 25 with 6 days to go. Share the link to get it over the line.", "r-static-tour-tee");
-  mail(now - 1 * DAY + HOUR, ADMIN_EMAIL, "admin", "New round to review: Gravel Cap",
-    "Merch Round submitted Gravel Cap (A$35, target 24). Check the printer quote and approve.", "r-static-sunburn-cap");
+    "This Round Is On Us Tee is at 17 of 25 with 6 days to go. Share the link to get it over the line.", "r-static-tour-tee");
+  mail(now - 1 * DAY + HOUR, ADMIN_EMAIL, "admin", "New round to review: Circle Cap",
+    "Merch Round submitted Circle Cap (A$35, target 24). Check the printer quote and approve.", "r-static-sunburn-cap");
   for (const e of emails) if (e.at > now - 3 * HOUR) e.read = false;
 
   return {

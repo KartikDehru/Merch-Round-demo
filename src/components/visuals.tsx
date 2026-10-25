@@ -174,7 +174,7 @@ export function MerchMock({
   className?: string;
 }) {
   const id = useId().replace(/:/g, "");
-  const photo = !back ? PRODUCT_PHOTO[product] : undefined;
+  const photo = PRODUCT_PHOTO[product];
   if (photo) {
     return (
       <span className={cx("relative block h-full w-full", className)}>

@@ -19,7 +19,6 @@ export default function RoundPage() {
   const { round, artist, c } = useRound(slug);
   const { world } = useWorld();
   const router = useRouter();
-  const [side, setSide] = useState<"front" | "back">("front");
   const [size, setSize] = useState<string | null>(null);
   const [mode, setMode] = useState<"pickup" | "delivery">("pickup");
   const [nudge, setNudge] = useState(false);
@@ -49,15 +48,8 @@ export default function RoundPage() {
             <div className="absolute top-4 left-4 z-10">
               <RoundPill status={round.status} fan />
             </div>
-            <div className="absolute top-4 right-4 z-10 flex border border-ink text-[14px] font-bold text-ink">
-              {(["front", "back"] as const).map((s) => (
-                <button key={s} onClick={() => setSide(s)} className={cx("px-3 py-1.5 capitalize", side === s ? "bg-ink text-paper" : "hover:bg-ink/5")}>
-                  {s}
-                </button>
-              ))}
-            </div>
-            <div key={side} className="animate-rise absolute inset-[9%]">
-              <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={printInk} label={artist.name} back={side === "back"} fit="cover" />
+            <div className="animate-rise absolute inset-[9%]">
+              <MerchMock product={round.product} colorway={round.colorway} motif={round.motif} accent={printInk} label={artist.name} fit="cover" />
             </div>
             {round.status === "failed" && (
               <div className="absolute inset-x-0 bottom-8 flex justify-center">

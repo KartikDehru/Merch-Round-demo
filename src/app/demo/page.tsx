@@ -60,11 +60,11 @@ export default function DemoPage() {
           <ol className="mt-4 space-y-3 text-[13px]">
             {[
               ["Fan", "Open the live Circle Hoodie and buy one. It's 2 away from the number."],
-              ["Fan", "In My orders, confirm the Gravel Rash payment your bank flagged."],
+              ["Fan", "In My orders, confirm the Merch Round Tee payment your bank flagged."],
               ["Merch Round", "Open This Round Is On Us Tee and use the demo controls to fill and close it."],
               ["Admin", "Approve the Circle Cap in review, then send the tee to the printer."],
               ["Merch Round", "The delivered Circle Hoodie → confirm delivery → get paid → open the merch desk."],
-              ["Merch Round", "From the list below, open Saltwater Choir and make the shortfall decision."],
+              ["Merch Round", "Open the Merch Round Tee that is short and make the decision."],
             ].map(([who, text], i) => (
               <li key={i} className="flex gap-3 border border-line bg-card p-3">
                 <span className="font-display text-[16px] text-mute">{String(i + 1).padStart(2, "0")}</span>

@@ -46,40 +46,38 @@ export function ArtistSlide({ index }: { index: number }) {
     return (
       <PhoneScreen>
         <TopBar step="2 / 7" />
-        <div className="flex flex-1 flex-col overflow-hidden px-4 pb-3 pt-3">
-          <h4 className="font-display text-[22px] leading-none">Set it up</h4>
-          <div className="label mt-3">1 · Design</div>
-          <div className="relative mt-1.5 aspect-[16/10] overflow-hidden border border-dashed border-ink/25 bg-stone">
-            <Image src="/merch/tee.jpg" alt="" fill className="object-cover opacity-90" sizes="240px" />
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-2 pt-2 [-webkit-overflow-scrolling:touch]">
+          <h4 className="font-display text-[18px] leading-none">Set it up</h4>
+          <div className="mt-2 grid grid-cols-[72px_1fr] gap-2">
+            <div className="relative aspect-square overflow-hidden border border-dashed border-ink/25 bg-stone">
+              <Image src="/merch/tee.jpg" alt="" fill className="object-cover opacity-90" sizes="72px" />
+            </div>
+            <div className="min-w-0">
+              <div className="label">1 · Design</div>
+              <Field label="Description" value="Merch Round Tee" compact />
+            </div>
           </div>
-          <Field label="Description" value="Merch Round Tee" />
-          <div className="label mt-3">2 · Numbers</div>
-          <div className="mt-1 grid grid-cols-2 gap-2">
+          <div className="label mt-2">2 · Numbers</div>
+          <div className="mt-1 grid grid-cols-3 gap-1.5">
             <Field label="Price (A$)" value="55" compact />
-            <Field label="Fans needed" value="25" compact />
+            <Field label="Fans" value="25" compact />
+            <Field label="Printer (A$)" value="900" compact />
           </div>
-          <Field label="Printer quote (A$)" value="900" compact />
-          <div className="mt-2 rounded-[4px] border border-ink bg-brick-soft p-2.5 text-[10px] leading-snug">
-            <div className="font-display text-[12px]">Take home</div>
-            <div className="mt-1 flex justify-between">
+          <div className="mt-2 rounded-[4px] border border-ink bg-brick-soft p-2 text-[10px] leading-snug">
+            <div className="font-display text-[11px]">Take home</div>
+            <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">
               <span>Fans pay</span>
-              <span className="tabular">{aud(1375)}</span>
-            </div>
-            <div className="flex justify-between">
+              <span className="text-right tabular">{aud(1375)}</span>
               <span>Merch Round 10%</span>
-              <span className="tabular">{aud(137.5)}</span>
-            </div>
-            <div className="flex justify-between">
+              <span className="text-right tabular">{aud(137.5)}</span>
               <span>Printer</span>
-              <span className="tabular">{aud(900)}</span>
-            </div>
-            <div className="mt-1 flex justify-between border-t border-ink/15 pt-1 font-bold">
-              <span>You get</span>
-              <span className="tabular">{aud(337.5)}</span>
+              <span className="text-right tabular">{aud(900)}</span>
+              <span className="border-t border-ink/15 pt-0.5 font-bold">You get</span>
+              <span className="border-t border-ink/15 pt-0.5 text-right font-bold tabular">{aud(337.5)}</span>
             </div>
           </div>
-          <div className="mt-auto pt-2">
-            <div className="rounded-[4px] bg-brick py-2.5 text-center text-[12px] font-bold text-ink">Launch the round</div>
+          <div className="mt-2">
+            <div className="rounded-[4px] bg-brick py-2 text-center text-[12px] font-bold text-ink">Launch the round</div>
           </div>
         </div>
       </PhoneScreen>
@@ -319,7 +317,7 @@ export function FanSlide({ index }: { index: number }) {
 }
 
 function PhoneScreen({ children }: { children: React.ReactNode }) {
-  return <div className="flex h-full flex-col bg-paper text-ink">{children}</div>;
+  return <div className="flex h-full min-h-0 flex-col overflow-hidden bg-paper text-ink">{children}</div>;
 }
 
 function TopBar({ step }: { step?: string }) {

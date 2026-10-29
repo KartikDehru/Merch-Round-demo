@@ -178,8 +178,14 @@ export function FanSlide({ index }: { index: number }) {
         <TopBar step="1 / 6" />
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-3 pt-3">
           <h4 className="font-display text-[20px] leading-none">{SHOW_ROUND.title}</h4>
-          <div className="relative mt-2.5 aspect-[5/4] overflow-hidden border border-line bg-stone">
-            <Image src="/merch/tee.jpg" alt="" fill className="object-cover" sizes="280px" />
+          <div className="relative mt-2.5 flex h-[220px] items-center justify-center overflow-hidden border border-line bg-stone px-4 py-3">
+            <Image
+              src="/merch/tee.jpg"
+              alt=""
+              width={200}
+              height={200}
+              className="h-full w-auto max-h-[180px] object-contain"
+            />
             <span className="absolute left-2 top-2 rounded-full bg-brick px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide">
               Open
             </span>

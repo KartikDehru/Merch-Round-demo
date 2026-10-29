@@ -7,8 +7,8 @@ export const metadata = {
 export default function TryLayout({ children }: { children: React.ReactNode }) {
   return (
     <TryProvider>
-      <div className="min-h-[calc(100dvh-8rem)] bg-stone">
-        <div className="mx-auto w-full max-w-md px-4 py-6 sm:py-10">{children}</div>
+      <div className="min-h-[calc(100dvh-7rem)] bg-stone pb-8">
+        <div className="mx-auto w-full max-w-md px-4 py-4 sm:py-8">{children}</div>
       </div>
     </TryProvider>
   );

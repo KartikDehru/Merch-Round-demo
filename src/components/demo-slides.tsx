@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { QRCodeSVG } from "qrcode.react";
 import { ARTIST_SLIDES, CARD_NOTE, FAILED_ROUND_EMAIL, FAN_SLIDES, SHOW_ROUND } from "@/lib/copy";
 import { aud } from "@/lib/demo-math";
 
@@ -96,8 +97,8 @@ export function FanSlide({ index }: { index: number }) {
   if (index === 4) {
     return (
       <SlideShell eyebrow="5 · Pickup" title="Pickup code">
-        <div className="mx-auto mt-1 flex size-20 items-center justify-center border-2 border-ink bg-paper font-mono text-[10px]">
-          QR
+        <div className="mx-auto mt-1 flex size-[88px] items-center justify-center border border-line bg-paper p-1.5">
+          <QRCodeSVG value="https://merchround.com/pickup/MR4821" size={76} level="M" includeMargin={false} />
         </div>
         <p className="mt-2 text-center font-mono text-[12px] font-bold tracking-widest">MR 4821</p>
         <p className="sr-only">{title}</p>

@@ -48,9 +48,12 @@ async function getClient() {
   return connectPromise;
 }
 
+export async function getDb() {
+  return (await getClient()).db(process.env.MONGODB_DB || "merchround");
+}
+
 async function collection(): Promise<Collection<WorldDoc>> {
-  const db = (await getClient()).db(process.env.MONGODB_DB || "merchround");
-  return db.collection<WorldDoc>("world");
+  return (await getDb()).collection<WorldDoc>("world");
 }
 
 function sharedFrom(world: World): SharedWorld {

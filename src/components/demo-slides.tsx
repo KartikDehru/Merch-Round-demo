@@ -176,10 +176,10 @@ export function FanSlide({ index }: { index: number }) {
     return (
       <PhoneScreen>
         <TopBar step="1 / 6" />
-        <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-3 pt-3">
           <h4 className="font-display text-[20px] leading-none">{SHOW_ROUND.title}</h4>
-          <div className="relative mt-3 aspect-square overflow-hidden border border-line bg-stone">
-            <Image src="/merch/tee.jpg" alt="" fill className="object-cover" sizes="240px" />
+          <div className="relative mt-2.5 aspect-[5/4] overflow-hidden border border-line bg-stone">
+            <Image src="/merch/tee.jpg" alt="" fill className="object-cover" sizes="280px" />
             <span className="absolute left-2 top-2 rounded-full bg-brick px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide">
               Open
             </span>
@@ -194,7 +194,7 @@ export function FanSlide({ index }: { index: number }) {
           <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-line">
             <div className="h-full bg-brick" style={{ width: `${pct}%` }} />
           </div>
-          <div className="label mt-3 mb-1.5">Size</div>
+          <div className="label mt-2.5 mb-1.5">Size</div>
           <div className="flex gap-1.5">
             {["S", "M", "L", "XL"].map((s) => (
               <div

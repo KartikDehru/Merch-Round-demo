@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { cx } from "./ui";
 
-/** Frameless Figma-sized stage — no bezel, no notch. */
+/** Frameless Figma artboard (388×580) — no bezel, no notch. */
 export function PhoneCarousel({
   label,
   stepNames,
@@ -25,7 +25,7 @@ export function PhoneCarousel({
         {index + 1} of {total} · {stepNames[index]}
       </p>
       <div
-        className="mt-6 w-full max-w-[440px] touch-pan-y"
+        className="mt-6 w-full max-w-[480px] touch-pan-y"
         onTouchStart={(e) => {
           const t = e.touches[0];
           (e.currentTarget as HTMLElement).dataset.tx = String(t?.clientX ?? 0);
@@ -39,14 +39,12 @@ export function PhoneCarousel({
           const endY = e.changedTouches[0]?.clientY ?? startY;
           const dx = endX - startX;
           const dy = endY - startY;
-          // Only change slides on clear horizontal swipes — don't fight vertical scroll
           if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return;
           if (dx > 0) prev();
           else next();
         }}
       >
-        {/* Squarer artboard, soft corner — matches Figma screens without device chrome */}
-        <div className="aspect-square overflow-hidden rounded-[16px] border border-line bg-paper sm:aspect-[5/6]">
+        <div className="aspect-[388/580] overflow-hidden rounded-[16px] border border-line bg-paper">
           {renderSlide(index)}
         </div>
       </div>

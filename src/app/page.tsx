@@ -67,8 +67,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* See it in action */}
-      <section className="border-b border-line bg-paper">
+      {/* See it in action — Figma 29:2 section, phones from artist 17:* / fan 39:* */}
+      <section id="action" className="scroll-mt-20 border-b border-line bg-paper">
         <div className="mx-auto max-w-[1100px] px-5 py-20 sm:px-8 sm:py-24">
           <h2 className="text-center font-display text-[clamp(28px,4.5vw,44px)] leading-none">{ACTION.heading}</h2>
           <ActionCarousels />

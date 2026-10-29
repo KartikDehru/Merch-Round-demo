@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Button, cx } from "./ui";
+import { cx } from "./ui";
 import { PhoneFrame } from "./phone-frame";
 
 export function PhoneCarousel({
@@ -20,12 +20,12 @@ export function PhoneCarousel({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="label">{label}</div>
-      <p className="mt-2 text-center text-[14px] font-semibold text-ink">
+      <p className="text-center text-[13px] font-medium tracking-[0.04em] text-ash uppercase">{label}</p>
+      <p className="mt-2 text-center text-[15px] font-semibold text-ink">
         {index + 1} of {total} · {stepNames[index]}
       </p>
       <div
-        className="mt-4 w-full touch-pan-y"
+        className="mt-5 w-full touch-pan-y"
         onTouchStart={(e) => {
           const x = e.touches[0]?.clientX ?? 0;
           (e.currentTarget as HTMLElement).dataset.tx = String(x);
@@ -40,24 +40,34 @@ export function PhoneCarousel({
       >
         <PhoneFrame>{renderSlide(index)}</PhoneFrame>
       </div>
-      <div className="mt-4 flex items-center gap-3">
-        <Button type="button" variant="secondary" size="sm" onClick={prev} aria-label="Previous">
-          ←
-        </Button>
-        <div className="flex gap-1.5">
+      <div className="mt-5 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={prev}
+          aria-label="Previous"
+          className="flex size-10 items-center justify-center rounded-full border border-ink text-[18px] font-semibold leading-none text-ink transition hover:bg-ink hover:text-paper"
+        >
+          ‹
+        </button>
+        <div className="flex gap-2">
           {stepNames.map((_, i) => (
             <button
               key={i}
               type="button"
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => setIndex(i)}
-              className={cx("size-2 rounded-full", i === index ? "bg-ink" : "bg-line")}
+              className={cx("h-2 rounded-full transition-all", i === index ? "w-5 bg-ink" : "w-2 bg-line hover:bg-mute")}
             />
           ))}
         </div>
-        <Button type="button" variant="secondary" size="sm" onClick={next} aria-label="Next">
-          →
-        </Button>
+        <button
+          type="button"
+          onClick={next}
+          aria-label="Next"
+          className="flex size-10 items-center justify-center rounded-full border border-ink text-[18px] font-semibold leading-none text-ink transition hover:bg-ink hover:text-paper"
+        >
+          ›
+        </button>
       </div>
     </div>
   );

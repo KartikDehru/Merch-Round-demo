@@ -147,7 +147,7 @@ export function WaitlistForm({ source = "landing", showFeedback = false, classNa
       </Button>
 
       <p className="text-[13px] text-ash">
-        {WAITLIST.privacy.replace("privacy policy", "").trim()}{" "}
+        We&apos;ll only use your details to tell you when Merch Round opens. Read the{" "}
         <Link href="/privacy" className="underline underline-offset-2">
           privacy policy
         </Link>

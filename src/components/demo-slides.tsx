@@ -14,7 +14,7 @@ import { cx } from "./ui";
  * Frame size in Figma: 388 × 580
  */
 
-export function ArtistSlide({ index }: { index: number }) {
+export function ArtistSlide({ index, badge }: { index: number; badge?: string }) {
   const title = ARTIST_SLIDES[index] ?? ARTIST_SLIDES[0];
   if (index === 0) {
     return (
@@ -45,7 +45,7 @@ export function ArtistSlide({ index }: { index: number }) {
   if (index === 1) {
     return (
       <PhoneScreen>
-        <TopBar step="2 / 7" />
+        <TopBar step={badge ?? "2 / 7"} />
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-2 pt-2 [-webkit-overflow-scrolling:touch]">
           <h4 className="font-display text-[18px] leading-none">Set it up</h4>
           <div className="mt-2 grid grid-cols-[72px_1fr] gap-2">
@@ -87,7 +87,7 @@ export function ArtistSlide({ index }: { index: number }) {
   if (index === 2) {
     return (
       <PhoneScreen>
-        <TopBar step="3 / 7" />
+        <TopBar step={badge ?? "3 / 7"} />
         <div className="flex flex-1 flex-col px-4 pb-3 pt-3">
           <h4 className="font-display text-[22px] leading-none">Your round is live</h4>
           <p className="mt-2 text-[11px] text-ash">Share the link and watch the count.</p>
@@ -122,7 +122,7 @@ export function ArtistSlide({ index }: { index: number }) {
   if (index === 3) {
     return (
       <PhoneScreen>
-        <TopBar step="4 / 7" />
+        <TopBar step={badge ?? "4 / 7"} />
         <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
           <h4 className="font-display text-[22px] leading-none">You hit the number</h4>
           <p className="mt-3 text-[12px] leading-relaxed text-ash">
@@ -145,7 +145,7 @@ export function ArtistSlide({ index }: { index: number }) {
 
   return (
     <PhoneScreen>
-      <TopBar step="5 / 7" />
+      <TopBar step={badge ?? "5 / 7"} />
       <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
         <h4 className="font-display text-[22px] leading-none">Get paid</h4>
         <p className="mt-3 text-[12px] leading-relaxed text-ash">
@@ -169,13 +169,13 @@ export function ArtistSlide({ index }: { index: number }) {
   );
 }
 
-export function FanSlide({ index }: { index: number }) {
+export function FanSlide({ index, badge }: { index: number; badge?: string }) {
   const title = FAN_SLIDES[index] ?? FAN_SLIDES[0];
   if (index === 0) {
     const pct = Math.round((SHOW_ROUND.progress / SHOW_ROUND.target) * 100);
     return (
       <PhoneScreen>
-        <TopBar step="1 / 6" />
+        <TopBar step={badge ?? "1 / 6"} />
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-3 pt-3">
           <h4 className="font-display text-[20px] leading-none">{SHOW_ROUND.title}</h4>
           <div className="relative mt-2.5 flex h-[220px] items-center justify-center overflow-hidden border border-line bg-stone px-4 py-3">
@@ -227,7 +227,7 @@ export function FanSlide({ index }: { index: number }) {
   if (index === 1) {
     return (
       <PhoneScreen>
-        <TopBar step="2 / 6" />
+        <TopBar step={badge ?? "2 / 6"} />
         <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
           <h4 className="font-display text-[22px] leading-none">Save your card</h4>
           <p className="mt-2 text-[10px] leading-snug text-ash">{CARD_NOTE}</p>
@@ -250,7 +250,7 @@ export function FanSlide({ index }: { index: number }) {
   if (index === 2) {
     return (
       <PhoneScreen>
-        <TopBar step="3 / 6" />
+        <TopBar step={badge ?? "3 / 6"} />
         <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
           <h4 className="font-display text-[22px] leading-none">You&apos;re in</h4>
           <p className="mt-3 text-[12px] leading-relaxed text-ash">
@@ -271,7 +271,7 @@ export function FanSlide({ index }: { index: number }) {
   if (index === 3) {
     return (
       <PhoneScreen>
-        <TopBar step="4 / 6" />
+        <TopBar step={badge ?? "4 / 6"} />
         <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
           <h4 className="font-display text-[22px] leading-none">It hit</h4>
           <p className="mt-3 text-[12px] leading-relaxed text-ash">
@@ -292,7 +292,7 @@ export function FanSlide({ index }: { index: number }) {
   if (index === 4) {
     return (
       <PhoneScreen>
-        <TopBar step="5 / 6" />
+        <TopBar step={badge ?? "5 / 6"} />
         <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
           <h4 className="font-display text-[22px] leading-none">Pickup code</h4>
           <p className="mt-2 text-[11px] text-ash">Show this at the merch desk. Each order has its own code.</p>
@@ -309,7 +309,7 @@ export function FanSlide({ index }: { index: number }) {
 
   return (
     <PhoneScreen>
-      <TopBar step="6 / 6" />
+      <TopBar step={badge ?? "6 / 6"} />
       <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
         <h4 className="font-display text-[22px] leading-none">Not this time</h4>
         <div className="mt-4 border border-line bg-stone p-3 text-[11px] leading-relaxed text-ink">

@@ -112,7 +112,11 @@ export function ActionCarousels() {
           }}
         >
           <div className="aspect-[388/580] overflow-hidden rounded-[16px] border border-line bg-paper shadow-[0_24px_60px_rgba(1,1,0,0.08)]">
-            {tab === "artist" ? <ArtistSlide index={slideIndex} /> : <FanSlide index={slideIndex} />}
+            {tab === "artist" ? (
+              <ArtistSlide index={slideIndex} badge={`${step + 1} / ${total}`} />
+            ) : (
+              <FanSlide index={slideIndex} badge={`${step + 1} / ${total}`} />
+            )}
           </div>
         </div>
       </div>

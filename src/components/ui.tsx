@@ -11,7 +11,7 @@ export function cx(...c: (string | false | null | undefined)[]) {
 type Variant = "primary" | "secondary" | "ghost" | "brick" | "danger";
 
 const btnBase =
-  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-ink focus-visible:outline-offset-2 select-none rounded-[4px]";
+  "inline-flex items-center justify-center gap-2 font-bold transition-[transform,background,color] duration-150 active:translate-y-px disabled:opacity-40 disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-ink focus-visible:outline-offset-2 select-none rounded-[6px]";
 
 const variants: Record<Variant, string> = {
   primary: "bg-ink text-paper hover:bg-coal border border-ink",

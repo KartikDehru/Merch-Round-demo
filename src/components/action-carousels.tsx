@@ -29,8 +29,8 @@ export function ActionCarousels() {
   const current = steps[step]!;
 
   return (
-    <div className="mt-10">
-      <div className="mx-auto flex w-fit items-center rounded-full border border-line bg-paper p-1">
+    <div>
+      <div className="mx-auto flex w-fit items-center rounded-full border border-line bg-stone p-1">
         <button
           type="button"
           onClick={() => switchTab("artist")}

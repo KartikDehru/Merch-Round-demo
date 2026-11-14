@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useState } from "react";
-import { cx } from "./ui";
+import { cx } from "@/lib/cx";
 import { left, pad } from "@/lib/format";
 import type { Colorway, PrintMotif, ProductKind } from "@/lib/types";
 
@@ -39,14 +39,30 @@ export function TeeGlyph({ size = 150, className }: { size?: number; className?:
   );
 }
 
+/** Brand lockup exported from Figma (640 × 116). `size` is the rendered height. */
 export function Logo({ className, dark = false, size = 32 }: { className?: string; dark?: boolean; size?: number; cursor?: boolean }) {
   return (
-    <span className={cx("inline-flex items-center gap-2.5", dark ? "text-paper" : "text-ink", className)}>
-      <LogoMark size={size} />
-      <span className="font-display leading-none whitespace-nowrap tracking-[-0.03em]" style={{ fontSize: size * 0.55 }}>
-        Merch Round
-      </span>
-    </span>
+    <Image
+      src={dark ? "/brand/logo-white.png" : "/brand/logo-black.png"}
+      alt="Merch Round"
+      width={Math.round((size * 640) / 116)}
+      height={size}
+      className={cx("block shrink-0 self-start object-contain", className)}
+      style={{ height: size, width: "auto" }}
+    />
+  );
+}
+
+/** Round mark only (tee in ring + lime dot), from the Figma lockup. */
+export function BrandMark({ size = 24, dark = false, className }: { size?: number; dark?: boolean; className?: string }) {
+  return (
+    <Image
+      src={dark ? "/brand/mark-white.png" : "/brand/mark-black.png"}
+      alt=""
+      width={size}
+      height={size}
+      className={cx("block shrink-0", className)}
+    />
   );
 }
 

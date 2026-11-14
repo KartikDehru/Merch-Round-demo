@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { cx } from "@/lib/cx";
 import type { ComponentProps, ReactNode } from "react";
 import type { PledgeStatus, RoundStatus } from "@/lib/types";
 
-export function cx(...c: (string | false | null | undefined)[]) {
-  return c.filter(Boolean).join(" ");
-}
+export { cx } from "@/lib/cx";
 
 type Variant = "primary" | "secondary" | "ghost" | "brick" | "danger";
 

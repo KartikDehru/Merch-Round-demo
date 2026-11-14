@@ -11,9 +11,11 @@ type Props = {
   showFeedback?: boolean;
   className?: string;
   compact?: boolean;
+  /** Figma "Early access form": Name, Email, Band or Artist name; joins as an artist. */
+  variant?: "default" | "figma";
 };
 
-export function WaitlistForm({ source = "landing", showFeedback = false, className, compact }: Props) {
+export function WaitlistForm({ source = "landing", showFeedback = false, className, compact, variant = "default" }: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<WaitlistRole>("artist");
@@ -56,6 +58,60 @@ export function WaitlistForm({ source = "landing", showFeedback = false, classNa
     } finally {
       setBusy(false);
     }
+  }
+
+  if (sent && variant === "figma") {
+    return (
+      <div className={cx("py-4 text-center", className)} role="status">
+        <h3 className="font-display text-[26px] leading-tight">{WAITLIST.sentHeading}</h3>
+        <p className="mx-auto mt-2 max-w-sm text-[15px] font-light text-ash">{WAITLIST.sentBody}</p>
+      </div>
+    );
+  }
+
+  if (variant === "figma") {
+    const label = "mb-2 block text-[13px] font-medium text-ink";
+    const input =
+      "h-[51px] w-full rounded-[3px] border border-ink/15 bg-paper px-3.5 text-[15px] font-light text-ink placeholder:text-ink/45 focus:border-ink focus:outline-none";
+    return (
+      <form onSubmit={onSubmit} className={cx("space-y-5", className)}>
+        <label className="block">
+          <span className={label}>Name</span>
+          <input className={input} value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" placeholder="Your name" />
+        </label>
+        <label className="block">
+          <span className={label}>Email</span>
+          <input
+            className={input}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+          />
+        </label>
+        <label className="block">
+          <span className={label}>Band or Artist name</span>
+          <input className={input} value={band} onChange={(e) => setBand(e.target.value)} placeholder="Optional" autoComplete="organization" />
+        </label>
+        {error && <p className="text-[14px] text-stop">{error}</p>}
+        <button
+          type="submit"
+          disabled={busy}
+          className="h-[51px] w-full rounded-[3px] bg-brick text-[15px] font-bold text-ink transition hover:bg-brick-deep disabled:opacity-60"
+        >
+          {busy ? "Sending…" : WAITLIST.submit}
+        </button>
+        <p className="text-[12px] font-light leading-[1.5] text-ash">
+          {WAITLIST.privacy[0]}
+          <br />
+          <Link href="/privacy" className="hover:underline">
+            {WAITLIST.privacy[1]}
+          </Link>
+        </p>
+      </form>
+    );
   }
 
   if (sent) {

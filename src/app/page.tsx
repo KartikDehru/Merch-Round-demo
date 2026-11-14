@@ -1,88 +1,86 @@
 import Image from "next/image";
-import { ActionCarousels } from "@/components/action-carousels";
+import Link from "next/link";
+import { CostsSection } from "@/components/costs-section";
 import { FaqSection } from "@/components/faq-section";
 import { HowSection } from "@/components/how-section";
 import { LiveRoundSection } from "@/components/live-round-section";
 import { ProblemSection } from "@/components/problem-section";
-import { VideoSection } from "@/components/video-section";
+import { SeeItInAction } from "@/components/see-it-in-action";
 import { WaitlistForm } from "@/components/waitlist-form";
-import { LinkButton } from "@/components/ui";
-import { ACTION, HERO, WAITLIST } from "@/lib/copy";
+import { WhoSection } from "@/components/who-section";
+import { HERO, WAITLIST } from "@/lib/copy";
 
 export default function Home() {
   return (
-    <div>
-      {/* Hero — Figma Master / Landing full-bleed photo */}
-      <section className="relative isolate min-h-[min(82vh,760px)] overflow-hidden bg-ink text-paper">
-        <Image
-          src="/photos/hero-booth.jpg"
-          alt="Merch hanging at a live show"
-          fill
-          priority
-          className="object-cover object-[center_30%]"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/55 to-ink/75" />
-        <div className="relative mx-auto flex max-w-[900px] flex-col items-center px-5 py-28 text-center sm:px-8 sm:py-36">
-          <h1 className="animate-rise font-display text-[clamp(44px,8vw,84px)] leading-[0.92]">
-            {HERO.headline}
-          </h1>
-          <p className="animate-rise mt-6 max-w-xl text-[16px] leading-relaxed text-paper/90 sm:text-[19px] [animation-delay:60ms]">
-            {HERO.sub}
-          </p>
-          <div className="animate-rise mt-9 flex flex-wrap items-center justify-center gap-3 [animation-delay:120ms]">
-            <LinkButton href="/#waitlist" variant="brick" size="lg" className="min-w-[180px] rounded-[6px]">
-              {HERO.earlyAccessCta}
-            </LinkButton>
-            <LinkButton
-              href="/try"
-              variant="secondary"
-              size="lg"
-              className="rounded-[6px] border-paper/80 text-paper hover:bg-paper hover:text-ink"
-            >
-              {HERO.tryCta}
-              <span aria-hidden>→</span>
-            </LinkButton>
-          </div>
-        </div>
-      </section>
-
+    <>
+      <Hero />
       <ProblemSection />
-      <VideoSection />
       <HowSection />
       <LiveRoundSection />
-
-      {/* Interactive demo — Artist / Fan toggle */}
-      <section id="action" className="scroll-mt-20 border-b border-line bg-stone">
-        <div className="mx-auto max-w-[1265px] px-5 py-20 sm:px-8 sm:py-24">
-          <h2 className="mx-auto max-w-3xl text-center font-display text-[clamp(28px,4.5vw,48px)] leading-none">
-            {ACTION.heading}
-          </h2>
-          <div className="mt-12 rounded-[24px] border border-line bg-paper px-4 py-10 shadow-[0_24px_60px_rgba(17,17,17,0.06)] sm:px-8 sm:py-14">
-            <ActionCarousels />
-          </div>
-          <div className="mt-12 text-center">
-            <LinkButton href="/try" variant="brick" size="lg" className="rounded-[6px]">
-              {HERO.tryCta}
-            </LinkButton>
-          </div>
-        </div>
-      </section>
-
+      <SeeItInAction />
+      <WhoSection />
+      <CostsSection />
       <FaqSection />
+      <Waitlist />
+    </>
+  );
+}
 
-      {/* Waitlist / early access */}
-      <section id="waitlist" className="scroll-mt-20 bg-ink text-paper">
-        <div className="mx-auto grid max-w-[1100px] gap-10 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-          <div>
-            <h2 className="font-display text-[clamp(32px,5vw,52px)] leading-none">{WAITLIST.heading}</h2>
-            <p className="mt-4 max-w-md text-[16px] text-paper/75 sm:text-[17px]">{WAITLIST.subheading}</p>
-          </div>
-          <div className="rounded-[16px] border border-paper/15 bg-paper p-5 text-ink shadow-[0_24px_60px_rgba(0,0,0,0.25)] sm:p-8">
-            <WaitlistForm source="landing" />
-          </div>
+function Hero() {
+  return (
+    <section className="relative isolate overflow-hidden bg-ink text-paper">
+      <Image
+        src="/figma/hero.jpg"
+        alt="Fans lined up at a merch stand inside a venue"
+        fill
+        priority
+        className="-z-10 object-cover"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 -z-10 bg-ink/45" />
+      <div className="mx-auto flex min-h-[365px] max-w-[1265px] flex-col items-center justify-center px-5 py-12 text-center sm:min-h-[489px] sm:px-12">
+        <h1 className="animate-rise font-display text-[44px] leading-[1.02] sm:text-[78px]">{HERO.headline}</h1>
+        <p className="animate-rise mt-4 max-w-[600px] text-[15px] font-light leading-[1.5] text-paper/90 [animation-delay:60ms] sm:mt-5 sm:text-[19px]">
+          {HERO.sub}
+          <br />
+          {HERO.sub2}
+        </p>
+        <div className="animate-rise mt-7 flex items-center justify-center gap-4 [animation-delay:120ms] sm:mt-8 sm:gap-6">
+          <a
+            href="#waitlist"
+            className="flex h-[44px] items-center rounded-[3px] bg-brick px-5 text-[13px] font-bold uppercase text-ink transition hover:bg-brick-deep sm:h-[50px] sm:px-6 sm:text-[14px]"
+          >
+            {HERO.earlyAccessCta}
+          </a>
+          <Link
+            href="/try"
+            className="group flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.04em] text-paper sm:text-[14px]"
+          >
+            {HERO.tryCta}
+            <svg viewBox="0 0 12 12" className="size-3 text-brick transition group-hover:translate-x-0.5" aria-hidden>
+              <path d="m4 2 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+  );
+}
+
+function Waitlist() {
+  return (
+    <section id="waitlist" className="scroll-mt-20 bg-ink text-paper">
+      <div className="mx-auto max-w-[1265px] px-5 pb-16 pt-14 sm:px-12 sm:pb-[95px] sm:pt-[100px]">
+        <h2 className="text-center font-display text-[32px] leading-tight sm:text-[42px]">{WAITLIST.heading}</h2>
+        <p className="mx-auto mt-3 max-w-[340px] text-center text-[15px] font-light leading-[1.6] text-paper/80 sm:max-w-none sm:text-[17px]">
+          {WAITLIST.subheading[0]}
+          <br />
+          {WAITLIST.subheading[1]}
+        </p>
+        <div className="mx-auto mt-9 max-w-[521px] rounded-[4px] bg-paper px-5 py-7 text-ink sm:mt-11 sm:px-8 sm:py-8">
+          <WaitlistForm source="landing" variant="figma" />
+        </div>
+      </div>
+    </section>
   );
 }

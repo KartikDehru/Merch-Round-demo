@@ -1,37 +1,33 @@
-"use client";
-
 import Link from "next/link";
-import { HERO, SITE } from "@/lib/copy";
+import { NAV, SITE } from "@/lib/copy";
 import { Logo } from "./visuals";
 
 export function PreviewBar() {
   return (
-    <div className="bg-ink px-4 py-2 text-center text-[12px] font-medium tracking-[0.04em] text-paper sm:text-[13px]">
-      {SITE.previewBar}
-    </div>
+    <div className="bg-ink px-4 py-[9px] text-center text-[13px] leading-none text-paper">{SITE.previewBar}</div>
   );
 }
 
 export function MarketingHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-line/80 bg-paper/95 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-[1265px] items-center justify-between gap-4 px-5 sm:px-8">
-        <Link href="/" aria-label="Merch Round home">
-          <Logo size={28} />
+    <header className="sticky top-0 z-40 border-b border-ink/5 bg-paper/95 backdrop-blur">
+      <div className="mx-auto flex h-[68px] max-w-[1265px] items-center justify-between gap-4 px-5 sm:h-[84px] sm:px-12">
+        <Link href="/" aria-label="Merch Round home" className="shrink-0">
+          <Logo size={30} className="sm:!h-[38px]" />
         </Link>
-        <nav className="flex items-center gap-4 text-[14px] font-medium text-ink sm:gap-6">
-          <a href="/#how" className="hidden text-ash hover:text-ink sm:inline">
-            How it works
-          </a>
-          <a href="/#faq" className="hidden text-ash hover:text-ink sm:inline">
-            FAQ
-          </a>
-          <a
+        <nav className="flex items-center gap-7 text-[15px] text-ink sm:gap-8">
+          <Link href="/#how" className="hidden hover:underline sm:inline">
+            {NAV.how}
+          </Link>
+          <Link href="/#faq" className="hidden hover:underline sm:inline">
+            {NAV.faq}
+          </Link>
+          <Link
             href="/#waitlist"
-            className="rounded-[4px] border border-ink bg-ink px-3 py-1.5 text-paper hover:bg-coal"
+            className="whitespace-nowrap rounded-[4px] bg-ink px-4 py-2.5 text-[14px] font-bold text-paper transition hover:bg-ink/85 sm:px-6 sm:py-3.5 sm:text-[15px]"
           >
-            {HERO.earlyAccessCta}
-          </a>
+            {NAV.cta}
+          </Link>
         </nav>
       </div>
     </header>

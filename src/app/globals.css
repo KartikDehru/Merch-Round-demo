@@ -31,8 +31,15 @@
   --color-stop-soft: #ffe6df;
   --color-note: #ffeb8c;
 
-  --font-display: var(--font-anton), "Impact", "Arial Narrow", ui-sans-serif, sans-serif;
-  --font-sans: var(--font-bricolage), "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  /* Figma handoff: dark card + grey */
+  --color-panel: #1a1a1a;
+  --color-panel-2: #242424;
+  --color-panel-3: #2c2c2c;
+  --color-grey: #b0b0ab;
+  --color-bubble: #e9e9e5;
+
+  --font-display: var(--font-assistant), "Helvetica Neue", ui-sans-serif, sans-serif;
+  --font-sans: var(--font-assistant), "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
 
   --animate-blink: blink 1.1s steps(1) infinite;
   --animate-rise: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
@@ -69,20 +76,19 @@ html {
   background: var(--color-paper);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.5;
 }
 
-/* Display: Anton — heavy uppercase like Figma Master / Landing */
+/* Display: Assistant ExtraBold, sentence case (Figma Master / Landing) */
 .font-display {
-  font-weight: 400;
-  font-synthesis: none;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 ::selection {

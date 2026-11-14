@@ -2,43 +2,47 @@
 
 import { useState } from "react";
 import { FAQ } from "@/lib/copy";
-import { cx } from "./ui";
 
+/** Figma "Common questions": white collapsible rows that open and close independently. */
 export function FaqSection() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<ReadonlySet<number>>(() => new Set([0]));
+
+  const toggle = (i: number) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
 
   return (
-    <section id="faq" className="scroll-mt-20 border-b border-line bg-paper">
-      <div className="mx-auto max-w-[800px] px-5 py-20 sm:px-8 sm:py-24">
-        <h2 className="text-center font-display text-[clamp(28px,4.5vw,44px)] leading-none">{FAQ.heading}</h2>
-        <ul className="mt-10 divide-y divide-line border-y border-line">
+    <section id="faq" className="scroll-mt-20 bg-stone">
+      <div className="mx-auto max-w-[810px] px-5 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-[70px]">
+        <h2 className="text-center font-display text-[30px] leading-tight sm:text-[42px]">{FAQ.heading}</h2>
+        <p className="mt-3 text-center text-[16px] font-light text-ash sm:mt-5 sm:text-[18px]">{FAQ.sub}</p>
+
+        <ul className="mt-6 space-y-[5px] sm:mt-7">
           {FAQ.items.map((item, i) => {
-            const isOpen = open === i;
+            const isOpen = open.has(i);
+            const id = `faq-${i}`;
             return (
-              <li key={item.q}>
+              <li key={item.q} className="rounded-[4px] bg-paper">
                 <button
                   type="button"
                   aria-expanded={isOpen}
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex w-full items-start justify-between gap-4 py-5 text-left"
+                  aria-controls={id}
+                  onClick={() => toggle(i)}
+                  className="flex min-h-[57px] w-full items-center justify-between gap-4 px-5 py-3.5 text-left sm:px-[25px]"
                 >
-                  <span className="font-display text-[17px] leading-snug sm:text-[18px]">{item.q}</span>
-                  <span
-                    className={cx(
-                      "mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-[4px] border border-ink text-[18px] leading-none transition",
-                      isOpen && "bg-ink text-paper",
-                    )}
-                    aria-hidden
-                  >
-                    {isOpen ? "−" : "+"}
-                  </span>
+                  <span className="text-[16px] font-medium leading-snug sm:text-[17px]">{item.q}</span>
+                  <svg viewBox="0 0 16 16" className="size-3.5 shrink-0 text-ink/60" aria-hidden>
+                    <path d="M2 8h12" stroke="currentColor" strokeWidth="1.2" />
+                    {!isOpen && <path d="M8 2v12" stroke="currentColor" strokeWidth="1.2" />}
+                  </svg>
                 </button>
                 {isOpen && (
-                  <div className="pb-5 pr-12 text-[15px] leading-relaxed text-ash">
+                  <div id={id} className="px-5 pb-5 text-[15px] font-light leading-[1.5] text-ink/80 sm:px-[25px] sm:pr-16">
                     <p>{item.a}</p>
-                    {"pendingLegal" in item && item.pendingLegal && (
-                      <p className="mt-2 text-[13px] text-mute">Legal wording still in review with the team.</p>
-                    )}
                   </div>
                 )}
               </li>

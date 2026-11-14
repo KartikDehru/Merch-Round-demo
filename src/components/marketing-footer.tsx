@@ -4,26 +4,21 @@ import { Logo } from "./visuals";
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-line bg-paper">
-      <div className="mx-auto flex max-w-[1265px] flex-wrap items-center justify-between gap-x-8 gap-y-5 px-5 py-10 sm:px-8">
-        <div className="flex flex-col gap-1.5">
-          <Logo size={28} />
-          <span className="text-[14px] text-ash">{SITE.tagline}</span>
+    <footer className="border-t border-paper/10 bg-ink text-paper">
+      <div className="mx-auto flex max-w-[1265px] flex-col gap-5 px-5 py-9 sm:flex-row sm:items-center sm:justify-between sm:px-12">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <Logo dark size={20} />
+          <span className="text-[14px] text-paper/70">{SITE.tagline}</span>
         </div>
-        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] text-ink">
-          <a href="/#how" className="hover:underline">
-            How it works
+        <p className="text-[14px] text-paper/80">
+          <a href={`mailto:${SITE.contactEmail}`} className="hover:text-paper hover:underline">
+            {SITE.contactEmail}
           </a>
-          <a href="/#faq" className="hover:underline">
-            FAQ
-          </a>
-          <Link href="/try" className="hover:underline">
-            Try the demo
+          <span className="mx-2.5 text-paper/50">·</span>
+          <Link href="/privacy" className="hover:text-paper hover:underline">
+            Privacy policy
           </Link>
-          <Link href="/privacy" className="hover:underline">
-            Privacy
-          </Link>
-        </nav>
+        </p>
       </div>
     </footer>
   );

@@ -1,17 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { TryScreen } from "@/components/try-chrome";
 import { LinkButton, Pill, cx } from "@/components/ui";
 import { SHOW_ROUND } from "@/lib/copy";
+import { aud } from "@/lib/demo-math";
+import { DELIVERY_FEE, formatFanTotal, useTry, type FanMethod, type FanSize } from "@/lib/try-store";
 
-const SIZES = ["S", "M", "L", "XL"] as const;
+const SIZES: FanSize[] = ["S", "M", "L", "XL"];
 
 export default function FanRoundPage() {
-  const [size, setSize] = useState<(typeof SIZES)[number]>("M");
-  const [method, setMethod] = useState<"pickup" | "delivery">("pickup");
+  const { state, set } = useTry();
   const pct = Math.round((SHOW_ROUND.progress / SHOW_ROUND.target) * 100);
+  const total = formatFanTotal(state.price, state.fanMethod);
 
   return (
     <TryScreen
@@ -20,7 +21,7 @@ export default function FanRoundPage() {
       title={SHOW_ROUND.title}
       footer={
         <LinkButton href="/try/fan/card" variant="brick" size="lg" className="w-full">
-          Save your card · {SHOW_ROUND.price}
+          Save your card · {total}
         </LinkButton>
       }
     >
@@ -52,10 +53,10 @@ export default function FanRoundPage() {
             <button
               key={s}
               type="button"
-              onClick={() => setSize(s)}
+              onClick={() => set({ fanSize: s })}
               className={cx(
                 "size-10 rounded-[4px] border text-[13px] font-bold",
-                size === s ? "border-ink bg-ink text-paper" : "border-line",
+                state.fanSize === s ? "border-ink bg-ink text-paper" : "border-line",
               )}
             >
               {s}
@@ -67,26 +68,24 @@ export default function FanRoundPage() {
       <div className="mt-5">
         <div className="label mb-2">Fulfilment</div>
         <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => setMethod("pickup")}
-            className={cx(
-              "rounded-[4px] border px-3 py-2 text-left text-[13px] font-semibold",
-              method === "pickup" ? "border-ink bg-brick" : "border-line",
-            )}
-          >
-            Pickup at the show
-          </button>
-          <button
-            type="button"
-            onClick={() => setMethod("delivery")}
-            className={cx(
-              "rounded-[4px] border px-3 py-2 text-left text-[13px] font-semibold",
-              method === "delivery" ? "border-ink bg-brick" : "border-line",
-            )}
-          >
-            Delivery · A$12.50
-          </button>
+          {(
+            [
+              ["pickup", "Pickup at the show"],
+              ["delivery", `Delivery · ${aud(DELIVERY_FEE)}`],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => set({ fanMethod: value as FanMethod })}
+              className={cx(
+                "rounded-[4px] border px-3 py-2 text-left text-[13px] font-semibold",
+                state.fanMethod === value ? "border-ink bg-brick" : "border-line",
+              )}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
     </TryScreen>

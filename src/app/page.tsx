@@ -30,11 +30,11 @@ function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-ink text-paper">
       <Image
-        src="/figma/hero.jpg"
-        alt="Fans lined up at a merch stand inside a venue"
+        src="/photos/hero-booth.jpg"
+        alt="Merch hanging at a live show"
         fill
         priority
-        className="-z-10 object-cover"
+        className="-z-10 object-cover object-[center_30%]"
         sizes="100vw"
       />
       <div className="absolute inset-0 -z-10 bg-ink/45" />
